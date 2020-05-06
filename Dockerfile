@@ -2,6 +2,8 @@ FROM crystallang/crystal:0.34.0-alpine
 
 WORKDIR /scripts
 
+COPY Makefile Makefile
+
 COPY shard.yml shard.yml
 
 COPY shard.lock shard.lock
