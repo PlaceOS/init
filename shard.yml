@@ -1,0 +1,46 @@
+name: init
+version: 0.1.0
+license: MIT
+
+description: |
+  Set of scripts and a container environment to make engine development easier
+
+target:
+  start:
+    main: src/start.cr
+
+dependencies:
+  sam:
+    github: imdrasil/sam.cr
+
+  faker:
+    github: askn/faker
+
+  models:
+    github: placeos/models
+    version: 0.8.1
+
+  driver:
+    github: placeos/driver
+    version: ~> 1.2
+
+  drivers:
+    github: placeos/drivers
+    branch: master
+
+  etcd:
+    github: aca-labs/crystal-etcd
+
+  hound-dog:
+    github: aca-labs/hound-dog
+    version: ~> 2.0
+
+  rethinkdb:
+    github: aca-labs/crystal-rethinkdb
+
+  rethinkdb-orm:
+    github: spider-gazelle/rethinkdb-orm
+    version: ~> 2.7
+
+  action-controller:
+    github: spider-gazelle/action-controller
