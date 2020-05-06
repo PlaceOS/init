@@ -1,0 +1,9 @@
+*.dwarf
+.DS_Store
+.crystal
+.shards
+Makefile
+app
+bin
+docs
+lib
