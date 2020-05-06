@@ -1,6 +1,6 @@
 require "sam"
 
-require "./src/tasks"
+require "./tasks"
 
 desc "Drops Elasticsearch and RethinkDB"
 task "drop", %w[drop:db drop:elastic] do
@@ -19,16 +19,22 @@ namespace "drop" do
     db = (args["db"]? || ENV["RETHINKDB_DB"]? || "test").to_s
     host = (args["host"]? || ENV["RETHINKDB_HOST"]? || "localhost").to_s
     port = (args["port"]? || ENV["RETHINKDB_PORT"]? || 28015).to_i
-    user = args["user"]? || ENV["RETHINKDB_USER"]?
-    password = args["password"]? || ENV["RETHINKDB_PASS"]?
-    PlaceOS::Tasks.drop_rethinkdb_tables(db, host, port, user, password)
+    user = (args["user"]? || ENV["RETHINKDB_USER"]?).try &.to_s
+    password = (args["password"]? || ENV["RETHINKDB_PASS"]?).try &.to_s
+    PlaceOS::Tasks.drop_rethinkdb_tables(
+      rethinkdb_db: db,
+      rethinkdb_host: host,
+      rethinkdb_port: port,
+      user: user,
+      password: password
+    )
   end
 end
 
-namespace "generate" do
+namespace "create" do
   desc "Creates a representative set of documents in RethinkDB"
   task "documents" do
-    PlaceOS::Tasks.minimal_documents
+    PlaceOS::Tasks.create_placeholders
   end
 
   desc "Creates an authority"
@@ -49,7 +55,7 @@ namespace "generate" do
 
   desc "Creates a user"
   task "user" do |_, args_hash|
-    arguments = {"authority", "email", "username", "password"}.map do |arg_key|
+    arguments = {"authority_id", "email", "username", "password"}.map do |arg_key|
       (args_hash[arg_key]?.try &.to_s) || abort "missing argument: `#{arg_key}`"
     end
 

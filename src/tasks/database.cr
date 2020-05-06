@@ -2,9 +2,12 @@ require "http/client"
 require "rethinkdb"
 require "uri"
 
+require "../log"
+
 module PlaceOS::Tasks::Database
   extend self
   include RethinkDB::Shortcuts
+  Log = ::Log.for("tasks").for("database")
 
   def drop_rethinkdb_tables(
     rethinkdb_db : String,
@@ -13,6 +16,9 @@ module PlaceOS::Tasks::Database
     user : String? = nil,
     password : String? = nil
   )
+    user = "admin" if user.nil?
+    password = "" if password.nil?
+
     conn = r.connect(
       host: rethinkdb_host,
       port: rethinkdb_port,
@@ -26,7 +32,8 @@ module PlaceOS::Tasks::Database
       r.table(table).delete
     end.run(conn)
   ensure
-    conn.close
+    # Close off the RethinkDB connection
+    conn.try &.close
   end
 
   def drop_elastic_indices(elastic_host : String, elastic_port : Int32)

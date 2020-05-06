@@ -6,6 +6,8 @@ require "../log"
 
 module PlaceOS::Tasks::Entities
   extend self
+  Log = ::Log.for("tasks").for("entities")
+
   def create_authority(
     site_name : String,
     site_origin : String
@@ -15,14 +17,16 @@ module PlaceOS::Tasks::Entities
     auth.domain = site_origin
     auth.save!
     Log.info { {message: "created Authority", authority_id: auth.id, site_name: site_name, site_origin: site_origin} }
+    auth
   rescue e
     Log.error(exception: e) {
-      Log.context.set(model: e.model.class.name, model_errors: e.model.inspect_errors) if e.is_a?(RethinkORM::Error::DocumentInvalid)
+      Log.context.set(model: e.model.class.name, model_errors: e.inspect_errors) if e.is_a?(RethinkORM::Error::DocumentInvalid)
       "Authority creation failed with: #{e.inspect_with_backtrace}"
     }
+    raise e
   end
 
-  def create_admin_user(
+  def create_user(
     authority : Model::Authority | String,
     name : String? = nil,
     email : String? = nil,
@@ -30,9 +34,10 @@ module PlaceOS::Tasks::Entities
     sys_admin : Bool = false,
     support : Bool = false
   )
+    authority = Model::Authority.find!(authority) if authority.is_a?(String)
     name = "PlaceOS Support (#{authority.name})" if name.nil?
     email = "support@place.tech" if email.nil?
-    authority_id = authority.is_a?(String) ? authority : authority.id.as(String)
+    authority_id = authority.id.as(String)
 
     if password.nil? || password.empty?
       password = secure_string(bytes: 8)
@@ -46,14 +51,13 @@ module PlaceOS::Tasks::Entities
     user.authority_id = authority_id
     user.email = email
     user.password = password
-    user.password_confirmation = password
 
     user.save!
     Log.info { {message: "Admin user created", email: email, site_name: authority.name, authority_id: authority.id} }
     user
   rescue e
     Log.error(exception: e) {
-      Log.context.set(model: e.model.class.name, model_errors: e.model.inspect_errors) if e.is_a?(RethinkORM::Error::DocumentInvalid)
+      Log.context.set(model: e.model.class.name, model_errors: e.inspect_errors) if e.is_a?(RethinkORM::Error::DocumentInvalid)
       "Admin user creation failed with: #{e.inspect_with_backtrace}"
     }
     raise e
@@ -64,7 +68,7 @@ module PlaceOS::Tasks::Entities
     application_base : String,
     scope : String? = nil
   )
-    redirect_uri = "#{app_base}/oauth-resp.html"
+    redirect_uri = "#{application_base}/oauth-resp.html"
     application_id = Digest::MD5.hexdigest(redirect_uri)
     scope = "public" if scope.nil? || scope.empty?
 
@@ -97,12 +101,13 @@ module PlaceOS::Tasks::Entities
     application
   rescue e
     Log.error(exception: e) {
-      Log.context.set(model: e.model.class.name, model_errors: e.model.inspect_errors) if e.is_a?(RethinkORM::Error::DocumentInvalid)
+      Log.context.set(model: e.model.class.name, model_errors: e.inspect_errors) if e.is_a?(RethinkORM::Error::DocumentInvalid)
       "Application creation failed with: #{e.inspect_with_backtrace}"
     }
+    raise e
   end
 
-  def placeholder_documents
+  def create_placeholders
     version = UUID.random.to_s.split('-').first
 
     # Private Repository metadata
@@ -180,9 +185,10 @@ module PlaceOS::Tasks::Entities
     trigger_instance.save!
   rescue e
     Log.error(exception: e) {
-      Log.context.set(model: e.model.class.name, model_errors: e.model.inspect_errors) if e.is_a?(RethinkORM::Error::DocumentInvalid)
+      Log.context.set(model: e.model.class.name, model_errors: e.inspect_errors) if e.is_a?(RethinkORM::Error::DocumentInvalid)
       "Application creation failed with: #{e.inspect_with_backtrace}"
     }
+    raise e
   end
 
   private def secure_string(bytes : Int32)

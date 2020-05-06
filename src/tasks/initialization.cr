@@ -1,8 +1,9 @@
 require "./entities"
+require "../log"
 
 module PlaceOS::Tasks::Initialization
   extend self
-  Log = Log.for("initialization")
+  Log = ::Log.for("tasks").for("initialization")
 
   # Initialization script
   def start(
@@ -33,7 +34,7 @@ module PlaceOS::Tasks::Initialization
 
     if development
       Log.info { "creating placeholder documents" }
-      Entities.placeholder_documents
+      Entities.create_placeholders
     end
   end
 end
