@@ -42,7 +42,7 @@ The default entrypoint to the container generates a User, Authority, and Applica
 - `domain`: `PLACE_DOMAIN` || `"localhost:8080"`
 - `tls`: `PLACE_TLS == "true"`
 - `auth_host`: `PLACE_AUTH_HOST` || `"auth"`
-- `development`: `SG_ENV == "development"`
+- `development`: `ENV == "development"`
 
 ## Scripts
 

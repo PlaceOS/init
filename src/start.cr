@@ -9,6 +9,6 @@ module PlaceOS
     username: ENV["PLACE_USERNAME"]? || abort("missing PLACE_USERNAME"),
     password: ENV["PLACE_PASSWORD"]? || abort("missing PLACE_PASSWORD"),
     auth_host: ENV["PLACE_AUTH_HOST"]? || "auth",
-    development: ENV["SG_ENV"]? == "development",
+    development: ENV["ENV"]? == "development",
   )
 end
