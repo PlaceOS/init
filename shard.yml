@@ -18,25 +18,17 @@ dependencies:
 
   models:
     github: placeos/models
-    version: 0.8.1
-
-  driver:
-    github: placeos/driver
-    version: ~> 1.2
-
-  drivers:
-    github: placeos/drivers
-    branch: master
+    version: ~> 1.0
 
   etcd:
-    github: aca-labs/crystal-etcd
-
-  hound-dog:
-    github: aca-labs/hound-dog
-    version: ~> 2.0
+    github: place-labs/crystal-etcd
 
   rethinkdb:
-    github: aca-labs/crystal-rethinkdb
+    github: place-labs/crystal-rethinkdb
+    version: ~> 1
+
+  log_helper:
+    github: spider-gazelle/log_helper
 
   rethinkdb-orm:
     github: spider-gazelle/rethinkdb-orm
@@ -44,3 +36,4 @@ dependencies:
 
   action-controller:
     github: spider-gazelle/action-controller
+    version: ~> 3
