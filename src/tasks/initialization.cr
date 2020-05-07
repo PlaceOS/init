@@ -25,12 +25,9 @@ module PlaceOS::Tasks::Initialization
       response = HTTP::Client.head("http://#{auth_host}/auth/404")
     end
 
-    Log.info { "creating authority" }
-    authority = Entities.create_authority(site_name: domain, site_origin: application_base)
-    Log.info { "creating user" }
+    authority = Entities.create_authority(name: domain, domain: application_base)
     Entities.create_user(authority: authority, name: username, email: email, password: password, sys_admin: true)
-    Log.info { "creating application" }
-    Entities.create_application(application_name: application_name, application_base: application_base)
+    Entities.create_application(name: application_name, base: application_base)
 
     if development
       Log.info { "creating placeholder documents" }

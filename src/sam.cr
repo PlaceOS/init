@@ -33,17 +33,17 @@ end
 
 namespace "create" do
   desc "Creates a representative set of documents in RethinkDB"
-  task "documents" do
+  task "placeholders" do
     PlaceOS::Tasks.create_placeholders
   end
 
   desc "Creates an authority"
   task "authority" do |_, args|
-    domain = (args["domain"]? || ENV["PLACE_DOMAIN"]? || "localhost:8080").to_s
+    domain_name = (args["domain"]? || ENV["PLACE_DOMAIN"]? || "localhost:8080").to_s
     tls = (args["tls"]? || ENV["PLACE_TLS"]?).try &.to_s.downcase == "true"
 
-    application_base = "#{tls ? "https" : "http"}://#{domain}"
-    PlaceOS::Tasks.create_authority(site_name: domain, site_origin: application_base)
+    site_origin = "#{tls ? "https" : "http"}://#{domain_name}"
+    PlaceOS::Tasks.create_authority(name: domain_name, domain: site_origin)
   end
 
   desc "Creates an application"
