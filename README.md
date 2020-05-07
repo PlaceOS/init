@@ -4,7 +4,7 @@ A set of scripts for initialization of PlaceOS.
 
 ## Usage
 
-The scripts are methods wrapped by a [sam.cr](https://github.com/imdrasil/sam.cr) interface. Most use named arguments which are used as [described here](https://github.com/imdrasil/sam.cr#tasks-with-arguments)
+The scripts are methods wrapped by a [sam.cr](https://github.com/imdrasil/sam.cr) interface. Most use named arguments which are used as [described here](https://github.com/imdrasil/sam.cr#tasks-with-arguments).
 
 Execute scripts as one-off container jobs.
 
@@ -31,11 +31,20 @@ docker run -it placeos/init -- make sam create:user \
                                         support=true
 ```
 
+## Container Entrypoint
+
+The default entrypoint to the container generates a User, Authority, and Application dependent on the environment variables below.
+
+- `email`: `PLACE_EMAIL`, required.
+- `username`: `PLACE_USERNAME`, required.
+- `password`: `PLACE_PASSWORD`, required.
+- `application_name`: `PLACE_APPLICATION` || `"backoffice"`
+- `domain`: `PLACE_DOMAIN` || `"localhost:8080"`
+- `tls`: `PLACE_TLS == "true"`
+- `auth_host`: `PLACE_AUTH_HOST` || `"auth"`
+- `development`: `SG_ENV == "development"`
+
 ## Scripts
-
-`UPCASE` indicates the value is pulled from the environment.
-
-- `create:makefile`: Generates makefile extension. Now command could be executed via `make sam your:command argument`
 
 - `create:placeholders`: Creates a representative set of documents in RethinkDB
 
