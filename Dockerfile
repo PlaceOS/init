@@ -12,6 +12,6 @@ RUN shards install
 
 COPY src src
 
-RUN crystal build --error-trace --release -o bin/start src/start.cr
+RUN crystal build --error-trace --release -o start src/start.cr
 
-CMD ["/scripts/bin/start"]
+CMD ["/scripts/start"]
