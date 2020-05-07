@@ -5,7 +5,10 @@ license: MIT
 description: |
   Set of scripts and a container environment to make engine development easier
 
-target:
+executables:
+  - start
+
+targets:
   start:
     main: src/start.cr
 
