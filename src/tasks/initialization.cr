@@ -17,7 +17,7 @@ module PlaceOS::Tasks::Initialization
     development : Bool
   )
     application_base = "#{tls ? "https" : "http"}://#{domain}"
-    authority = Entities.create_authority(name: domain, domain: application_base)
+    authority = Entities.create_authority(name: application_name, domain: application_base)
     Entities.create_user(authority: authority, name: username, email: email, password: password, sys_admin: true)
     Entities.create_application(name: application_name, base: application_base)
 

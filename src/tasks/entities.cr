@@ -19,7 +19,7 @@ module PlaceOS::Tasks::Entities
     end
 
     auth = Model::Authority.new
-    auth.name = name
+    auth.name = File.join(domain.lchop("https://").lchop("http://"), name)
     auth.domain = domain
     auth.save!
     Log.info { {message: "created Authority", authority_id: auth.id, name: name, domain: domain} }
@@ -151,6 +151,8 @@ module PlaceOS::Tasks::Entities
                            repo.folder_name = private_repository_folder_name
                            repo.description = "PlaceOS Private Drivers"
                            repo.save!
+                           Log.info { "created private_drivers Repository<#{repo.id}>" }
+                           repo
                          else
                            Log.info { "using existing private_repository Repository<#{existing_private_repository.id}>" }
                            existing_private_repository
@@ -174,6 +176,8 @@ module PlaceOS::Tasks::Entities
       repo.folder_name = "drivers"
       repo.description = "PlaceOS Drivers"
       repo.save!
+      Log.info { "created drivers Repository<#{repo.id}>" }
+      repo
     else
       Log.info { "using existing drivers Repository<#{existing_drivers_repository.id}>" }
     end
@@ -196,6 +200,8 @@ module PlaceOS::Tasks::Entities
 
                new_driver.repository = private_repository
                new_driver.save!
+               Log.info { "created Driver<#{new_driver.id}>" }
+               new_driver
              else
                Log.info { "using existing Driver<#{existing_driver.id}>" }
                existing_driver
@@ -208,6 +214,8 @@ module PlaceOS::Tasks::Entities
              zone_name = "TestZone-#{version}"
              new_zone = Model::Zone.new(name: zone_name)
              new_zone.save!
+             Log.info { "created Zone<#{new_zone.id}>" }
+             new_zone
            else
              Log.info { "using existing Zone<#{existing_zone.id}>" }
              existing_zone
@@ -219,6 +227,8 @@ module PlaceOS::Tasks::Entities
                        control_system_name = "TestSystem-#{version}"
                        new_control_system = Model::ControlSystem.new(name: control_system_name)
                        new_control_system.save!
+                       Log.info { "created ControlSystem<#{new_control_system.id}>" }
+                       new_control_system
                      else
                        Log.info { "using existing ControlSystem<#{existing_control_system.id}>" }
                        existing_control_system
@@ -233,6 +243,8 @@ module PlaceOS::Tasks::Entities
       settings = Model::Settings.new(encryption_level: settings_encryption_level, settings_string: settings_string)
       settings.control_system = control_system
       settings.save!
+      Log.info { "created Settings<#{settings.id}>" }
+      settings
     else
       Log.info { "using existing Settings<#{existing_settings.id}>" }
     end
@@ -245,6 +257,8 @@ module PlaceOS::Tasks::Entities
             new_module = Model::Generator.module(driver: driver, control_system: control_system)
             new_module.custom_name = module_name
             new_module.save!
+            Log.info { "created Module<#{new_module.id}>" }
+            new_module
           else
             Log.info { "using existing Module<#{existing_module.id}>" }
             existing_module
@@ -263,6 +277,8 @@ module PlaceOS::Tasks::Entities
                 new_trigger = Model::Trigger.new(name: trigger_name, description: trigger_description)
                 new_trigger.control_system = control_system
                 new_trigger.save!
+                Log.info { "created Trigger<#{new_trigger.id}>" }
+                new_trigger
               else
                 Log.info { "using existing Trigger<#{existing_trigger.id}>" }
                 existing_trigger
@@ -276,6 +292,7 @@ module PlaceOS::Tasks::Entities
       trigger_instance.zone = zone
       trigger_instance.trigger = trigger
       trigger_instance.save!
+      Log.info { "created TriggerInstance<#{trigger_instance.id}>" }
     else
       Log.info { "using existing TriggerInstance<#{existing_trigger_instance.id}>" }
     end

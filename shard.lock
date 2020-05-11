@@ -50,7 +50,7 @@ shards:
 
   models:
     github: placeos/models
-    version: 1.0.4
+    version: 1.0.6
 
   neuroplastic:
     github: spider-gazelle/neuroplastic
