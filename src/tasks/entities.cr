@@ -288,6 +288,6 @@ module PlaceOS::Tasks::Entities
   end
 
   private def secure_string(bytes : Int32)
-    Random::Secure.base64(bytes).rstrip('=')
+    Random::Secure.hex(bytes)
   end
 end
