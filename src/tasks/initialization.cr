@@ -17,14 +17,6 @@ module PlaceOS::Tasks::Initialization
     development : Bool
   )
     application_base = "#{tls ? "https" : "http"}://#{domain}"
-
-    response = HTTP::Client.head("http://#{auth_host}/auth/404")
-    until response.success?
-      Log.info { {message: "waiting for response from Auth container", auth_host: auth_host} }
-      sleep 0.5
-      response = HTTP::Client.head("http://#{auth_host}/auth/404")
-    end
-
     authority = Entities.create_authority(name: domain, domain: application_base)
     Entities.create_user(authority: authority, name: username, email: email, password: password, sys_admin: true)
     Entities.create_application(name: application_name, base: application_base)

@@ -99,6 +99,10 @@ module PlaceOS::Tasks::Entities
     } }
 
     application = Model::DoorkeeperApplication.new
+
+    # Required as we are setting a custom database id
+    application._new_flag = true
+
     application.name = name
     application.secret = secure_string(bytes: 48)
     application.redirect_uri = redirect_uri
