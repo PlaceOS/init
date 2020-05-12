@@ -80,7 +80,7 @@ module PlaceOS::Tasks::Entities
     base : String,
     scope : String? = nil
   )
-    redirect_uri = "#{base}/oauth-resp.html"
+    redirect_uri = File.join(base, name, "oauth-resp.html")
     application_id = Digest::MD5.hexdigest(redirect_uri)
     scope = "public" if scope.nil? || scope.empty?
 
