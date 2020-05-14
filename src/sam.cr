@@ -48,9 +48,9 @@ namespace "create" do
 
   desc "Creates an application"
   task "application" do |_, args|
-    base = (args["base"]? || "http://localhost:8080").to_s
     name = (args["name"]? || "backoffice").to_s
-    PlaceOS::Tasks.create_application(base, name)
+    base = (args["base"]? || "http://localhost:8080").to_s
+    PlaceOS::Tasks.create_application(name, base)
   end
 
   desc "Creates a user"
