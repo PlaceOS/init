@@ -76,10 +76,14 @@ module PlaceOS::Tasks::Entities
   end
 
   def create_application(
+    authority : Model::Authority | String,
     name : String,
     base : String,
     scope : String? = nil
   )
+    authority = Model::Authority.find!(authority) if authority.is_a?(String)
+    authority_id = authority.id.as(String)
+
     redirect_uri = File.join(base, name, "oauth-resp.html")
     application_id = Digest::MD5.hexdigest(redirect_uri)
     scope = "public" if scope.nil? || scope.empty?
@@ -110,6 +114,7 @@ module PlaceOS::Tasks::Entities
     application.uid = application_id
     application.scopes = scope
     application.skip_authorization = true
+    application.owner_id = authority_id
 
     application.save!
     Log.info { {
