@@ -48,9 +48,10 @@ namespace "create" do
 
   desc "Creates an application"
   task "application" do |_, args|
+    authority = (args["authority"]? || abort "missing authority id").to_s
     name = (args["name"]? || "backoffice").to_s
     base = (args["base"]? || "http://localhost:8080").to_s
-    PlaceOS::Tasks.create_application(name, base)
+    PlaceOS::Tasks.create_application(authority, name, base)
   end
 
   desc "Creates a user"
