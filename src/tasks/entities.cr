@@ -79,12 +79,13 @@ module PlaceOS::Tasks::Entities
     authority : Model::Authority | String,
     name : String,
     base : String,
+    redirect_uri : String? = nil,
     scope : String? = nil
   )
     authority = Model::Authority.find!(authority) if authority.is_a?(String)
     authority_id = authority.id.as(String)
 
-    redirect_uri = File.join(base, name, "oauth-resp.html")
+    redirect_uri = File.join(base, name, "oauth-resp.html") if redirect_uri.nil?
     application_id = Digest::MD5.hexdigest(redirect_uri)
     scope = "public" if scope.nil? || scope.empty?
 
