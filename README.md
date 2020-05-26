@@ -53,8 +53,11 @@ The default entrypoint to the container generates a User, Authority, and Applica
     * `tls`: Defaults to `PLACE_TLS` || `false`
 
 - `create:application`: Creates an Application
+    * `authority`: Authority ID. Required.
     * `base`: Defaults to `"http://localhost:8080"`
     * `name`: Defaults to `"backoffice"`
+    * `redirect_uri`: Defaults to `"#{base}/#{name}/oauth-resp.html"`
+    * `scope`: Defaults to `"public"`
 
 - `create:user`: Creates a User
     * `authority_id`: Id of Authority. Required.
