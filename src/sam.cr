@@ -51,7 +51,16 @@ namespace "create" do
     authority = (args["authority"]? || abort "missing authority id").to_s
     name = (args["name"]? || "backoffice").to_s
     base = (args["base"]? || "http://localhost:8080").to_s
-    PlaceOS::Tasks.create_application(authority, name, base)
+    redirect_uri = args["redirect_uri"]?.try &.to_s
+    scope = args["scope"]?.try &.to_s
+
+    PlaceOS::Tasks.create_application(
+      authority: authority,
+      name: name,
+      base: base,
+      redirect_uri: redirect_uri,
+      scope: scope,
+    )
   end
 
   desc "Creates a user"
