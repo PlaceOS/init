@@ -6,7 +6,7 @@ shards:
 
   action-controller:
     github: spider-gazelle/action-controller
-    version: 3.1.0
+    version: 3.1.1
 
   active-model:
     github: spider-gazelle/active-model
@@ -14,7 +14,7 @@ shards:
 
   bindata:
     github: spider-gazelle/bindata
-    version: 1.5.1
+    version: 1.5.2
 
   db:
     github: crystal-lang/crystal-db
@@ -48,10 +48,6 @@ shards:
     github: spider-gazelle/log_helper
     version: 0.1.2
 
-  models:
-    github: placeos/models
-    version: 1.0.6
-
   neuroplastic:
     github: spider-gazelle/neuroplastic
     version: 1.4.1
@@ -60,13 +56,17 @@ shards:
     github: stakach/openssl_ext
     version: 1.2.0
 
+  placeos-models:
+    github: placeos/models
+    version: 2.0.0
+
   rethinkdb:
     github: place-labs/crystal-rethinkdb
     version: 1.0.0
 
   rethinkdb-orm:
     github: spider-gazelle/rethinkdb-orm
-    version: 2.8.1
+    version: 2.9.0
 
   sam:
     github: imdrasil/sam.cr
