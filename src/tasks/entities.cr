@@ -1,5 +1,5 @@
-require "models"
-require "models/spec/generator"
+require "placeos-models"
+require "placeos-models/spec/generator"
 require "uuid"
 
 require "../log"
