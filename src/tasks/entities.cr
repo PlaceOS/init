@@ -25,10 +25,41 @@ module PlaceOS::Tasks::Entities
     Log.info { {message: "created Authority", authority_id: auth.id, name: name, domain: domain} }
     auth
   rescue e
-    Log.error(exception: e) {
-      Log.context.set(model: e.model.class.name, model_errors: e.inspect_errors) if e.is_a?(RethinkORM::Error::DocumentInvalid)
-      "Authority creation failed with: #{e.inspect_with_backtrace}"
-    }
+    log_fail("Authority", e)
+    raise e
+  end
+
+  def create_interface(
+    name : String,
+    folder_name : String,
+    description : String,
+    uri : String,
+    commit_hash : String = "HEAD"
+  )
+    existing = Model::Repository.where(
+      repo_type: Model::Repository::Type::Interface,
+      folder_name: folder_name.strip.downcase,
+    ).first?
+
+    unless existing.nil?
+      Log.info { {message: "Frontend already exists", folder_name: folder_name} }
+      return existing
+    end
+
+    frontend = Model::Repository.new
+    frontend.repo_type = Model::Repository::Type::Interface
+    frontend.commit_hash = commit_hash
+    frontend.description = description
+    frontend.folder_name = folder_name
+    frontend.name = name
+    frontend.uri = uri
+    frontend.save!
+
+    Log.info { {message: "created Interface Repository", repository_id: frontend.id, name: name, folder_name: folder_name, commit_hash: commit_hash, uri: uri} }
+
+    frontend
+  rescue e
+    log_fail("Interface Repository", e)
     raise e
   end
 
@@ -68,10 +99,7 @@ module PlaceOS::Tasks::Entities
     Log.info { {message: "Admin user created", email: email, site_name: authority.name, authority_id: authority.id} }
     user
   rescue e
-    Log.error(exception: e) {
-      Log.context.set(model: e.model.class.name, model_errors: e.inspect_errors) if e.is_a?(RethinkORM::Error::DocumentInvalid)
-      "Admin user creation failed with: #{e.inspect_with_backtrace}"
-    }
+    log_fail("Admin user", e)
     raise e
   end
 
@@ -128,10 +156,7 @@ module PlaceOS::Tasks::Entities
     } }
     application
   rescue e
-    Log.error(exception: e) {
-      Log.context.set(model: e.model.class.name, model_errors: e.inspect_errors) if e.is_a?(RethinkORM::Error::DocumentInvalid)
-      "Application creation failed with: #{e.inspect_with_backtrace}"
-    }
+    log_fail("Application", e)
     raise e
   end
 
@@ -303,11 +328,15 @@ module PlaceOS::Tasks::Entities
       Log.info { "using existing TriggerInstance<#{existing_trigger_instance.id}>" }
     end
   rescue e
-    Log.error(exception: e) {
-      Log.context.set(model: e.model.class.name, model_errors: e.inspect_errors) if e.is_a?(RethinkORM::Error::DocumentInvalid)
-      "Application creation failed with: #{e.inspect_with_backtrace}"
-    }
+    log_fail("Placeholder", e)
     raise e
+  end
+
+  private def log_fail(type : String, exception : Exception)
+    Log.error(exception: exception) {
+      Log.context.set(model: exception.model.class.name, model_errors: exception.inspect_errors) if exception.is_a?(RethinkORM::Error::DocumentInvalid)
+      "#{type} creation failed with: #{exception.inspect_with_backtrace}"
+    }
   end
 
   private def secure_string(bytes : Int32)
