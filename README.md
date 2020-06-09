@@ -12,23 +12,23 @@ Execute scripts as one-off container jobs.
 
 ```bash
 # Create a set of placeholder documents
-docker run -it placeos/init -- make sam create:placeholder
+docker run -it placeos/init make sam create:placeholder
 ```
 
 ```bash
 # Create an Authority
-docker run -it placeos/init -- make sam create:authority domain="localhost:8080"
+docker run -it placeos/init make sam create:authority domain="localhost:8080"
 ```
 
 ```bash
 # Create a User
-docker run -it placeos/init -- make sam create:user \
-                                        authority_id="s0mek1nd4UUID" \
-                                        email="support@place.tech" \
-                                        username="burger" \
-                                        password="burgerR00lz" \
-                                        sys_admin=true \
-                                        support=true
+docker run -it placeos/init make sam create:user \
+                                     authority_id="s0mek1nd4UUID" \
+                                     email="support@place.tech" \
+                                     username="burger" \
+                                     password="burgerR00lz" \
+                                     sys_admin=true \
+                                     support=true
 ```
 
 ## Container Entrypoint
