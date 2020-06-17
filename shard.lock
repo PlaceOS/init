@@ -1,82 +1,90 @@
-version: 1.0
+version: 2.0
 shards:
   CrystalEmail:
-    github: Nephos/CrystalEmail
+    git: https://github.com/Nephos/CrystalEmail.git
     version: 0.2.4
 
   action-controller:
-    github: spider-gazelle/action-controller
-    version: 3.1.3
+    git: https://github.com/spider-gazelle/action-controller.git
+    version: 3.1.5
 
   active-model:
-    github: spider-gazelle/active-model
-    version: 1.8.2
+    git: https://github.com/spider-gazelle/active-model.git
+    version: 1.8.4
 
   bindata:
-    github: spider-gazelle/bindata
-    version: 1.5.2
+    git: https://github.com/spider-gazelle/bindata.git
+    version: 1.5.4
 
   db:
-    github: crystal-lang/crystal-db
+    git: https://github.com/crystal-lang/crystal-db.git
     version: 0.9.0
 
   delimiter_tree:
-    github: drujensen/delimiter_tree
+    git: https://github.com/drujensen/delimiter_tree.git
     version: 0.1.4
 
   etcd:
-    github: place-labs/crystal-etcd
+    git: https://github.com/place-labs/crystal-etcd.git
     version: 1.0.1
 
   faker:
-    github: askn/faker
+    git: https://github.com/askn/faker.git
     version: 0.4.0
 
   future:
-    github: crystal-community/future.cr
+    git: https://github.com/crystal-community/future.cr.git
     version: 0.1.0
 
   habitat:
-    github: luckyframework/habitat
+    git: https://github.com/luckyframework/habitat.git
     version: 0.4.3
 
+  json_mapping:
+    git: https://github.com/crystal-lang/json_mapping.cr.git
+    version: 0.1.0
+
   jwt:
-    github: crystal-community/jwt
-    version: 1.4.0
+    git: https://github.com/crystal-community/jwt.git
+    version: 1.4.2
 
   log_helper:
-    github: spider-gazelle/log_helper
-    version: 0.1.2
+    git: https://github.com/spider-gazelle/log_helper.git
+    version: 1.0.2
 
   neuroplastic:
-    github: spider-gazelle/neuroplastic
-    version: 1.4.1
+    git: https://github.com/spider-gazelle/neuroplastic.git
+    version: 1.4.2
 
   openssl_ext:
-    github: stakach/openssl_ext
-    version: 1.2.0
+    git: https://github.com/stakach/openssl_ext.git
+    version: 1.2.1
 
   placeos-models:
-    github: placeos/models
-    version: 2.0.0
+    git: https://github.com/placeos/models.git
+    version: 2.0.3
 
   rethinkdb:
-    github: place-labs/crystal-rethinkdb
+    git: https://github.com/place-labs/crystal-rethinkdb.git
     version: 1.0.0
 
   rethinkdb-orm:
-    github: spider-gazelle/rethinkdb-orm
-    version: 2.9.0
+    git: https://github.com/spider-gazelle/rethinkdb-orm.git
+    version: 2.9.1
 
   sam:
-    github: imdrasil/sam.cr
+    git: https://github.com/imdrasil/sam.cr.git
     version: 0.3.2
 
   simple_retry:
-    github: spider-gazelle/simple_retry
+    git: https://github.com/spider-gazelle/simple_retry.git
     version: 1.1.0
 
   tokenizer:
-    github: spider-gazelle/tokenizer
+    git: https://github.com/spider-gazelle/tokenizer.git
     version: 1.1.0
+
+  yaml_mapping:
+    git: https://github.com/crystal-lang/yaml_mapping.cr.git
+    version: 0.1.0
 
