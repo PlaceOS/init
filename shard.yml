@@ -1,5 +1,6 @@
 name: placeos-init
-version: 0.5.0
+version: 0.5.1
+crystal: 0.35.0
 license: MIT
 
 description: |
@@ -13,30 +14,30 @@ targets:
     main: src/start.cr
 
 dependencies:
-  sam:
-    github: imdrasil/sam.cr
+  action-controller:
+    github: spider-gazelle/action-controller
+    version: ~> 3
+
+  etcd:
+    github: place-labs/crystal-etcd
 
   faker:
     github: askn/faker
+
+  log_helper:
+    github: spider-gazelle/log_helper
 
   placeos-models:
     github: placeos/models
     version: ~> 2.0
 
-  etcd:
-    github: place-labs/crystal-etcd
-
   rethinkdb:
     github: place-labs/crystal-rethinkdb
     version: ~> 1
-
-  log_helper:
-    github: spider-gazelle/log_helper
 
   rethinkdb-orm:
     github: spider-gazelle/rethinkdb-orm
     version: ~> 2.7
 
-  action-controller:
-    github: spider-gazelle/action-controller
-    version: ~> 3
+  sam:
+    github: imdrasil/sam.cr
