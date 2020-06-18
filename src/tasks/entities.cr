@@ -224,7 +224,7 @@ module PlaceOS::Tasks::Entities
                new_driver = Model::Driver.new(
                  name: driver_name,
                  role: driver_role,
-                 commit: "1b2de89",
+                 commit: "HEAD",
                  module_name: driver_module_name,
                  file_name: driver_file_name,
                )
