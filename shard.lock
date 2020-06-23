@@ -14,7 +14,7 @@ shards:
 
   bindata:
     git: https://github.com/spider-gazelle/bindata.git
-    version: 1.5.4
+    version: 1.5.5
 
   db:
     git: https://github.com/crystal-lang/crystal-db.git
@@ -54,15 +54,15 @@ shards:
 
   neuroplastic:
     git: https://github.com/spider-gazelle/neuroplastic.git
-    version: 1.4.2
+    version: 1.5.0
 
   openssl_ext:
     git: https://github.com/stakach/openssl_ext.git
-    version: 1.2.1
+    version: 1.2.2
 
   placeos-models:
     git: https://github.com/placeos/models.git
-    version: 2.1.0
+    version: 2.1.1
 
   rethinkdb:
     git: https://github.com/place-labs/crystal-rethinkdb.git
