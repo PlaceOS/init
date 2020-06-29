@@ -1,6 +1,6 @@
 name: placeos-init
-version: 0.5.3
-crystal: 0.35.0
+version: 0.5.4
+crystal: 0.35.1
 license: MIT
 
 description: |
@@ -32,8 +32,8 @@ dependencies:
     version: ~> 2.0
 
   rethinkdb:
-    github: place-labs/crystal-rethinkdb
-    version: ~> 1
+    github: kingsleyh/crystal-rethinkdb
+    version: ~> 0.2
 
   rethinkdb-orm:
     github: spider-gazelle/rethinkdb-orm
