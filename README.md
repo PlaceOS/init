@@ -31,6 +31,13 @@ docker run -it placeos/init make sam create:user \
                                      support=true
 ```
 
+```bash
+# Restore a database backup
+docker-compose run --no-deps \
+                   -v /etc/placeos/rethinkdb_dump_2020-07-14T14_26_19.tar.gz:/rethink-dump.tar.gz:Z \
+                   init sh -c 'rethinkdb restore --connect $RETHINKDB_HOST:$RETHINKDB_PORT --force /rethink-dump.tar.gz'
+```
+
 ## Container Entrypoint
 
 The default entrypoint to the container generates a User, Authority, and Application dependent on the environment variables below.
