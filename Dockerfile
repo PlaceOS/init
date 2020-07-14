@@ -14,4 +14,8 @@ COPY src src
 
 RUN crystal build --error-trace --release -o start src/start.cr
 
+# Install rethinkdb & python driver
+RUN apk add --update rethinkdb py-pip
+RUN pip install rethinkdb
+
 CMD ["/scripts/start"]
