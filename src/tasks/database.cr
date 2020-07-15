@@ -7,7 +7,7 @@ require "../log"
 module PlaceOS::Tasks::Database
   extend self
   include RethinkDB::Shortcuts
-  Log = ::Log.for("tasks").for("database")
+  Log = ::Log.for(self)
 
   def drop_rethinkdb_tables(
     rethinkdb_db : String,

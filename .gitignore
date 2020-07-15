@@ -6,3 +6,4 @@ app
 bin
 docs
 lib
+sam.cr

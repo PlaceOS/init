@@ -6,7 +6,7 @@ require "../log"
 
 module PlaceOS::Tasks::Entities
   extend self
-  Log = ::Log.for("tasks").for("entities")
+  Log = ::Log.for(self)
 
   def create_authority(
     name : String,
@@ -34,6 +34,7 @@ module PlaceOS::Tasks::Entities
     folder_name : String,
     description : String,
     uri : String,
+    branch : String = "master",
     commit_hash : String = "HEAD"
   )
     existing = Model::Repository.where(
