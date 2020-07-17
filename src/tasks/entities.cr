@@ -49,6 +49,7 @@ module PlaceOS::Tasks::Entities
 
     frontend = Model::Repository.new
     frontend.repo_type = Model::Repository::Type::Interface
+    frontend.branch = branch
     frontend.commit_hash = commit_hash
     frontend.description = description
     frontend.folder_name = folder_name
@@ -56,7 +57,15 @@ module PlaceOS::Tasks::Entities
     frontend.uri = uri
     frontend.save!
 
-    Log.info { {message: "created Interface Repository", repository_id: frontend.id, name: name, folder_name: folder_name, commit_hash: commit_hash, uri: uri} }
+    Log.info { {
+      message:       "created Interface Repository",
+      repository_id: frontend.id,
+      folder_name:   folder_name,
+      name:          name,
+      branch:        branch,
+      commit_hash:   commit_hash,
+      uri:           uri,
+    } }
 
     frontend
   rescue e
