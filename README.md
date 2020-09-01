@@ -38,9 +38,9 @@ docker-compose run --no-deps \
                    init sh -c 'rethinkdb restore --connect $RETHINKDB_HOST:$RETHINKDB_PORT --force /rethink-dump.tar.gz'
 ```
 
-## Container Entrypoint
+## Init Container
 
-The default entrypoint to the container generates a User, Authority, and Application dependent on the environment variables below.
+The default entrypoint to the init container generates a User, Authority, and Application dependent on the environment variables below.
 
 - `email`: `PLACE_EMAIL`, required.
 - `username`: `PLACE_USERNAME`, required.
@@ -50,6 +50,21 @@ The default entrypoint to the container generates a User, Authority, and Applica
 - `tls`: `PLACE_TLS == "true"`
 - `auth_host`: `PLACE_AUTH_HOST` || `"auth"`
 - `development`: `ENV == "development"`
+
+## Backup Container
+
+`Dockerfile.rethinkdb-backup` generates a container that will backup the state of RethinkDB to S3.
+By default, the backup will take place at midnight every day.
+
+- `cron`: `BACKUP_CRON` || `0 0 * * *`
+- `rethinkdb_host`: `RETHINKDB_HOST` || `"localhost"`
+- `rethinkdb_port`: `RETHINKDB_PORT` || `28019`
+- `rethinkdb_db`: `RETHINKDB_DB`
+- `aws_region`: `AWS_REGION`, required.
+- `aws_key`: `AWS_KEY`, required,
+- `aws_secret`: `AWS_SECRET`, required.
+- `aws_s3_bucket`: `AWS_S3_BUCKET`, required.
+- `aws_kms_key_id`: `AWS_KMS_KEY_ID`
 
 ## Scripts
 
@@ -73,6 +88,16 @@ The default entrypoint to the container generates a User, Authority, and Applica
     * `password`: Password of user. Required.
     * `sys_admin`: Defaults to `false`
     * `support`: Defaults to `false`
+
+- `backup:rethinkdb`: Backup RethinkDB to S3.
+    * `rethinkdb_host`: Defaults to `RETHINKDB_HOST` || `"localhost"`
+    * `rethinkdb_port`: Defaults to `RETHINKDB_PORT` || `28019`
+    * `rethinkdb_db`: Defaults to `RETHINKDB_DB`, or the entire database
+    * `aws_region`: Defaults to `AWS_REGION`, required.
+    * `aws_key`: Defaults to `AWS_KEY`, required,
+    * `aws_secret`: Defaults to `AWS_SECRET`, required.
+    * `aws_s3_bucket`: Defaults to `AWS_S3_BUCKET`, required.
+    * `aws_kms_key_id`: Defaults to `AWS_KMS_KEY_ID`
 
 - `drop`: Drops Elasticsearch and RethinkDB
     * Runs `drop:elastic` and `drop:db` via environmental configuration

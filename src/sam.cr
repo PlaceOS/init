@@ -3,6 +3,31 @@ require "sam"
 require "./tasks"
 require "./constants"
 
+namespace "backup" do
+  desc "Generates a rethinkdb backup and writes it to s3"
+  task "rethinkdb" do |_, args|
+    rethinkdb_db = (args["db"]? || PlaceOS::RETHINKDB_DB).to_s
+    rethinkdb_host = (args["host"]? || PlaceOS::RETHINKDB_HOST).to_s
+    rethinkdb_port = (args["port"]? || PlaceOS::RETHINKDB_PORT).to_i
+    aws_region = (args["aws_region"]? || PlaceOS::AWS_REGION || abort "AWS_REGION unset").to_s
+    aws_key = (args["aws_key"]? || PlaceOS::AWS_KEY || abort "AWS_KEY unset").to_s
+    aws_secret = (args["aws_secret"]? || PlaceOS::AWS_SECRET || abort "AWS_SECRET unset").to_s
+    aws_s3_bucket = (args["aws_s3_bucket"]? || PlaceOS::AWS_S3_BUCKET || abort "AWS_S3_BUCKET unset").to_s
+    aws_kms_key_id = (args["aws_kms_key_id"]? || PlaceOS::AWS_KMS_KEY_ID).try &.to_s
+
+    PlaceOS::Tasks.rethinkdb_backup(
+      rethinkdb_db: rethinkdb_db,
+      rethinkdb_host: rethinkdb_host,
+      rethinkdb_port: rethinkdb_port,
+      aws_region: aws_region,
+      aws_key: aws_key,
+      aws_secret: aws_secret,
+      aws_s3_bucket: aws_s3_bucket,
+      aws_kms_key_id: aws_kms_key_id,
+    )
+  end
+end
+
 desc "Drops Elasticsearch and RethinkDB"
 task "drop", %w[drop:db drop:elastic] do
 end
@@ -10,18 +35,18 @@ end
 namespace "drop" do
   desc "Deletes all elastic indices tables"
   task "elastic" do |_, args|
-    host = (args["host"]? || ENV["ES_HOST"]? || "localhost").to_s
-    port = (args["port"]? || ENV["ES_PORT"]? || 9200).to_i
+    host = (args["host"]? || PlaceOS::ES_HOST).to_s
+    port = (args["port"]? || PlaceOS::ES_PORT).to_i
     PlaceOS::Tasks.drop_elastic_indices(host, port)
   end
 
   desc "Drops all RethinkDB tables"
   task "db" do |_, args|
-    db = (args["db"]? || ENV["RETHINKDB_DB"]? || "test").to_s
-    host = (args["host"]? || ENV["RETHINKDB_HOST"]? || "localhost").to_s
-    port = (args["port"]? || ENV["RETHINKDB_PORT"]? || 28015).to_i
-    user = (args["user"]? || ENV["RETHINKDB_USER"]?).try &.to_s
-    password = (args["password"]? || ENV["RETHINKDB_PASS"]?).try &.to_s
+    db = (args["db"]? || PlaceOS::RETHINKDB_DB).to_s
+    host = (args["host"]? || PlaceOS::RETHINKDB_HOST).to_s
+    port = (args["port"]? || PlaceOS::RETHINKDB_PORT).to_i
+    user = (args["user"]? || PlaceOS::RETHINKDB_USER).try &.to_s
+    password = (args["password"]? || PlaceOS::RETHINKDB_PASS).try &.to_s
     PlaceOS::Tasks.drop_rethinkdb_tables(
       rethinkdb_db: db,
       rethinkdb_host: host,
@@ -40,8 +65,8 @@ namespace "create" do
 
   desc "Creates an authority"
   task "authority" do |_, args|
-    domain_name = (args["domain"]? || ENV["PLACE_DOMAIN"]? || "localhost:8080").to_s
-    tls = (args["tls"]? || ENV["PLACE_TLS"]?).try &.to_s.downcase == "true"
+    domain_name = (args["domain"]? || PlaceOS::DOMAIN).to_s
+    tls = (args["tls"]? || TLS).try &.to_s.downcase == "true"
 
     site_origin = "#{tls ? "https" : "http"}://#{domain_name}"
     PlaceOS::Tasks.create_authority(name: domain_name, domain: site_origin)
