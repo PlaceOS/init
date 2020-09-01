@@ -13,6 +13,7 @@ RUN shards install
 COPY src src
 
 RUN crystal build --error-trace --release -o start src/start.cr
+RUN crystal build --error-trace --release -o start src/backup.cr
 
 # Install rethinkdb & python driver
 RUN apk add --update rethinkdb py-pip
