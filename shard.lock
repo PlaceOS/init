@@ -6,11 +6,19 @@ shards:
 
   action-controller:
     git: https://github.com/spider-gazelle/action-controller.git
-    version: 3.3.0
+    version: 3.4.0
 
   active-model:
     git: https://github.com/spider-gazelle/active-model.git
     version: 1.8.4
+
+  awscr-s3:
+    git: https://github.com/taylorfinnell/awscr-s3.git
+    version: 0.8.0
+
+  awscr-signer:
+    git: https://github.com/taylorfinnell/awscr-signer.git
+    version: 0.7.0
 
   bindata:
     git: https://github.com/spider-gazelle/bindata.git
@@ -23,6 +31,10 @@ shards:
   etcd:
     git: https://github.com/place-labs/crystal-etcd.git
     version: 1.0.1
+
+  exec_from:
+    git: https://github.com/place-labs/exec_from.git
+    version: 1.2.0
 
   faker:
     git: https://github.com/askn/faker.git
@@ -54,7 +66,7 @@ shards:
 
   neuroplastic:
     git: https://github.com/spider-gazelle/neuroplastic.git
-    version: 1.6.1
+    version: 1.6.4
 
   openssl_ext:
     git: https://github.com/stakach/openssl_ext.git
@@ -62,7 +74,7 @@ shards:
 
   placeos-models:
     git: https://github.com/placeos/models.git
-    version: 3.1.1
+    version: 3.3.0
 
   rethinkdb:
     git: https://github.com/kingsleyh/crystal-rethinkdb.git

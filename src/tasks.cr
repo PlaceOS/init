@@ -1,3 +1,4 @@
+require "./constants"
 require "./tasks/*"
 
 module PlaceOS::Tasks
@@ -5,8 +6,6 @@ module PlaceOS::Tasks
   include Database
   include Entities
   include Initialization
-
-  PROD = (ENV["ENV"]? || ENV["SG_ENV"]?) == "production"
 
   def production?
     PROD

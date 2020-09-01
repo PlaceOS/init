@@ -1,5 +1,5 @@
 name: placeos-init
-version: 0.7.1
+version: 0.8.0
 crystal: 0.35.1
 license: MIT
 
@@ -8,18 +8,28 @@ description: |
 
 executables:
   - start
+  - backup
 
 targets:
   start:
     main: src/start.cr
+  backup:
+    main: src/backup.cr
 
 dependencies:
   action-controller:
     github: spider-gazelle/action-controller
     version: ~> 3
 
+  awscr-s3:
+    github: taylorfinnell/awscr-s3
+
   etcd:
     github: place-labs/crystal-etcd
+
+  exec_from:
+    github: place-labs/exec_from
+    version: ~> 1.2
 
   faker:
     github: askn/faker
@@ -41,3 +51,7 @@ dependencies:
 
   sam:
     github: imdrasil/sam.cr
+
+  tasker:
+    github: spider-gazelle/tasker
+    version: ~> 2
