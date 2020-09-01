@@ -1,6 +1,7 @@
 require "sam"
 
 require "./tasks"
+require "./constants"
 
 desc "Drops Elasticsearch and RethinkDB"
 task "drop", %w[drop:db drop:elastic] do
