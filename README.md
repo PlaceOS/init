@@ -93,10 +93,20 @@ By default, the backup will take place at midnight every day.
     * `rethinkdb_host`: Defaults to `RETHINKDB_HOST` || `"localhost"`
     * `rethinkdb_port`: Defaults to `RETHINKDB_PORT` || `28019`
     * `rethinkdb_db`: Defaults to `RETHINKDB_DB`, or the entire database
+    * `aws_s3_bucket`: Defaults to `AWS_S3_BUCKET`, required.
     * `aws_region`: Defaults to `AWS_REGION`, required.
     * `aws_key`: Defaults to `AWS_KEY`, required,
     * `aws_secret`: Defaults to `AWS_SECRET`, required.
+    * `aws_kms_key_id`: Defaults to `AWS_KMS_KEY_ID`
+
+- `restore:rethinkdb`: Restore RethinkDB from S3.
+    * `rethinkdb_host`: Defaults to `RETHINKDB_HOST` || `"localhost"`
+    * `rethinkdb_port`: Defaults to `RETHINKDB_PORT` || `28019`
+    * `aws_s3_object`: Object to restore DB from. Defaults to `AWS_S3_BUCKET`, required.
     * `aws_s3_bucket`: Defaults to `AWS_S3_BUCKET`, required.
+    * `aws_region`: Defaults to `AWS_REGION`, required.
+    * `aws_key`: Defaults to `AWS_KEY`, required,
+    * `aws_secret`: Defaults to `AWS_SECRET`, required.
     * `aws_kms_key_id`: Defaults to `AWS_KMS_KEY_ID`
 
 - `drop`: Drops Elasticsearch and RethinkDB

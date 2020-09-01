@@ -6,6 +6,7 @@ module PlaceOS
     rethinkdb_host: RETHINKDB_HOST,
     rethinkdb_port: RETHINKDB_PORT,
     rethinkdb_db: RETHINKDB_DB,
+    rethinkdb_password: RETHINKDB_PASS,
     aws_region: AWS_REGION || abort("AWS_REGION is unset"),
     aws_key: AWS_KEY || abort("AWS_KEY is unset"),
     aws_secret: AWS_SECRET || abort("AWS_SECRET is unset"),
