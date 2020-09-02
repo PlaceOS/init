@@ -12,30 +12,43 @@ Execute scripts as one-off container jobs.
 
 ```bash
 # Create a set of placeholder documents
-docker run -it placeos/init task create:placeholder
+docker-compose run --no-deps -it init task create:placeholder
 ```
 
 ```bash
 # Create an Authority
-docker run -it placeos/init task create:authority domain="localhost:8080"
+docker-compose run --no-deps -it init task create:authority domain="localhost:8080"
 ```
 
 ```bash
 # Create a User
-docker run -it placeos/init task create:user \
-                                 authority_id="s0mek1nd4UUID" \
-                                 email="support@place.tech" \
-                                 username="burger" \
-                                 password="burgerR00lz" \
-                                 sys_admin=true \
-                                 support=true
+docker-compose run --no-deps -it init task create:user \
+    authority_id="s0mek1nd4UUID" \
+    email="support@place.tech" \
+    username="burger" \
+    password="burgerR00lz" \
+    sys_admin=true \
+    support=true
 ```
 
 ```bash
-# Restore a database backup
+# Restore to a database backup from S3
+docker-compose run --no-deps -it init task restore:rethinkdb \
+    rethinkdb_host=$RETHINKDB_HOST \
+    rethinkdb_port=$RETHINKDB_PORT \
+    force_restore=$RETHINKDB_FORCE_RESTORE \
+    aws_region=$AWS_REGION \
+    aws_s3_bucket=$AWS_S3_BUCKET \
+    aws_s3_object=$AWS_S3_BUCKET \
+    aws_key=$AWS_KEY \
+    aws_secret=$AWS_SECRET
+```
+
+```bash
+# Restore to a database backup from filesystem
 docker-compose run --no-deps \
-                   -v /etc/placeos/rethinkdb_dump_2020-07-14T14_26_19.tar.gz:/rethink-dump.tar.gz:Z \
-                   init sh -c 'rethinkdb restore --connect $RETHINKDB_HOST:$RETHINKDB_PORT --force /rethink-dump.tar.gz'
+    -v /etc/placeos/rethinkdb_dump_2020-07-14T14_26_19.tar.gz:/rethink-dump.tar.gz:Z \
+    init sh -c 'rethinkdb restore --connect $RETHINKDB_HOST:$RETHINKDB_PORT --force /rethink-dump.tar.gz'
 ```
 
 ## Init Container
@@ -104,7 +117,7 @@ By default, the backup will take place at midnight every day.
 - `restore:rethinkdb`: Restore RethinkDB from S3.
     * `rethinkdb_host`: Defaults to `RETHINKDB_HOST` || `"localhost"`
     * `rethinkdb_port`: Defaults to `RETHINKDB_PORT` || `28019`
-    * `force_force`: Defaults to `RETHINKDB_FORCE_RESTORE` || `false`
+    * `force_restore`: Defaults to `RETHINKDB_FORCE_RESTORE` || `false`
     * `aws_s3_object`: Object to restore DB from. Defaults to `AWS_S3_BUCKET`, required.
     * `aws_s3_bucket`: Defaults to `AWS_S3_BUCKET`, required.
     * `aws_region`: Defaults to `AWS_REGION`, required.
