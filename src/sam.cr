@@ -29,6 +29,7 @@ namespace "restore" do
       rethinkdb_host:     (args["host"]? || PlaceOS::RETHINKDB_HOST).to_s,
       rethinkdb_port:     (args["port"]? || PlaceOS::RETHINKDB_PORT).to_i,
       rethinkdb_password: (args["password"]? || PlaceOS::RETHINKDB_PASS).try(&.to_s),
+      force_restore:      args["force_restore"]?.try(&.to_s.downcase) == "true" || PlaceOS::RETHINKDB_FORCE_RESTORE,
       aws_region:         (args["aws_region"]? || PlaceOS::AWS_REGION || abort "AWS_REGION unset").to_s,
       aws_key:            (args["aws_key"]? || PlaceOS::AWS_KEY || abort "AWS_KEY unset").to_s,
       aws_secret:         (args["aws_secret"]? || PlaceOS::AWS_SECRET || abort "AWS_SECRET unset").to_s,

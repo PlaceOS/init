@@ -24,8 +24,9 @@ module PlaceOS::Utils::RethinkDB
     end
   end
 
-  def restore(path : Path, host : String, port : Int32, password : String? = nil)
+  def restore(path : Path, host : String, port : Int32, password : String? = nil, force_restore : Bool = false)
     arguments = ["restore", path.expand.to_s, "-c", "#{host}:#{port}"]
+    arguments.concat({"--force"}) if force_restore
     arguments.concat({"-p", password}) unless password.nil?
 
     # Return the file descriptor

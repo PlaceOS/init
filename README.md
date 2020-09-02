@@ -104,6 +104,7 @@ By default, the backup will take place at midnight every day.
 - `restore:rethinkdb`: Restore RethinkDB from S3.
     * `rethinkdb_host`: Defaults to `RETHINKDB_HOST` || `"localhost"`
     * `rethinkdb_port`: Defaults to `RETHINKDB_PORT` || `28019`
+    * `force_force`: Defaults to `RETHINKDB_FORCE_RESTORE` || `false`
     * `aws_s3_object`: Object to restore DB from. Defaults to `AWS_S3_BUCKET`, required.
     * `aws_s3_bucket`: Defaults to `AWS_S3_BUCKET`, required.
     * `aws_region`: Defaults to `AWS_REGION`, required.
