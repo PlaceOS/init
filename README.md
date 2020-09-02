@@ -12,23 +12,23 @@ Execute scripts as one-off container jobs.
 
 ```bash
 # Create a set of placeholder documents
-docker run -it placeos/init make sam create:placeholder
+docker run -it placeos/init task create:placeholder
 ```
 
 ```bash
 # Create an Authority
-docker run -it placeos/init make sam create:authority domain="localhost:8080"
+docker run -it placeos/init task create:authority domain="localhost:8080"
 ```
 
 ```bash
 # Create a User
-docker run -it placeos/init make sam create:user \
-                                     authority_id="s0mek1nd4UUID" \
-                                     email="support@place.tech" \
-                                     username="burger" \
-                                     password="burgerR00lz" \
-                                     sys_admin=true \
-                                     support=true
+docker run -it placeos/init task create:user \
+                                 authority_id="s0mek1nd4UUID" \
+                                 email="support@place.tech" \
+                                 username="burger" \
+                                 password="burgerR00lz" \
+                                 sys_admin=true \
+                                 support=true
 ```
 
 ```bash
@@ -67,6 +67,8 @@ By default, the backup will take place at midnight every day.
 - `aws_kms_key_id`: `AWS_KMS_KEY_ID`
 
 ## Scripts
+
+- `help`: List all defined tasks
 
 - `create:placeholders`: Creates a representative set of documents in RethinkDB
 
@@ -125,5 +127,5 @@ By default, the backup will take place at midnight every day.
 ## Development
 
 - Create a function in a relevant file under `src/tasks`
-- Write the sam binding in `src/sam.cr`
+- Write the task binding in `src/sam.cr`
 - Document it

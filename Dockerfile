@@ -9,14 +9,15 @@ WORKDIR /scripts
 COPY Makefile Makefile
 
 COPY shard.yml shard.yml
-
 COPY shard.lock shard.lock
 
 RUN shards install
 
 COPY src src
 
-RUN crystal build --error-trace --release -o start src/start.cr
-RUN crystal build --error-trace --release -o backup src/backup.cr
+RUN mkdir -p /scripts/bin
+ENV PATH="/scripts/bin:${PATH}"
+
+RUN shards build --production --error-trace --release
 
 CMD ["/scripts/start"]

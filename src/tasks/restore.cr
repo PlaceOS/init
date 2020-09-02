@@ -14,7 +14,7 @@ module PlaceOS::Tasks::Restore
     aws_s3_bucket : String,
     aws_s3_object : String,
     rethinkdb_password : String? = nil,
-    aws_kms_key_id : String? = nil,
+    aws_kms_key_id : String? = nil
   )
     Log.context.set({
       rethinkdb_host: rethinkdb_host,
@@ -45,6 +45,7 @@ module PlaceOS::Tasks::Restore
       host: rethinkdb_host,
       port: rethinkdb_port,
       password: rethinkdb_password,
+      force_restore: force_restore,
     )
   end
 end
