@@ -9,6 +9,7 @@ description: |
 executables:
   - start
   - backup
+  - task
 
 targets:
   start:

@@ -4,7 +4,7 @@ module PlaceOS::Utils::RethinkDB
   def dump(host : String, port : Int32, db : String? = nil, password : String? = nil) : Path?
     directory = Dir.tempdir
 
-    arguments = ["dump", "-c", "#{host}:#{port}"]
+    arguments = ["dump", "-c", "#{host}:#{port}", "-f", "rethinkdb_dump_#{Time.utc.to_unix}.tar.gz"]
     arguments.concat({"-e", db}) unless db.nil?
     arguments.concat({"-p", password}) unless password.nil?
 

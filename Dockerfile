@@ -20,4 +20,4 @@ ENV PATH="/scripts/bin:${PATH}"
 
 RUN shards build --production --error-trace --release
 
-CMD ["/scripts/start"]
+CMD ["/scripts/bin/start"]
