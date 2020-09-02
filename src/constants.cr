@@ -1,7 +1,7 @@
 module PlaceOS
   PROD = (ENV["ENV"]? || ENV["SG_ENV"]?) == "production"
 
-  # Backup constants
+  # Backup/Restore constants
 
   BACKUP_CRON    = ENV["PLACE_BACKUP_CRON"]? || "0 0 * * *"
   AWS_REGION     = ENV["AWS_REGION"]?

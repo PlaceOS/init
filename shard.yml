@@ -15,6 +15,8 @@ targets:
     main: src/start.cr
   backup:
     main: src/backup.cr
+  task:
+    main: src/sam.cr
 
 dependencies:
   action-controller:
