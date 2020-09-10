@@ -342,6 +342,38 @@ module PlaceOS::Tasks::Entities
     raise e
   end
 
+  def create_broker(
+    name : String,
+    description : String,
+    host : String,
+    port : Int32 = 1883, # Default MQTT port for non-tls connections
+    tls : Bool = false,
+    username : String? = nil,
+    password : String? = nil,
+    certificate : String? = nil,
+    auth_type : AuthType = Model::AuthType::UserPassword,
+    secret : String? = nil,
+    filters : Array(String)? = nil
+  )
+    broker = Model::Broker.new(
+      name: name,
+      description: description,
+      host: host,
+      port: port,
+      tls: port,
+      auth_type: auth_type,
+    )
+
+    broker.secret = secret unless secret.nil?
+    broker.filters = filers unless filters.nil?
+    broker.certificate = certificate unless certificate.nil?
+    broker.username = username unless username.nil?
+    broker.password = password unless password.nil?
+  rescue e
+    log_fail("Broker", e)
+    raise e
+  end
+
   private def log_fail(type : String, exception : Exception)
     Log.error(exception: exception) {
       Log.context.set(model: exception.model.class.name, model_errors: exception.inspect_errors) if exception.is_a?(RethinkORM::Error::DocumentInvalid)
