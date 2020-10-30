@@ -1,4 +1,4 @@
-FROM crystallang/crystal:0.35.1-alpine
+FROM crystallang/crystal:0.35.1-alpine AS base
 
 WORKDIR /scripts
 
@@ -16,10 +16,13 @@ RUN shards build --static --production --error-trace --release
 
 FROM alpine:3.11
 
-# Install rethinkdb & python driver
-RUN apk add --update rethinkdb py-pip
+# Install bash, rethinkdb & python driver
+RUN apk add --no-cache rethinkdb py-pip bash openssl openssh
+
 RUN pip install rethinkdb
 
-COPY --from=0 /scripts/bin /scripts
+COPY --from=base scripts/bin /scripts
+
+COPY scripts/* /scripts
 
 CMD ["/scripts/start"]
