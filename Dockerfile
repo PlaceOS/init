@@ -17,7 +17,7 @@ RUN shards build --static --production --error-trace --release
 FROM alpine:3.11
 
 # Install bash, rethinkdb & python driver
-RUN apk add --no-cache rethinkdb py-pip bash openssl openssh
+RUN apk add --no-cache rethinkdb py-pip bash openssl openssh coreutils
 
 RUN pip install rethinkdb
 
