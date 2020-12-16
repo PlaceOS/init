@@ -10,12 +10,15 @@ executables:
   - start
   - backup
   - task
+  - exec_from
 
 targets:
-  start:
-    main: src/start.cr
   backup:
     main: src/backup.cr
+  exec_from:
+    main: lib/exec_from/src/app.cr
+  start:
+    main: src/start.cr
   task:
     main: src/sam.cr
 

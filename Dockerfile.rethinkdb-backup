@@ -1,2 +1,2 @@
 FROM placeos/init:latest
-CMD ["/scripts/backup"]
+CMD ["/app/bin/backup"]
