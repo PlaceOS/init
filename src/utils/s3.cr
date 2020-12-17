@@ -35,7 +35,10 @@ class PlaceOS::Utils::S3
     uploader = Awscr::S3::FileUploader.new(s3)
     File.open(path) do |io|
       begin
-        rewind_io = ->(_e : Exception, _a : Int32, _t : Time::Span, _n : Time::Span) { io.rewind }
+        rewind_io = ->(e : Exception, _a : Int32, _t : Time::Span, _n : Time::Span) {
+          Log.error(exception: e) { "failed to write to S3" }
+          io.rewind
+        }
         retry times: 10, max_interval: 1.minute, on_retry: rewind_io do
           Log.info { "attempting to write #{path.basename} to S3" }
           uploader.upload(bucket, path.basename, io, headers)

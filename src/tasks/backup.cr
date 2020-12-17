@@ -68,6 +68,13 @@ module PlaceOS::Tasks::Backup
     rethinkdb_password : String? = nil,
     cron : String = BACKUP_CRON
   )
+    Log.context.set({
+      rethinkdb_host: rethinkdb_host,
+      rethinkdb_port: rethinkdb_port,
+      rethinkdb_db:   rethinkdb_db,
+      cron:           cron,
+    })
+
     writer = PlaceOS::Utils::S3.new(
       region: aws_region,
       key: aws_key,
@@ -76,14 +83,9 @@ module PlaceOS::Tasks::Backup
       kms_key_id: aws_kms_key_id,
     )
 
+    Log.info { "starting backup cron" }
     Tasker.cron(cron) do
-      Log.info { {
-        message:        "running rethinkdb backup",
-        rethinkdb_host: rethinkdb_host,
-        rethinkdb_port: rethinkdb_port,
-        rethinkdb_db:   rethinkdb_db,
-        cron:           cron,
-      } }
+      Log.info { "running rethinkdb backup" }
 
       path = PlaceOS::Utils::RethinkDB.dump(
         host: rethinkdb_host,

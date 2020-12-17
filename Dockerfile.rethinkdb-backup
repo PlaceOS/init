@@ -1,2 +1,3 @@
 FROM placeos/init:latest
+WORKDIR /app
 CMD ["/app/bin/backup"]
