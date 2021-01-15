@@ -238,6 +238,13 @@ module PlaceOS::Tasks::Entities
       trigger_instance.trigger = trigger
       trigger_instance
     end
+
+    upsert_document(Model::Edge.all) do
+      Model::Edge.new(
+        name: "TestEdge-#{version}",
+        description: "Automatically generated edge profile. Set PLACE_EDGE_SECRET in your edge node's",
+      )
+    end
   rescue e
     log_fail("Placeholder", e)
     raise e

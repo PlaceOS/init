@@ -6,11 +6,11 @@ shards:
 
   action-controller:
     git: https://github.com/spider-gazelle/action-controller.git
-    version: 3.4.0
+    version: 3.4.2
 
   active-model:
     git: https://github.com/spider-gazelle/active-model.git
-    version: 1.8.4
+    version: 2.0.2
 
   awscr-s3:
     git: https://github.com/taylorfinnell/awscr-s3.git
@@ -22,7 +22,7 @@ shards:
 
   bindata:
     git: https://github.com/spider-gazelle/bindata.git
-    version: 1.5.6
+    version: 1.8.1
 
   cron_parser:
     git: https://github.com/kostya/cron_parser.git
@@ -30,11 +30,11 @@ shards:
 
   db:
     git: https://github.com/crystal-lang/crystal-db.git
-    version: 0.9.0
+    version: 0.10.0
 
   etcd:
     git: https://github.com/place-labs/crystal-etcd.git
-    version: 1.0.1
+    version: 1.0.3
 
   exec_from:
     git: https://github.com/place-labs/exec_from.git
@@ -42,7 +42,7 @@ shards:
 
   faker:
     git: https://github.com/askn/faker.git
-    version: 0.4.0
+    version: 0.4.1
 
   future:
     git: https://github.com/crystal-community/future.cr.git
@@ -51,6 +51,10 @@ shards:
   habitat:
     git: https://github.com/luckyframework/habitat.git
     version: 0.4.4
+
+  http-params-serializable:
+    git: https://github.com/vladfaust/http-params-serializable.git
+    version: 0.4.0
 
   json_mapping:
     git: https://github.com/crystal-lang/json_mapping.cr.git
@@ -66,11 +70,11 @@ shards:
 
   lucky_router:
     git: https://github.com/luckyframework/lucky_router.git
-    version: 0.3.0
+    version: 0.4.0
 
   neuroplastic:
     git: https://github.com/spider-gazelle/neuroplastic.git
-    version: 1.6.4
+    version: 1.7.1
 
   openssl_ext:
     git: https://github.com/stakach/openssl_ext.git
@@ -78,7 +82,7 @@ shards:
 
   placeos-models:
     git: https://github.com/placeos/models.git
-    version: 3.3.0
+    version: 4.8.3
 
   rethinkdb:
     git: https://github.com/kingsleyh/crystal-rethinkdb.git
@@ -86,7 +90,7 @@ shards:
 
   rethinkdb-orm:
     git: https://github.com/spider-gazelle/rethinkdb-orm.git
-    version: 2.10.1
+    version: 3.2.0
 
   retriable:
     git: https://github.com/sija/retriable.cr.git
@@ -102,7 +106,7 @@ shards:
 
   tasker:
     git: https://github.com/spider-gazelle/tasker.git
-    version: 2.0.1
+    version: 2.0.2
 
   tokenizer:
     git: https://github.com/spider-gazelle/tokenizer.git
