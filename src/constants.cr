@@ -11,7 +11,7 @@ module PlaceOS
   AWS_S3_BUCKET  = ENV["AWS_S3_BUCKET"]?
   AWS_KMS_KEY_ID = ENV["AWS_KMS_KEY_ID"]?
 
-  RETHINKDB_FORCE_RESTORE = ENV["RETHINKDB_FORCE_RESTORE "]?.try(&.downcase) == "true"
+  RETHINKDB_FORCE_RESTORE = ENV["RETHINKDB_FORCE_RESTORE"]?.try(&.downcase) == "true"
 
   # Initialization constants
 
