@@ -265,7 +265,7 @@ module PlaceOS::Tasks::Entities
 
   private def log_fail(type : String, exception : Exception)
     Log.error(exception: exception) {
-      Log.context.set(model: exception.model.class.name, model_errors: exception.inspect_errors) if exception.is_a?(RethinkORM::Error::DocumentInvalid)
+      Log.context.set(model: exception.model.class.name, model_errors: exception.errors) if exception.is_a?(RethinkORM::Error::DocumentInvalid)
       "#{type} creation failed with: #{exception.inspect_with_backtrace}"
     }
   end

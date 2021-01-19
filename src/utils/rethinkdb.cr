@@ -1,6 +1,8 @@
 module PlaceOS::Utils::RethinkDB
   extend self
 
+  Log = ::Log.for(self)
+
   def dump(host : String, port : Int32, db : String? = nil, password : String? = nil) : Path?
     directory = Dir.tempdir
 
@@ -25,6 +27,11 @@ module PlaceOS::Utils::RethinkDB
   end
 
   def restore(path : Path, host : String, port : Int32, password : String? = nil, force_restore : Bool = false)
+    Log.info do
+      Log.context.set({path: path.to_s, host: host, port: port, force_restore: force_restore})
+      "restoring"
+    end
+
     arguments = ["restore", path.expand.to_s, "-c", "#{host}:#{port}"]
     arguments.concat({"--force"}) if force_restore
     arguments.concat({"-p", password}) unless password.nil?

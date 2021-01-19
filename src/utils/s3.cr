@@ -9,12 +9,12 @@ class PlaceOS::Utils::S3
   private getter headers : Hash(String, String) = {} of String => String
 
   def initialize(@region : String, @key : String, @secret : String, @bucket : String, kms_key_id : String? = nil)
-    if kms_key_id
-      # For accessing external S3 via KMS by specifying a CMK
-      headers["x-amz-acl"] = "bucket-owner-full-control"
-      headers["x-amz-server-side-encryption"] = "aws:kms"
-      headers["x-amz-server-side-encryption-aws-kms-key-id"] = kms_key_id
-    end
+    # if kms_key_id
+    #  # For accessing external S3 via KMS by specifying a CMK
+    #  headers["x-amz-acl"] = "bucket-owner-full-control"
+    #  headers["x-amz-server-side-encryption"] = "aws:kms"
+    #  headers["x-amz-server-side-encryption-aws-kms-key-id"] = kms_key_id
+    # end
   end
 
   def shutdown!
