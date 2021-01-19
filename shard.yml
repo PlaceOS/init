@@ -1,6 +1,6 @@
 name: placeos-init
-version: 0.9.0
-crystal: 0.35.1
+version: 0.10.0
+crystal: ~> 0.35
 license: MIT
 
 description: |
@@ -9,12 +9,15 @@ description: |
 executables:
   - start
   - backup
+  - restore
   - task
   - exec_from
 
 targets:
   backup:
     main: src/backup.cr
+  restore:
+    main: src/restore.cr
   exec_from:
     main: lib/exec_from/src/app.cr
   start:
