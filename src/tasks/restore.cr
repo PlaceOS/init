@@ -35,7 +35,7 @@ module PlaceOS::Tasks::Restore
     )
 
     Log.info { "pulling backup from S3" }
-    file = File.tempfile do |temporary_io|
+    file = File.tempfile("rethinkdb-backup.tar.gz") do |temporary_io|
       s3.read_file(aws_s3_object) do |object|
         IO.copy(object.body_io, temporary_io)
       end
@@ -48,6 +48,6 @@ module PlaceOS::Tasks::Restore
       port: rethinkdb_port,
       password: rethinkdb_password,
       force_restore: force_restore,
-    )
+    ).tap { Log.info { "successfully restored rethinkDB" } }
   end
 end
