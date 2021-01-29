@@ -22,8 +22,10 @@ RUN apk add --no-cache rethinkdb py-pip bash openssl openssh coreutils
 
 RUN pip install rethinkdb
 
+COPY scripts /app/scripts
+
 COPY --from=base /app/bin /app/bin
 
-ENV PATH="/app/bin:${PATH}"
+ENV PATH="/app/bin:/app/scripts:${PATH}"
 
 CMD ["/app/bin/start"]
