@@ -17,9 +17,9 @@ shards:
     git: https://github.com/taylorfinnell/awscr-s3.git
     version: 0.8.0
 
-  awscr-signer:
-    git: https://github.com/taylorfinnell/awscr-signer.git
-    version: 0.7.0
+  awscr-signer: # Overridden
+    git: https://github.com/caspiano/awscr-signer.git
+    version: 0.8.2+git.commit.cf41d19e60f6d3dc7da508b850c6e39b3fe4a83a
 
   bindata:
     git: https://github.com/spider-gazelle/bindata.git

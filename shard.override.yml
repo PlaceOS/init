@@ -1,3 +1,6 @@
 dependencies:
   retriable:
     github: Sija/retriable.cr
+  awscr-signer:
+    github: caspiano/awscr-signer
+    branch: fix/digest-module
