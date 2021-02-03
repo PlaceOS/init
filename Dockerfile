@@ -1,9 +1,10 @@
-FROM crystallang/crystal:0.35.1-alpine AS base
+FROM crystallang/crystal:0.36.1-alpine AS base
 
 WORKDIR /app
 
-COPY shard.yml shard.yml
-COPY shard.lock shard.lock
+COPY shard.yml .
+COPY shard.override.yml .
+COPY shard.lock .
 
 RUN shards install --static
 
