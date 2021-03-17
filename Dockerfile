@@ -8,13 +8,13 @@ COPY shard.yml .
 COPY shard.override.yml .
 COPY shard.lock .
 
-RUN shards install --static
+RUN shards install --production
 
 COPY src src
 
 RUN mkdir -p /app/bin
 
-RUN shards build --static --production --error-trace --release
+RUN shards build --static --error-trace --release
 
 FROM alpine:3.11
 
