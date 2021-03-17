@@ -2,6 +2,8 @@ FROM crystallang/crystal:0.36.1-alpine AS base
 
 WORKDIR /app
 
+RUN apk add --no-cache yaml-static
+
 COPY shard.yml .
 COPY shard.override.yml .
 COPY shard.lock .
