@@ -1,10 +1,10 @@
 name: placeos-init
-version: 0.10.0
-crystal: ~> 0.35
+version: 0.11.0
+crystal: ~> 1.0
 license: MIT
 
 description: |
-  Set of scripts and a container environment to make engine development easier
+  Set of scripts and a container environment for management of PlaceOS
 
 executables:
   - start
@@ -28,7 +28,7 @@ targets:
 dependencies:
   action-controller:
     github: spider-gazelle/action-controller
-    version: ~> 3
+    version: ~> 4
 
   awscr-s3:
     github: taylorfinnell/awscr-s3
@@ -48,7 +48,7 @@ dependencies:
 
   placeos-models:
     github: placeos/models
-    version: ~> 4.0
+    version: ~> 4.15
 
   rethinkdb:
     github: kingsleyh/crystal-rethinkdb
@@ -56,7 +56,7 @@ dependencies:
 
   rethinkdb-orm:
     github: spider-gazelle/rethinkdb-orm
-    version: ~> 3
+    version: ~> 4
 
   sam:
     github: imdrasil/sam.cr

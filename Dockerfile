@@ -1,5 +1,4 @@
-FROM crystallang/crystal:0.36.1-alpine AS base
-
+FROM crystallang/crystal:1.0.0-alpine AS base
 WORKDIR /app
 
 RUN apk add --no-cache yaml-static
@@ -8,15 +7,15 @@ COPY shard.yml .
 COPY shard.override.yml .
 COPY shard.lock .
 
-RUN shards install --production
+RUN shards install --static --ignore-crystal-version --production
 
 COPY src src
 
 RUN mkdir -p /app/bin
 
-RUN shards build --static --error-trace --release
+RUN shards build --static --error-trace --release --ignore-crystal-version
 
-FROM alpine:3.11
+FROM alpine:3.12
 
 WORKDIR /app
 
