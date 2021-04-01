@@ -1,8 +1,8 @@
+require "../log"
+
 require "placeos-models"
 require "placeos-models/spec/generator"
 require "uuid"
-
-require "../log"
 
 module PlaceOS::Tasks::Entities
   extend self
