@@ -1,8 +1,9 @@
+require "../log"
+
 require "exec_from"
 require "retriable/core_ext/kernel"
 require "tasker"
 
-require "../log"
 require "../utils/rethinkdb"
 require "../utils/s3"
 

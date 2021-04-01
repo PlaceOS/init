@@ -1,5 +1,5 @@
-require "./entities"
 require "../log"
+require "./entities"
 
 module PlaceOS::Tasks::Initialization
   extend self

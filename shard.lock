@@ -7,7 +7,7 @@ shards:
 
   action-controller:
     git: https://github.com/spider-gazelle/action-controller.git
-    version: 4.3.0
+    version: 4.3.3
 
   active-model:
     git: https://github.com/spider-gazelle/active-model.git
@@ -35,7 +35,7 @@ shards:
 
   etcd:
     git: https://github.com/place-labs/crystal-etcd.git
-    version: 1.2.0
+    version: 1.2.2
 
   exec_from:
     git: https://github.com/place-labs/exec_from.git
@@ -87,7 +87,7 @@ shards:
 
   placeos-models:
     git: https://github.com/placeos/models.git
-    version: 4.15.2
+    version: 4.15.3
 
   rethinkdb:
     git: https://github.com/kingsleyh/crystal-rethinkdb.git

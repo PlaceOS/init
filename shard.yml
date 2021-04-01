@@ -1,5 +1,5 @@
 name: placeos-init
-version: 0.11.0
+version: 0.12.0
 crystal: ~> 1.0
 license: MIT
 
@@ -45,6 +45,9 @@ dependencies:
 
   log_helper:
     github: spider-gazelle/log_helper
+
+  placeos-log-backend:
+    github: place-labs/log-backend
 
   placeos-models:
     github: placeos/models

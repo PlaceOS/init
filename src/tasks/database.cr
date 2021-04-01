@@ -1,8 +1,8 @@
+require "../log"
+
 require "http/client"
 require "rethinkdb"
 require "uri"
-
-require "../log"
 
 module PlaceOS::Tasks::Database
   extend self
