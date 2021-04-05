@@ -1,6 +1,9 @@
 require "./tasks"
+require "./migrations"
 
 module PlaceOS
+  Migrations.apply_all
+
   Tasks::Initialization.start(
     application_name: APPLICATION_NAME,
     domain: DOMAIN,
