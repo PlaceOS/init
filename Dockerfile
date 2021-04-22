@@ -20,7 +20,7 @@ FROM alpine:3.12
 WORKDIR /app
 
 # Install bash, rethinkdb & python driver
-RUN apk add --no-cache rethinkdb py-pip bash openssl openssh coreutils
+RUN apk add --no-cache rethinkdb py-pip bash openssl openssh coreutils apache2-utils
 
 RUN pip install rethinkdb
 
