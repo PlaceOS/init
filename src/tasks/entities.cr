@@ -10,13 +10,15 @@ module PlaceOS::Tasks::Entities
 
   def create_authority(
     name : String,
-    domain : String
+    domain : String,
+    config : Hash(String, JSON::Any)
   )
     upsert_document(Model::Authority.find_by_domain(domain)) do
       Log.info { {message: "creating Authority", name: name, domain: domain} }
       auth = Model::Authority.new
       auth.name = File.join(domain.lchop("https://").lchop("http://"), name)
       auth.domain = domain
+      auth.config = config
       auth
     end
   rescue e

@@ -22,6 +22,7 @@ module PlaceOS
   USERNAME         = ENV["PLACE_USERNAME"]? || abort("missing PLACE_USERNAME")
   PASSWORD         = ENV["PLACE_PASSWORD"]? || abort("missing PLACE_PASSWORD")
   AUTH_HOST        = ENV["PLACE_AUTH_HOST"]? || "auth"
+  METRICS_ROUTE     = ENV["PLACE_METRICS_ROUTE"]? || "monitor"
 
   # Resource configurations
 

@@ -12,5 +12,6 @@ module PlaceOS
     username: USERNAME,
     password: PASSWORD,
     auth_host: AUTH_HOST,
+    metrics_route: METRICS_ROUTE
   )
 end
