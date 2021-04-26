@@ -14,11 +14,11 @@ module PlaceOS::Tasks::Initialization
     username : String,
     password : String,
     auth_host : String,
-    kibana_route : String
+    metrics_route : String
   )
     application_base = "#{tls ? "https" : "http"}://#{domain}"
-    kibana_url = "#{application_base}/#{kibana_route}/"
-    metrics_config = {"metrics" => JSON::Any.new(kibana_url)}
+    metrics_url = "#{application_base}/#{metrics_route}/"
+    metrics_config = {"metrics" => JSON::Any.new(metrics_url)}
     authority = Entities.create_authority(name: application_name, domain: application_base, config: metrics_config)
     Entities.create_user(authority: authority, name: username, email: email, password: password, sys_admin: true)
     Entities.create_application(authority: authority, name: application_name, base: application_base)
