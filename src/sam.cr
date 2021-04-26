@@ -80,7 +80,9 @@ namespace "create" do
     tls = (args["tls"]? || PlaceOS::TLS).try &.to_s.downcase == "true"
 
     site_origin = "#{tls ? "https" : "http"}://#{domain_name}"
-    PlaceOS::Tasks.create_authority(name: domain_name, domain: site_origin)
+    kibana_url = "#{site_origin}/#{PlaceOS::KIBANA_ROUTE}/"
+    config = {"metrics" => JSON::Any.new(kibana_url)}
+    PlaceOS::Tasks.create_authority(name: domain_name, domain: site_origin, config: config)
   end
 
   desc "Creates an application"

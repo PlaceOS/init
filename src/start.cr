@@ -12,5 +12,6 @@ module PlaceOS
     username: USERNAME,
     password: PASSWORD,
     auth_host: AUTH_HOST,
+    kibana_route: KIBANA_ROUTE
   )
 end
