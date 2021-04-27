@@ -7,7 +7,7 @@ shards:
 
   action-controller:
     git: https://github.com/spider-gazelle/action-controller.git
-    version: 4.3.3
+    version: 4.3.5
 
   active-model:
     git: https://github.com/spider-gazelle/active-model.git
@@ -15,7 +15,7 @@ shards:
 
   awscr-s3:
     git: https://github.com/taylorfinnell/awscr-s3.git
-    version: 0.8.1
+    version: 0.8.2
 
   awscr-signer: # Overridden
     git: https://github.com/caspiano/awscr-signer.git
@@ -23,7 +23,7 @@ shards:
 
   bindata:
     git: https://github.com/spider-gazelle/bindata.git
-    version: 1.8.3
+    version: 1.9.0
 
   cron_parser:
     git: https://github.com/kostya/cron_parser.git
@@ -35,19 +35,19 @@ shards:
 
   etcd:
     git: https://github.com/place-labs/crystal-etcd.git
-    version: 1.2.2
+    version: 1.2.4
 
   exec_from:
     git: https://github.com/place-labs/exec_from.git
-    version: 1.2.1
+    version: 1.3.0
 
   faker:
     git: https://github.com/askn/faker.git
-    version: 0.5.0
+    version: 0.6.0
 
   future:
     git: https://github.com/crystal-community/future.cr.git
-    version: 0.1.0
+    version: 1.0.0
 
   habitat:
     git: https://github.com/luckyframework/habitat.git
@@ -59,7 +59,7 @@ shards:
 
   json_mapping:
     git: https://github.com/crystal-lang/json_mapping.cr.git
-    version: 0.1.0
+    version: 0.1.1
 
   jwt:
     git: https://github.com/crystal-community/jwt.git
@@ -71,7 +71,7 @@ shards:
 
   lucky_router:
     git: https://github.com/luckyframework/lucky_router.git
-    version: 0.4.1
+    version: 0.4.2
 
   neuroplastic:
     git: https://github.com/spider-gazelle/neuroplastic.git
@@ -83,11 +83,11 @@ shards:
 
   placeos-log-backend:
     git: https://github.com/place-labs/log-backend.git
-    version: 0.3.0
+    version: 0.4.0
 
   placeos-models:
     git: https://github.com/placeos/models.git
-    version: 4.15.3
+    version: 4.18.0
 
   rethinkdb:
     git: https://github.com/kingsleyh/crystal-rethinkdb.git
@@ -95,7 +95,7 @@ shards:
 
   rethinkdb-orm:
     git: https://github.com/spider-gazelle/rethinkdb-orm.git
-    version: 4.0.0
+    version: 4.1.0
 
   retriable: # Overridden
     git: https://github.com/sija/retriable.cr.git
@@ -119,5 +119,5 @@ shards:
 
   yaml_mapping:
     git: https://github.com/crystal-lang/yaml_mapping.cr.git
-    version: 0.1.0
+    version: 0.1.1
 

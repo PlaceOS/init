@@ -191,10 +191,14 @@ module PlaceOS::Tasks::Entities
       new_driver
     end
 
-    zone = upsert_document(Model::Zone.all) do
-      zone_name = "TestZone-#{version}"
-      new_zone = Model::Zone.new(name: zone_name)
-      new_zone
+    # Create default entities for each element of the hierarchy
+    zones = {"building", "org", "level", "area"}.map do |tag|
+      upsert_document(Model::Zone.with_tag(tag)) do
+        Model::Zone.new.tap do |zone|
+          zone.name = "Zone-#{tag}-#{version}"
+          zone.tags = Set{tag}
+        end
+      end
     end
 
     control_system = upsert_document(Model::ControlSystem.all) do
@@ -234,11 +238,11 @@ module PlaceOS::Tasks::Entities
     end
 
     upsert_document(Model::TriggerInstance.of(trigger.id.as(String))) do
-      trigger_instance = Model::TriggerInstance.new
-      trigger_instance.control_system = control_system
-      trigger_instance.zone = zone
-      trigger_instance.trigger = trigger
-      trigger_instance
+      Model::TriggerInstance.new.tap do |trigger_instance|
+        trigger_instance.control_system = control_system
+        trigger_instance.zone = zones.first
+        trigger_instance.trigger = trigger
+      end
     end
 
     upsert_document(Model::Edge.all) do
