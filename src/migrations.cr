@@ -8,4 +8,3 @@ module Migrations
     {% end %}
   end
 end
-
