@@ -7,7 +7,7 @@ module Migrations::SettingParentType
     raw_query do |r|
       r
         .table(PlaceOS::Model::Settings.table_name)
-        .filter { |s| s["parent_type"].type_of.eq("NUMBER") }
+        .filter(&.["parent_type"].type_of.eq("NUMBER"))
         .update { |s|
           {% begin %}
             {% type = PlaceOS::Model::Settings::ParentType %}
