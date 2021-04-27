@@ -109,7 +109,7 @@ module PlaceOS::Tasks::Entities
     application_id = Digest::MD5.hexdigest(redirect_uri)
     scope = "public" if scope.nil? || scope.empty?
 
-    upsert_document(Model::DoorkeeperApplication.get_all([application_id], index: :uid)) do
+    upsert_document(Model::DoorkeeperApplication.find_all([application_id], index: :uid)) do
       Log.info { {
         message:      "creating Application",
         name:         name,
@@ -149,12 +149,12 @@ module PlaceOS::Tasks::Entities
       name: private_repository_name,
       folder_name: private_repository_folder_name,
     )) do
-      repo = Model::Generator.repository(type: Model::Repository::Type::Driver)
-      repo.uri = private_repository_uri
-      repo.name = private_repository_name
-      repo.folder_name = private_repository_folder_name
-      repo.description = "PlaceOS Private Drivers"
-      repo
+      Model::Generator.repository(type: Model::Repository::Type::Driver).tap do |repo|
+        repo.uri = private_repository_uri
+        repo.name = private_repository_name
+        repo.folder_name = private_repository_folder_name
+        repo.description = "PlaceOS Private Drivers"
+      end
     end
 
     drivers_repository_uri = "https://github.com/placeos/drivers"
@@ -166,12 +166,12 @@ module PlaceOS::Tasks::Entities
       name: drivers_repository_name,
       folder_name: drivers_repository_folder_name,
     )) do
-      repo = Model::Generator.repository(type: Model::Repository::Type::Driver)
-      repo.uri = drivers_repository_uri
-      repo.name = drivers_repository_name
-      repo.folder_name = drivers_repository_folder_name
-      repo.description = "PlaceOS Drivers"
-      repo
+      Model::Generator.repository(type: Model::Repository::Type::Driver).tap do |repo|
+        repo.uri = drivers_repository_uri
+        repo.name = drivers_repository_name
+        repo.folder_name = drivers_repository_folder_name
+        repo.description = "PlaceOS Drivers"
+      end
     end
 
     driver = upsert_document(Model::Driver.all) do
@@ -202,10 +202,7 @@ module PlaceOS::Tasks::Entities
     end
 
     control_system = upsert_document(Model::ControlSystem.all) do
-      # ControlSystem metadata
-      control_system_name = "TestSystem-#{version}"
-      new_control_system = Model::ControlSystem.new(name: control_system_name)
-      new_control_system
+      Model::ControlSystem.new(name: "System-#{version}")
     end
 
     upsert_document(Model::Settings.for_parent(control_system.id.as(String))) do
@@ -217,21 +214,20 @@ module PlaceOS::Tasks::Entities
     end
 
     mod = upsert_document(Model::Module.where(driver_id: driver.id.as(String), control_system_id: control_system.id.as(String))) do
-      module_name = "TestModule-#{version}"
-      new_module = Model::Generator.module(driver: driver, control_system: control_system)
-      new_module.custom_name = module_name
-      new_module
+      Model::Generator.module(driver: driver, control_system: control_system).tap do |new_module|
+        new_module.custom_name = "Module-#{version}"
+      end
     end
 
     # Update subarrays of ControlSystem
     control_system.add_module(mod.id.as(String))
-    control_system.zones = control_system.zones.as(Array(String)) | [zone.id.as(String)]
+    control_system.zones = control_system.zones | zones.compact_map &.id
     control_system.save!
 
     trigger = upsert_document(Model::Trigger.where(control_system_id: control_system.id.as(String))) do
       # Trigger metadata
-      trigger_name = "TestTrigger-#{version}"
-      trigger_description = "a test trigger"
+      trigger_name = "Trigger-#{version}"
+      trigger_description = "An automatically generated Trigger."
       new_trigger = Model::Trigger.new(name: trigger_name, description: trigger_description)
       new_trigger.control_system = control_system
       new_trigger
@@ -247,8 +243,8 @@ module PlaceOS::Tasks::Entities
 
     upsert_document(Model::Edge.all) do
       Model::Edge.new(
-        name: "TestEdge-#{version}",
-        description: "Automatically generated edge profile. Set PLACE_EDGE_SECRET in your edge node's",
+        name: "Edge-#{version}",
+        description: "Automatically generated Edge profile. Set PLACE_EDGE_SECRET in your edge node's environment.",
       )
     end
   rescue e
