@@ -1,4 +1,5 @@
 module PlaceOS
+  NAME = "init"
   PROD = (ENV["ENV"]? || ENV["SG_ENV"]?) == "production"
 
   # Backup/Restore constants
@@ -34,4 +35,6 @@ module PlaceOS
   RETHINKDB_PORT = ENV["RETHINKDB_PORT"]?.try &.to_i || 28015
   RETHINKDB_USER = ENV["RETHINKDB_USER"]?
   RETHINKDB_PASS = ENV["RETHINKDB_PASS"]?
+
+  class_getter? production : Bool = PROD
 end

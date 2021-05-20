@@ -1,5 +1,5 @@
 require "placeos-models"
-require "./log"
+require "./logging"
 
 module Migration
   macro included

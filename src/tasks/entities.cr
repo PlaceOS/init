@@ -1,4 +1,4 @@
-require "../log"
+require "../logging"
 
 require "placeos-models"
 require "placeos-models/spec/generator"

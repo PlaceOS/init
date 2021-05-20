@@ -1,4 +1,4 @@
-require "../log"
+require "../logging"
 require "./entities"
 
 module PlaceOS::Tasks::Initialization
