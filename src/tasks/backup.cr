@@ -1,4 +1,4 @@
-require "../log"
+require "../logging"
 
 require "exec_from"
 require "retriable/core_ext/kernel"

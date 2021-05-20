@@ -1,5 +1,5 @@
 name: placeos-init
-version: 0.13.0
+version: 0.13.1
 crystal: ~> 1.0
 license: MIT
 
@@ -28,7 +28,7 @@ targets:
 dependencies:
   action-controller:
     github: spider-gazelle/action-controller
-    version: ~> 4
+    version: ~> 4.4
 
   awscr-s3:
     github: taylorfinnell/awscr-s3

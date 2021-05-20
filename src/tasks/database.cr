@@ -1,4 +1,4 @@
-require "../log"
+require "../logging"
 
 require "http/client"
 require "rethinkdb"
