@@ -27,7 +27,7 @@ module PlaceOS::Tasks::Initialization
       name: "Backoffice",
       folder_name: "backoffice",
       uri: "https://github.com/placeos/backoffice",
-      branch: "build-#{PlaceOS::Tasks.production? ? "release" : "alpha"}",
+      branch: "build/#{PlaceOS::Tasks.production? ? "prod" : "alpha"}",
       description: "Admin interface for PlaceOS",
     )
 
