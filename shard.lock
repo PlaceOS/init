@@ -7,11 +7,11 @@ shards:
 
   action-controller:
     git: https://github.com/spider-gazelle/action-controller.git
-    version: 4.4.1
+    version: 4.5.0
 
   active-model:
     git: https://github.com/spider-gazelle/active-model.git
-    version: 3.0.0
+    version: 3.1.1
 
   awscr-s3:
     git: https://github.com/taylorfinnell/awscr-s3.git
@@ -54,8 +54,8 @@ shards:
     version: 0.4.7
 
   http-params-serializable:
-    git: https://github.com/caspiano/http-params-serializable.git
-    version: 0.4.1+git.commit.c87119117af3d2db11af22ad799ccf77072e6a8b
+    git: https://github.com/place-labs/http-params-serializable.git
+    version: 0.5.0
 
   json_mapping:
     git: https://github.com/crystal-lang/json_mapping.cr.git
@@ -75,11 +75,11 @@ shards:
 
   neuroplastic:
     git: https://github.com/spider-gazelle/neuroplastic.git
-    version: 1.7.1
+    version: 1.8.0
 
   openssl_ext:
     git: https://github.com/spider-gazelle/openssl_ext.git
-    version: 2.1.4
+    version: 2.1.5
 
   placeos-log-backend:
     git: https://github.com/place-labs/log-backend.git
@@ -87,7 +87,7 @@ shards:
 
   placeos-models:
     git: https://github.com/placeos/models.git
-    version: 4.18.0
+    version: 4.18.2
 
   rethinkdb:
     git: https://github.com/kingsleyh/crystal-rethinkdb.git
@@ -95,15 +95,15 @@ shards:
 
   rethinkdb-orm:
     git: https://github.com/spider-gazelle/rethinkdb-orm.git
-    version: 4.1.0
+    version: 4.2.0
 
   retriable: # Overridden
     git: https://github.com/sija/retriable.cr.git
-    version: 0.2.3
+    version: 0.2.4
 
   sam:
     git: https://github.com/imdrasil/sam.cr.git
-    version: 0.4.0
+    version: 0.4.1
 
   simple_retry:
     git: https://github.com/spider-gazelle/simple_retry.git
@@ -111,7 +111,7 @@ shards:
 
   tasker:
     git: https://github.com/spider-gazelle/tasker.git
-    version: 2.0.3
+    version: 2.0.5
 
   tokenizer:
     git: https://github.com/spider-gazelle/tokenizer.git
