@@ -5,6 +5,8 @@ module Migration
   macro included
     Log = ::Log.for(self)
 
+    Ref = __FILE__
+
     def self.raw_query(&)
       results = PlaceOS::Model::Connection.raw { |r| yield r }
       Log.info { results }
