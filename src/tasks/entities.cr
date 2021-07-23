@@ -8,6 +8,13 @@ module PlaceOS::Tasks::Entities
   extend self
   Log = ::Log.for(self)
 
+  # Check if a user exists under a domain
+  def user_exists?(email : String, domain : String) : Bool
+    !!Model::Authority.find_by_domain(domain).try do |authority|
+      Model::User.find_by_email(authority.id.as(String), email)
+    end
+  end
+
   def create_authority(
     name : String,
     domain : String,

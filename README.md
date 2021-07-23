@@ -83,6 +83,10 @@ By default, the backup will take place at midnight every day.
 
 - `help`: List all defined tasks
 
+- `check:user`: Check for existence of a user
+    * `domain`: Required
+    * `email`: Required
+
 - `create:placeholders`: Creates a representative set of documents in RethinkDB
 
 - `create:authority`: Creates an Authority
