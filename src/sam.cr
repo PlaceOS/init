@@ -68,6 +68,15 @@ namespace "drop" do
   end
 end
 
+namespace "check" do
+  desc "Check if a user exists on a domain"
+  task "user" do |_, args|
+    email = (args["email"]? || abort "`email` not set").to_s
+    domain = (args["domain"]? || abort "`domain` not set").to_s
+    exit(PlaceOS::Tasks.user_exists?(email, domain) ? 0 : 1)
+  end
+end
+
 namespace "create" do
   desc "Creates a representative set of documents in RethinkDB"
   task "placeholders" do

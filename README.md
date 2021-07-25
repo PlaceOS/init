@@ -83,6 +83,10 @@ By default, the backup will take place at midnight every day.
 
 - `help`: List all defined tasks
 
+- `check:user`: Check for existence of a user
+    * `domain`: The PlaceOS domain the user is associated with (e.g. `example.com`). Required.
+    * `email`: Email of the user (e.g. `alice@example.com`). Required.
+
 - `create:placeholders`: Creates a representative set of documents in RethinkDB
 
 - `create:authority`: Creates an Authority

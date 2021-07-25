@@ -13,7 +13,7 @@ COPY src src
 
 RUN mkdir -p /app/bin
 
-RUN shards build --static --error-trace --release --ignore-crystal-version
+RUN shards build --release --static --error-trace --ignore-crystal-version
 
 FROM alpine:3.12
 
