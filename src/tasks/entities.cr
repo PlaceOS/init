@@ -10,9 +10,11 @@ module PlaceOS::Tasks::Entities
 
   # Check if a user exists under a domain
   def user_exists?(email : String, domain : String) : Bool
-    !!Model::Authority.find_by_domain(domain).try do |authority|
+    !!(Model::Authority.find_by_domain(domain).try do |authority|
       Model::User.find_by_email(authority.id.as(String), email)
-    end
+    end).tap { |found|
+      Log.info { {message: "#{found ? "found" : "could not find"} user", email: email, domain: domain} }
+    }
   end
 
   def create_authority(
