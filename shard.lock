@@ -2,8 +2,8 @@
 version: 2.0
 shards:
   CrystalEmail:
-    git: https://github.com/nephos/crystalemail.git
-    version: 0.2.4
+    git: https://github.com/place-labs/crystalemail.git
+    version: 0.2.6
 
   action-controller:
     git: https://github.com/spider-gazelle/action-controller.git
@@ -23,7 +23,7 @@ shards:
 
   bindata:
     git: https://github.com/spider-gazelle/bindata.git
-    version: 1.9.0
+    version: 1.9.1
 
   cron_parser:
     git: https://github.com/kostya/cron_parser.git
@@ -63,7 +63,7 @@ shards:
 
   jwt:
     git: https://github.com/crystal-community/jwt.git
-    version: 1.5.1
+    version: 1.6.0
 
   log_helper:
     git: https://github.com/spider-gazelle/log_helper.git
@@ -87,7 +87,7 @@ shards:
 
   placeos-models:
     git: https://github.com/placeos/models.git
-    version: 4.18.2
+    version: 5.10.0
 
   rethinkdb:
     git: https://github.com/kingsleyh/crystal-rethinkdb.git
@@ -95,7 +95,7 @@ shards:
 
   rethinkdb-orm:
     git: https://github.com/spider-gazelle/rethinkdb-orm.git
-    version: 4.2.0
+    version: 5.0.1
 
   retriable: # Overridden
     git: https://github.com/sija/retriable.cr.git
