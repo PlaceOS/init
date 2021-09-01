@@ -51,7 +51,7 @@ dependencies:
 
   placeos-models:
     github: placeos/models
-    version: ~> 4.18
+    version: ~> 5.9
 
   rethinkdb:
     github: kingsleyh/crystal-rethinkdb
@@ -59,7 +59,7 @@ dependencies:
 
   rethinkdb-orm:
     github: spider-gazelle/rethinkdb-orm
-    version: ~> 4
+    version: ">= 4.0.0"
 
   sam:
     github: imdrasil/sam.cr
