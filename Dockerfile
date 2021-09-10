@@ -22,13 +22,14 @@ WORKDIR /app
 
 # Install bash, rethinkdb & python driver
 RUN apk add --no-cache \
-  apache2-utils \
-  bash \
-  coreutils \
-  openssh \
-  openssl \
-  py-pip \
-  rethinkdb
+      apache2-utils \
+      bash \
+      coreutils \
+      openssh \
+      openssl \
+      py3-pip \
+    && \
+    apk add --no-cache -X http://dl-cdn.alpinelinux.org/alpine/v3.12/community rethinkdb
 
 RUN pip install rethinkdb
 
