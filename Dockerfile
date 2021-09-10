@@ -16,20 +16,20 @@ RUN mkdir -p /app/bin
 
 RUN shards build --release --static --error-trace --ignore-crystal-version
 
-FROM alpine:3.14
+# TODO: Stuck on 3.12 as `rethinkdb` is no longer packaged.
+FROM alpine:3.12
 
 WORKDIR /app
 
 # Install bash, rethinkdb & python driver
 RUN apk add --no-cache \
-      apache2-utils \
-      bash \
-      coreutils \
-      openssh \
-      openssl \
-      py3-pip \
-    && \
-    apk add --no-cache -X http://dl-cdn.alpinelinux.org/alpine/v3.12/community rethinkdb
+        apache2-utils \
+        bash \
+        coreutils \
+        openssh \
+        openssl \
+        py-pip \
+        rethinkdb
 
 RUN pip install rethinkdb
 
