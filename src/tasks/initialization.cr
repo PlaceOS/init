@@ -15,8 +15,8 @@ module PlaceOS::Tasks::Initialization
     password : String,
     auth_host : String,
     metrics_route : String,
-    interface_branch : String,
-    interface_commit : String
+    backoffice_branch : String,
+    backoffice_commit : String
   )
     application_base = "#{tls ? "https" : "http"}://#{domain}"
     metrics_url = "#{application_base}/#{metrics_route}/"
@@ -30,8 +30,8 @@ module PlaceOS::Tasks::Initialization
       name: "Backoffice",
       folder_name: "backoffice",
       uri: "https://github.com/placeos/backoffice",
-      branch: interface_branch,
-      commit_hash: interface_commit,
+      branch: backoffice_branch,
+      commit_hash: backoffice_commit,
       description: "Admin interface for PlaceOS",
     )
 
