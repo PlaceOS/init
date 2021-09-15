@@ -12,6 +12,8 @@ module PlaceOS
     username: USERNAME,
     password: PASSWORD,
     auth_host: AUTH_HOST,
-    metrics_route: METRICS_ROUTE
+    metrics_route: METRICS_ROUTE,
+    interface_branch: INTERFACE_BRANCH,
+    interface_commit: INTERFACE_COMMIT,
   )
 end
