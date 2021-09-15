@@ -13,7 +13,7 @@ module PlaceOS
     password: PASSWORD,
     auth_host: AUTH_HOST,
     metrics_route: METRICS_ROUTE,
-    interface_branch: INTERFACE_BRANCH,
-    interface_commit: INTERFACE_COMMIT,
+    backoffice_branch: BACKOFFICE_BRANCH,
+    backoffice_commit: BACKOFFICE_COMMIT,
   )
 end

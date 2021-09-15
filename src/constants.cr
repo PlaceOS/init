@@ -27,8 +27,8 @@ module PlaceOS
 
   # Backoffice
 
-  INTERFACE_BRANCH = ENV["PLACE_BACKOFFICE_BRANCH"]?.presence || "build/#{production? ? "prod" : "dev"}"
-  INTERFACE_COMMIT = ENV["PLACE_BACKOFFICE_COMMIT"]?.presence || "HEAD"
+  BACKOFFICE_BRANCH = ENV["PLACE_BACKOFFICE_BRANCH"]?.presence || "build/#{production? ? "prod" : "dev"}"
+  BACKOFFICE_COMMIT = ENV["PLACE_BACKOFFICE_COMMIT"]?.presence || "HEAD"
 
   # Resource configurations
 
