@@ -24,13 +24,13 @@ module PlaceOS::Tasks::Backup
     rethinkdb_db : String? = nil,
     rethinkdb_password : String? = nil
   )
-    Log.context.set({
+    Log.context.set(
       rethinkdb_host: rethinkdb_host,
       rethinkdb_port: rethinkdb_port,
-      rethinkdb_db:   rethinkdb_db || "Full backup",
-      aws_s3_bucket:  aws_s3_bucket,
-      aws_region:     aws_region,
-    })
+      rethinkdb_db: rethinkdb_db || "Full backup",
+      aws_s3_bucket: aws_s3_bucket,
+      aws_region: aws_region,
+    )
 
     writer = PlaceOS::Utils::S3.new(
       region: aws_region,
@@ -69,12 +69,12 @@ module PlaceOS::Tasks::Backup
     rethinkdb_password : String? = nil,
     cron : String = BACKUP_CRON
   )
-    Log.context.set({
+    Log.context.set(
       rethinkdb_host: rethinkdb_host,
       rethinkdb_port: rethinkdb_port,
-      rethinkdb_db:   rethinkdb_db,
-      cron:           cron,
-    })
+      rethinkdb_db: rethinkdb_db,
+      cron: cron,
+    )
 
     writer = PlaceOS::Utils::S3.new(
       region: aws_region,

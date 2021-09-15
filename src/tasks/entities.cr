@@ -40,7 +40,7 @@ module PlaceOS::Tasks::Entities
     folder_name : String,
     description : String,
     uri : String,
-    branch : String = "master",
+    branch : String,
     commit_hash : String = "HEAD"
   )
     upsert_document(Model::Repository.where(

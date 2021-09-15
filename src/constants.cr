@@ -25,6 +25,11 @@ module PlaceOS
   AUTH_HOST        = ENV["PLACE_AUTH_HOST"]? || "auth"
   METRICS_ROUTE    = ENV["PLACE_METRICS_ROUTE"]? || "monitor"
 
+  # Backoffice
+
+  INTERFACE_BRANCH = ENV["PLACE_BACKOFFICE_BRANCH"]?.presence || "build/#{production? ? "prod" : "dev"}"
+  INTERFACE_COMMIT = ENV["PLACE_BACKOFFICE_COMMIT"]?.presence || "HEAD"
+
   # Resource configurations
 
   ES_HOST = ENV["ES_HOST"]? || "localhost"

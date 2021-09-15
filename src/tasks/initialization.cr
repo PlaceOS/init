@@ -14,12 +14,15 @@ module PlaceOS::Tasks::Initialization
     username : String,
     password : String,
     auth_host : String,
-    metrics_route : String
+    metrics_route : String,
+    interface_branch : String,
+    interface_commit : String
   )
     application_base = "#{tls ? "https" : "http"}://#{domain}"
     metrics_url = "#{application_base}/#{metrics_route}/"
     metrics_config = {"metrics" => JSON::Any.new(metrics_url)}
     authority = Entities.create_authority(name: application_name, domain: application_base, config: metrics_config)
+
     Entities.create_user(authority: authority, name: username, email: email, password: password, sys_admin: true)
     Entities.create_application(authority: authority, name: application_name, base: application_base)
 
@@ -27,7 +30,8 @@ module PlaceOS::Tasks::Initialization
       name: "Backoffice",
       folder_name: "backoffice",
       uri: "https://github.com/placeos/backoffice",
-      branch: "build/#{PlaceOS::Tasks.production? ? "prod" : "dev"}",
+      branch: interface_branch,
+      commit_hash: interface_commit,
       description: "Admin interface for PlaceOS",
     )
 
