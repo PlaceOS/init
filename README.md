@@ -51,7 +51,7 @@ docker-compose run --no-deps \
     init sh -c 'rethinkdb restore --connect $RETHINKDB_HOST:$RETHINKDB_PORT --force /rethink-dump.tar.gz'
 ```
 
-## Init Container
+## Initialization
 
 The default entrypoint to the init container generates a User, Authority, and Application dependent on the environment variables below.
 
@@ -63,6 +63,8 @@ The default entrypoint to the init container generates a User, Authority, and Ap
 - `tls`: `PLACE_TLS == "true"`
 - `auth_host`: `PLACE_AUTH_HOST` || `"auth"`
 - `development`: `ENV == "development"`
+- `backoffice_branch`: `PLACE_BACKOFFICE_BRANCH`, `build/prod` or `build/dev` dependent on environment.
+- `backoffice_commmit`: `PLACE_BACKOFFICE_COMMIT` ||`"HEAD"`
 
 ## Backup Container
 
