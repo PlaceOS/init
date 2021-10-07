@@ -95,7 +95,7 @@ module PlaceOS::Tasks::Entities
       user.sys_admin = sys_admin
       user.support = support
       user.authority_id = authority_id
-      user.email = email
+      user.email = PlaceOS::Model::Email.new(email)
       user.password = password
       user
     end
