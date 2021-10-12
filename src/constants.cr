@@ -24,6 +24,7 @@ module PlaceOS
   PASSWORD         = ENV["PLACE_PASSWORD"]? || abort("missing PLACE_PASSWORD")
   AUTH_HOST        = ENV["PLACE_AUTH_HOST"]? || "auth"
   METRICS_ROUTE    = ENV["PLACE_METRICS_ROUTE"]? || "monitor"
+  ANALYTICS_ROUTE  = ENV["PLACE_ANALYTICS_ROUTE"]? || "analytics"
 
   # Backoffice
 

@@ -15,5 +15,6 @@ module PlaceOS
     metrics_route: METRICS_ROUTE,
     backoffice_branch: BACKOFFICE_BRANCH,
     backoffice_commit: BACKOFFICE_COMMIT,
+    analytics_route: ANALYTICS_ROUTE,
   )
 end

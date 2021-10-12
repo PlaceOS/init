@@ -16,7 +16,8 @@ module PlaceOS::Tasks::Initialization
     auth_host : String,
     metrics_route : String,
     backoffice_branch : String,
-    backoffice_commit : String
+    backoffice_commit : String,
+    analytics_route : String? = nil
   )
     application_base = "#{tls ? "https" : "http"}://#{domain}"
     metrics_url = "#{application_base}/#{metrics_route}/"
@@ -25,6 +26,7 @@ module PlaceOS::Tasks::Initialization
 
     Entities.create_user(authority: authority, name: username, email: email, password: password, sys_admin: true)
     Entities.create_application(authority: authority, name: application_name, base: application_base)
+    Entities.create_application(authority: authority, name: analytics_route.not_nil!, base: application_base) if analytics_route
 
     Entities.create_interface(
       name: "Backoffice",
