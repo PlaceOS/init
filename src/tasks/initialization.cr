@@ -29,7 +29,7 @@ module PlaceOS::Tasks::Initialization
 
     if analytics_route
       analytics_redirect_uri = File.join(application_base, analytics_route, ANALYTICS_CALLBACK_PATH)
-      Entities.create_application(authority: authority, name: analytics_route, base: application_base, redirect_uri: analytics_redirect_uri )
+      Entities.create_application(authority: authority, name: analytics_route, base: application_base, redirect_uri: analytics_redirect_uri)
     end
 
     Entities.create_interface(
