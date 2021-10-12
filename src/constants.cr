@@ -25,6 +25,7 @@ module PlaceOS
   AUTH_HOST        = ENV["PLACE_AUTH_HOST"]? || "auth"
   METRICS_ROUTE    = ENV["PLACE_METRICS_ROUTE"]? || "monitor"
   ANALYTICS_ROUTE  = ENV["PLACE_ANALYTICS_ROUTE"]? || "analytics"
+  ANALYTICS_CALLBACK_PATH = ENV["ANALYTICS_CALLBACK_PATH"]? || "oauth/PlaceOS/callback"
 
   # Backoffice
 

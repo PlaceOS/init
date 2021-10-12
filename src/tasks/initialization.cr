@@ -26,7 +26,11 @@ module PlaceOS::Tasks::Initialization
 
     Entities.create_user(authority: authority, name: username, email: email, password: password, sys_admin: true)
     Entities.create_application(authority: authority, name: application_name, base: application_base)
-    Entities.create_application(authority: authority, name: analytics_route.not_nil!, base: application_base) if analytics_route
+
+    if analytics_route
+      analytics_redirect_uri = File.join(application_base, analytics_route, ANALYTICS_CALLBACK_PATH)
+      Entities.create_application(authority: authority, name: analytics_route, base: application_base, redirect_uri: analytics_redirect_uri )
+    end
 
     Entities.create_interface(
       name: "Backoffice",
