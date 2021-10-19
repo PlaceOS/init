@@ -55,7 +55,7 @@ dependencies:
 
   rethinkdb:
     github: kingsleyh/crystal-rethinkdb
-    version: ~> 0.2
+    version: ~> 0.3
 
   rethinkdb-orm:
     github: spider-gazelle/rethinkdb-orm

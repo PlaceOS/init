@@ -7,7 +7,7 @@ shards:
 
   action-controller:
     git: https://github.com/spider-gazelle/action-controller.git
-    version: 4.5.0
+    version: 4.5.1
 
   active-model:
     git: https://github.com/spider-gazelle/active-model.git
@@ -15,11 +15,11 @@ shards:
 
   awscr-s3:
     git: https://github.com/taylorfinnell/awscr-s3.git
-    version: 0.8.2
+    version: 0.8.3
 
-  awscr-signer: # Overridden
-    git: https://github.com/caspiano/awscr-signer.git
-    version: 0.8.1+git.commit.2ec499e9d45d787f7bd6ae1abdb84e05bb4181f1
+  awscr-signer:
+    git: https://github.com/taylorfinnell/awscr-signer.git
+    version: 0.8.2
 
   bindata:
     git: https://github.com/spider-gazelle/bindata.git
@@ -71,7 +71,7 @@ shards:
 
   lucky_router:
     git: https://github.com/luckyframework/lucky_router.git
-    version: 0.4.2
+    version: 0.5.1
 
   neuroplastic:
     git: https://github.com/spider-gazelle/neuroplastic.git
@@ -87,15 +87,15 @@ shards:
 
   placeos-models:
     git: https://github.com/placeos/models.git
-    version: 5.12.0
+    version: 5.12.2
 
-  rethinkdb:
+  rethinkdb: # Overridden
     git: https://github.com/kingsleyh/crystal-rethinkdb.git
-    version: 0.2.3
+    version: 0.3.1
 
   rethinkdb-orm:
     git: https://github.com/spider-gazelle/rethinkdb-orm.git
-    version: 5.0.1
+    version: 5.0.2
 
   retriable: # Overridden
     git: https://github.com/sija/retriable.cr.git
@@ -103,7 +103,7 @@ shards:
 
   sam:
     git: https://github.com/imdrasil/sam.cr.git
-    version: 0.4.1
+    version: 0.4.2
 
   simple_retry:
     git: https://github.com/spider-gazelle/simple_retry.git
