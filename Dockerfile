@@ -2,7 +2,7 @@ ARG CRYSTAL_VERSION=1.1.1
 FROM crystallang/crystal:${CRYSTAL_VERSION}-alpine AS build
 WORKDIR /app
 
-RUN apk add --no-cache yaml-static
+RUN apk add --update --no-cache yaml-static
 
 COPY shard.yml .
 COPY shard.override.yml .
@@ -22,8 +22,10 @@ FROM alpine:3.12
 WORKDIR /app
 
 # Install bash, rethinkdb & python driver
-RUN apk add --no-cache \
-        apache2-utils \
+RUN apk add --update --no-cache \
+        apache2-utils>=2.4.51-r0 \
+        apk-tools>=2.10.8-r0 \
+        libcurl>=7.79.1-r0 \
         bash \
         coreutils \
         openssh \
