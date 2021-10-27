@@ -45,7 +45,7 @@ RUN shards build \
 SHELL ["/bin/ash", "-eo", "pipefail", "-c"]
 
 # Extract binary dependencies
-RUN for binary in "/app/*"; do \
+RUN for binary in /app/bin/*; do \
         ldd "$binary" | \
         tr -s '[:blank:]' '\n' | \
         grep '^/' | \
@@ -59,11 +59,11 @@ WORKDIR /app
 
 # Install bash, rethinkdb & python driver
 RUN apk add --update --no-cache \
-        apache2-utils>=2.4.51-r0 \
-        apk-tools>=2.10.8-r0 \
+        'apache2-utils>=2.4.51-r0' \
+        'apk-tools>=2.10.8-r0' \
         bash \
         coreutils \
-        libcurl>=7.79.1-r0 \
+        'libcurl>=7.79.1-r0' \
         libsodium \
         openssh \
         openssl \
