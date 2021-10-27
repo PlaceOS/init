@@ -50,7 +50,8 @@ RUN apk add --update --no-cache \
         py-pip \
         rethinkdb
 
-RUN pip install rethinkdb
+RUN pip install --no-cache-dir \
+        rethinkdb==2.4.8
 
 COPY scripts /app/scripts
 
