@@ -71,7 +71,8 @@ RUN apk add --update --no-cache \
         rethinkdb
 
 RUN pip install --no-cache-dir \
-        rethinkdb==2.4.8
+        rethinkdb==2.4.8 \
+        'urllib3>=1.26.5'
 
 COPY scripts /app/scripts
 
