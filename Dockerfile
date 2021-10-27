@@ -8,13 +8,30 @@ COPY shard.yml .
 COPY shard.override.yml .
 COPY shard.lock .
 
-RUN shards install --static --ignore-crystal-version --production
+# hadolint ignore=DL3003
+RUN shards install \
+        --ignore-crystal-version \
+        --production \
+        --skip-postinstall \
+        --static \
+    && \
+    ( \
+        cd lib/sodium \
+        && \
+        PKG_CONFIG_PATH=$(which pkg-config) \
+        bash build/libsodium_install.sh \
+    )
 
 COPY src src
 
 RUN mkdir -p /app/bin
 
-RUN shards build --release --static --error-trace --ignore-crystal-version
+RUN shards build \
+        --error-trace \
+        --ignore-crystal-version \
+        --production \
+        --release \
+        --static
 
 # TODO: Stuck on 3.12 as `rethinkdb` is no longer packaged.
 FROM alpine:3.12

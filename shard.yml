@@ -1,5 +1,5 @@
 name: placeos-init
-version: 0.14.0
+version: 0.15.0
 crystal: ~> 1.0
 license: MIT
 
@@ -38,7 +38,7 @@ dependencies:
 
   exec_from:
     github: place-labs/exec_from
-    version: ~> 1.2
+    version: ~> 2.0
 
   faker:
     github: askn/faker
@@ -61,9 +61,13 @@ dependencies:
     github: spider-gazelle/rethinkdb-orm
     version: ">= 4.0.0"
 
+  sodium:
+    github: place-labs/sodium.cr
+    branch: fix/aead-chalsa-signature
+
   sam:
     github: imdrasil/sam.cr
 
   tasker:
     github: spider-gazelle/tasker
-    version: ~> 2
+    version: ~> 2.0

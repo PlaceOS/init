@@ -12,12 +12,10 @@ module PlaceOS::Utils::RethinkDB
 
     # Return the file descriptor
     result = ExecFrom.exec_from(directory, "rethinkdb", arguments)
-    output = result[:output].to_s
-    exit_code = result[:exit_code]
-
+    output = result.output.to_s
     last_line = output.lines.last
 
-    if exit_code != 0 || !last_line.starts_with?("Done")
+    unless result.status.success? && last_line.starts_with?("Done")
       Log.error { "rethinkdb dump failed with: #{output}" }
       nil
     else
