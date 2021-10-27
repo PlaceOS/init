@@ -15,12 +15,12 @@ module PlaceOS::Utils::RethinkDB
     output = result.output.to_s
     last_line = output.lines.last
 
-    unless result.status.success? && last_line.starts_with?("Done")
+    if result.status.success? && last_line.starts_with?("Done")
+      file_name = last_line.split(':', limit: 2).last.strip
+      Path[file_name]
+    else
       Log.error { "rethinkdb dump failed with: #{output}" }
       nil
-    else
-      _, file_name = last_line.split(':', limit: 2)
-      Path[file_name.strip]
     end
   end
 
