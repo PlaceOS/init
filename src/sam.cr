@@ -1,7 +1,7 @@
 require "sam"
 
-require "./tasks"
 require "./constants"
+require "./tasks"
 
 namespace "backup" do
   desc "Generates a RethinkDB backup and writes it to S3"
@@ -78,6 +78,11 @@ namespace "check" do
 end
 
 namespace "create" do
+  desc "Generates an instance telemetry key"
+  task "instance_key" do
+    puts PlaceOS::Tasks.instance_secret_key
+  end
+
   desc "Creates a representative set of documents in RethinkDB"
   task "placeholders" do
     PlaceOS::Tasks.create_placeholders
