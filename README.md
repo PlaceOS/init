@@ -120,6 +120,9 @@ By default, the backup will take place at midnight every day.
     * `aws_secret`: Defaults to `AWS_SECRET`, required.
     * `aws_kms_key_id`: Defaults to `AWS_KMS_KEY_ID`
 
+- `secret:rotate_server_secret`: Rotate from old server secret to current value in `PLACE_SERVER_SECRET`
+    * `old_secret`: The previous value of `PLACE_SERVER_SECRET`, required.
+
 - `restore:rethinkdb`: Restore RethinkDB from S3.
     * `rethinkdb_host`: Defaults to `RETHINKDB_HOST` || `"localhost"`
     * `rethinkdb_port`: Defaults to `RETHINKDB_PORT` || `28019`
