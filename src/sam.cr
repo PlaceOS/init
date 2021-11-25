@@ -1,7 +1,7 @@
 require "sam"
 
-require "./tasks"
 require "./constants"
+require "./tasks"
 
 namespace "backup" do
   desc "Generates a RethinkDB backup and writes it to S3"
@@ -71,13 +71,28 @@ end
 namespace "check" do
   desc "Check if a user exists on a domain"
   task "user" do |_, args|
-    email = (args["email"]? || abort "`email` not set").to_s
-    domain = (args["domain"]? || abort "`domain` not set").to_s
+    email = required_argument(args, "email").to_s
+    domain = required_argument(args, "domain").to_s
     exit(PlaceOS::Tasks.user_exists?(email, domain) ? 0 : 1)
   end
 end
 
+namespace "secret" do
+  desc "Rotate the instance encryption secret"
+  task "rotate_server_secret" do |_, args|
+    abort("PLACE_SERVER_SECRET is unset") if ENV["PLACE_SERVER_SECRET"]?.presence.nil?
+
+    old_secret = required_argument(args, "old_secret").to_s
+    PlaceOS::Tasks.rotate_secret(old_secret)
+  end
+end
+
 namespace "create" do
+  desc "Generates an instance telemetry key"
+  task "instance_key" do
+    puts PlaceOS::Tasks.instance_secret_key
+  end
+
   desc "Creates a representative set of documents in RethinkDB"
   task "placeholders" do
     PlaceOS::Tasks.create_placeholders
@@ -97,7 +112,7 @@ namespace "create" do
   desc "Creates an application"
   task "application" do |_, args|
     arguments = {
-      authority:    (args["authority"]? || abort "missing authority id").to_s,
+      authority:    required_argument(args, "authority").to_s,
       name:         (args["name"]? || "backoffice").to_s,
       base:         (args["base"]? || "http://localhost:8080").to_s,
       redirect_uri: args["redirect_uri"]?.try &.to_s,
@@ -110,7 +125,7 @@ namespace "create" do
   desc "Creates a user"
   task "user" do |_, args_hash|
     arguments = {"authority_id", "email", "username", "password"}.map do |arg_key|
-      (args_hash[arg_key]?.try &.to_s) || abort "missing argument: `#{arg_key}`"
+      required_argument(args_hash, arg_key).to_s
     end
 
     sys_admin = args_hash["sys_admin"]?.try &.to_s.downcase == "true"
@@ -127,6 +142,10 @@ namespace "create" do
       support: support
     )
   end
+end
+
+def required_argument(args, key)
+  args[key]? || abort("missing argument `#{key}`")
 end
 
 Sam.help
