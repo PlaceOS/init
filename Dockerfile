@@ -1,4 +1,4 @@
-ARG CRYSTAL_VERSION=1.2.1
+ARG CRYSTAL_VERSION=1.2.2
 FROM crystallang/crystal:${CRYSTAL_VERSION}-alpine AS build
 WORKDIR /app
 
