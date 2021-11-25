@@ -1,4 +1,4 @@
-ARG CRYSTAL_VERSION=1.1.1
+ARG CRYSTAL_VERSION=1.2.2
 FROM crystallang/crystal:${CRYSTAL_VERSION}-alpine AS build
 WORKDIR /app
 
@@ -14,7 +14,11 @@ COPY src src
 
 RUN mkdir -p /app/bin
 
-RUN shards build --release --static --error-trace --ignore-crystal-version
+RUN shards build \
+    --error-trace \
+    --ignore-crystal-version \
+    --release \
+    --static
 
 # TODO: Stuck on 3.12 as `rethinkdb` is no longer packaged.
 FROM alpine:3.12
@@ -31,7 +35,7 @@ RUN apk add --no-cache \
         py-pip \
         rethinkdb
 
-RUN pip install rethinkdb
+RUN pip install --no-cache-dir "rethinkdb==2.4.8"
 
 COPY scripts /app/scripts
 

@@ -1,15 +1,8 @@
 name: CI
 on: push
 jobs:
-  style:
-    runs-on: ubuntu-latest
-    container:
-      image: crystallang/crystal
-    steps:
-      - uses: actions/checkout@v2
-      - name: Format
-        run: crystal tool format --check
-      - name: Lint
-        uses: crystal-ameba/github-action@v0.2.12
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+  crystal-style:
+    uses: PlaceOS/.github/.github/workflows/crystal-style.yml@main
+
+  dockerfile-style:
+    uses: PlaceOS/.github/.github/workflows/dockerfile-style.yml@main
