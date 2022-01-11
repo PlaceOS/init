@@ -59,7 +59,7 @@ WORKDIR /app
 
 # Install bash, rethinkdb & python driver
 RUN apk add --update --no-cache \
-        'apache2-utils>=2.4.51-r0' \
+        'apache2-utils>=2.4.52-r0' \
         'apk-tools>=2.10.8-r0' \
         bash \
         coreutils \
