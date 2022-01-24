@@ -58,21 +58,32 @@ FROM alpine:3.12
 WORKDIR /app
 
 # Install bash, rethinkdb & python driver
-RUN apk add --update --no-cache \
-        'apache2-utils>=2.4.52-r0' \
-        'apk-tools>=2.10.8-r0' \
-        bash \
-        coreutils \
-        'libcurl>=7.79.1-r0' \
-        libsodium \
-        openssh \
-        openssl \
-        py-pip \
-        rethinkdb
+RUN apk add \
+  --update \
+  --no-cache \
+  --repository=http://dl-cdn.alpinelinux.org/alpine/v3.15/main \
+    expat \
+    git
 
-RUN pip install --no-cache-dir \
-        rethinkdb==2.4.8 \
-        'urllib3>=1.26.5'
+# Install bash, rethinkdb & python driver
+RUN apk add \
+  --update \
+  --no-cache \
+    'apache2-utils>=2.4.52-r0' \
+    'apk-tools>=2.10.8-r0' \
+    bash \
+    coreutils \
+    'libcurl>=7.79.1-r0' \
+    libsodium \
+    openssh \
+    openssl \
+    py-pip \
+    rethinkdb
+
+RUN pip install \
+  --no-cache-dir \
+    rethinkdb==2.4.8 \
+    'urllib3>=1.26.5'
 
 COPY scripts /app/scripts
 
