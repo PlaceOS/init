@@ -85,6 +85,8 @@ RUN pip install \
     rethinkdb==2.4.8 \
     'urllib3>=1.26.5'
 
+RUN apk del py-pip
+
 COPY scripts /app/scripts
 
 COPY --from=build /app/deps /
