@@ -1,0 +1,9 @@
+#! /usr/bin/env bash
+
+# Ideally use a versioned api
+GITHUB_API="https://api.github.com"
+PLACEOS_RELEASE_REPOSITORY="placeos/placeos"
+TAGS_URL="${GITHUB_API}/repos/#{PLACEOS_RELEASE_REPOSITORY}/tags"
+
+# Need jq
+
