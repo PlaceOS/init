@@ -1,5 +1,8 @@
 # PlaceOS Init Container
 
+[![Build](https://github.com/PlaceOS/init/actions/workflows/build.yml/badge.svg)](https://github.com/PlaceOS/init/actions/workflows/build.yml)
+[![CI](https://github.com/PlaceOS/init/actions/workflows/ci.yml/badge.svg)](https://github.com/PlaceOS/init/actions/workflows/ci.yml)
+
 A set of scripts for initialization of PlaceOS.
 
 ## Usage
