@@ -2,6 +2,7 @@
 
 [![Build](https://github.com/PlaceOS/init/actions/workflows/build.yml/badge.svg)](https://github.com/PlaceOS/init/actions/workflows/build.yml)
 [![CI](https://github.com/PlaceOS/init/actions/workflows/ci.yml/badge.svg)](https://github.com/PlaceOS/init/actions/workflows/ci.yml)
+[![Changelog](https://img.shields.io/badge/Changelog-available-github.svg)](/CHANGELOG.md)
 
 A set of scripts for initialization of PlaceOS.
 
