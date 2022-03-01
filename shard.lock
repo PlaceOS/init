@@ -81,6 +81,14 @@ shards:
     git: https://github.com/spider-gazelle/neuroplastic.git
     version: 1.11.0
 
+  open_api:
+    git: https://github.com/elbywan/open_api.cr.git
+    version: 1.3.0
+
+  openapi-generator:
+    git: https://github.com/place-labs/openapi-generator.git
+    version: 2.1.0+git.commit.a65ffc2f7dcc6a393e7d1f9229650b520d9525be
+
   openssl_ext:
     git: https://github.com/spider-gazelle/openssl_ext.git
     version: 2.1.5
@@ -91,7 +99,7 @@ shards:
 
   placeos-models:
     git: https://github.com/placeos/models.git
-    version: 5.15.3
+    version: 6.6.5
 
   rethinkdb: # Overridden
     git: https://github.com/kingsleyh/crystal-rethinkdb.git

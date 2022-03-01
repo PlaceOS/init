@@ -32,10 +32,6 @@ module PlaceOS::Tasks::Secrets
   end
 
   def rotate_secret(old_secret : String)
-    Model::Edge.all.each do |model|
-      update_secret(old_secret, model, secret, Model::Edge::ENCRYPTION_LEVEL, "")
-    end
-
     Model::Settings.all.each do |model|
       level = model.encryption_level
       encryption_id = model.parent_id.as(String)

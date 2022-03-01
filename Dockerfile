@@ -73,6 +73,7 @@ RUN apk add \
     'apk-tools>=2.10.8-r0' \
     bash \
     coreutils \
+    jq \
     'libcurl>=7.79.1-r0' \
     libsodium \
     openssh \

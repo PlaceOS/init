@@ -51,7 +51,7 @@ dependencies:
 
   placeos-models:
     github: placeos/models
-    version: ~> 5.9
+    version: ~> 6.6
 
   rethinkdb:
     github: kingsleyh/crystal-rethinkdb
