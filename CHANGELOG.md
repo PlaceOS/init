@@ -1,15 +1,8 @@
 ## Unreleased
 
-### Refactor
-
-- central build ci ([#54](https://github.com/PlaceOS/init/pull/54))
-- **user**: use new Email struct
-- **user**: use new Email struct
-- **initialization**: change default backoffice branch to build/(dev/prod)
-- **entities**: cleaner name for dummy entities
-
 ### Fix
 
+- **tasks/entities**: remove `Edge` placeholder
 - **scripts/generate-secrets**: accept password via input
 - **logging**: prevent log output for LOG_LEVEL=NONE
 - **scripts/generate-secrets**: malformed bash conditional
@@ -26,6 +19,14 @@
 - double serialization of parent type
 - **constants**: space in env var
 - **task:restore**: remove KMS
+
+### Refactor
+
+- central build ci ([#54](https://github.com/PlaceOS/init/pull/54))
+- **user**: use new Email struct
+- **user**: use new Email struct
+- **initialization**: change default backoffice branch to build/(dev/prod)
+- **entities**: cleaner name for dummy entities
 
 ### Feat
 
