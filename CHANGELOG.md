@@ -1,5 +1,7 @@
 ## Unreleased
 
+## v0.15.0 (2022-03-03)
+
 ### Fix
 
 - **tasks/entities**: remove `Edge` placeholder
