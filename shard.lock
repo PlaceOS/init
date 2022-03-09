@@ -11,7 +11,7 @@ shards:
 
   active-model:
     git: https://github.com/spider-gazelle/active-model.git
-    version: 3.1.1
+    version: 4.0.0
 
   awscr-s3:
     git: https://github.com/taylorfinnell/awscr-s3.git
@@ -61,10 +61,6 @@ shards:
     git: https://github.com/place-labs/http-params-serializable.git
     version: 0.5.0
 
-  json_mapping:
-    git: https://github.com/crystal-lang/json_mapping.cr.git
-    version: 0.1.1
-
   jwt:
     git: https://github.com/crystal-community/jwt.git
     version: 1.6.0
@@ -99,7 +95,7 @@ shards:
 
   placeos-models:
     git: https://github.com/placeos/models.git
-    version: 6.6.5
+    version: 7.0.0
 
   rethinkdb: # Overridden
     git: https://github.com/kingsleyh/crystal-rethinkdb.git
@@ -107,7 +103,7 @@ shards:
 
   rethinkdb-orm:
     git: https://github.com/spider-gazelle/rethinkdb-orm.git
-    version: 5.0.4
+    version: 6.0.0
 
   retriable: # Overridden
     git: https://github.com/sija/retriable.cr.git
@@ -132,8 +128,4 @@ shards:
   tokenizer:
     git: https://github.com/spider-gazelle/tokenizer.git
     version: 1.1.1
-
-  yaml_mapping:
-    git: https://github.com/crystal-lang/yaml_mapping.cr.git
-    version: 0.1.1
 
