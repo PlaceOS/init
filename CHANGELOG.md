@@ -1,4 +1,8 @@
-## Unreleased
+## v0.15.1 (2022-03-17)
+
+### Fix
+
+- **generate-secrets**: discards extra lines(logging) in `create:instance_key` ([#57](https://github.com/PlaceOS/init/pull/57))
 
 ## v0.15.0 (2022-03-03)
 
