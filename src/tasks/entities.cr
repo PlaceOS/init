@@ -40,8 +40,7 @@ module PlaceOS::Tasks::Entities
     folder_name : String,
     description : String,
     uri : String,
-    branch : String,
-    commit_hash : String = "HEAD"
+    release : String = "latest"
   )
     upsert_document(Model::Repository.where(
       repo_type: Model::Repository::Type::Interface,
