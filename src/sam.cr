@@ -1,6 +1,6 @@
-require "sam"
-
 require "./constants"
+
+require "sam"
 require "./tasks"
 
 namespace "backup" do
