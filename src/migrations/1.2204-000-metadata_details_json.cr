@@ -6,7 +6,7 @@ module Migrations::MetadataJsonDetails
   def self.up
     PlaceOS::Model::Metadata.table_query do |q|
       q
-        .filter { |metadata| metadata["details"].type_of == "STRING" }
+        .filter { |metadata| metadata["details"].type_of.eq("STRING") }
         .update { |metadata| ({"details" => r.json(metadata["details"])}) }
     end
   rescue e
