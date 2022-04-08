@@ -47,7 +47,7 @@ shards:
 
   faker:
     git: https://github.com/askn/faker.git
-    version: 0.7.0
+    version: 0.8.0
 
   future:
     git: https://github.com/crystal-community/future.cr.git
@@ -89,13 +89,17 @@ shards:
     git: https://github.com/spider-gazelle/openssl_ext.git
     version: 2.1.5
 
+  pars:
+    git: https://github.com/spider-gazelle/pars.git
+    version: 1.1.0
+
   placeos-log-backend:
     git: https://github.com/place-labs/log-backend.git
     version: 0.6.0
 
   placeos-models:
     git: https://github.com/placeos/models.git
-    version: 7.6.6
+    version: 8.1.0
 
   rethinkdb:
     git: https://github.com/kingsleyh/crystal-rethinkdb.git
