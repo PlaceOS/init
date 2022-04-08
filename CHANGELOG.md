@@ -1,4 +1,8 @@
-## Unreleased
+## v0.15.2 (2022-04-08)
+
+### Refactor
+
+- **metadata**: migrate Metadata.details to JSON ([#59](https://github.com/PlaceOS/init/pull/59))
 
 ## v0.15.1 (2022-03-17)
 
