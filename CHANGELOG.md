@@ -1,3 +1,9 @@
+## v0.15.3 (2022-04-08)
+
+### Fix
+
+- **migration**: patch to allow for coerced value
+
 ## v0.15.2 (2022-04-08)
 
 ### Refactor
