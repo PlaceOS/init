@@ -13,10 +13,12 @@ module Migrations::UserIdPrefix
   end
 
   def self.up
-    PlaceOS::Model::User.table_query do |q|
-      q.filter do |user|
-        user["id"].match("^#{PlaceOS::Model::User.table_name}").not
-      end
+    PlaceOS::Model::User.raw_query do |q|
+      q
+        .table(PlaceOS::Model::User.table_name)
+        .filter do |user|
+          user["id"].match("^#{PlaceOS::Model::User.table_name}").not
+        end
     end.each do |user|
       Log.info { "migrating User's id from #{user.id} to #{PlaceOS::Model::User.table_name}-#{user.id}" }
       new_id = "#{PlaceOS::Model::User.table_name}-#{user.id}"
