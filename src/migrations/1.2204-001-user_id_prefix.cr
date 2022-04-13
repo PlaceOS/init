@@ -1,12 +1,6 @@
 require "../migration"
 
-module RethinkDB
-  def self.json(json_string)
-    DatumTerm.new(TermType::JSON, [json_string])
-  end
-end
-
-module Migrations::MetadataJsonDetails
+module Migrations::UserIdPrefix
   include Migration::Irreversible
 
   def self.update(table, key, old_id, new_id)
