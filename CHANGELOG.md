@@ -1,3 +1,9 @@
+## v0.16.0 (2022-04-13)
+
+### Feat
+
+- **migration**: ensure user id prefixed by user table name ([#61](https://github.com/PlaceOS/init/pull/61))
+
 ## v0.15.3 (2022-04-08)
 
 ### Fix
