@@ -1,4 +1,8 @@
-## Unreleased
+## v0.16.1 (2022-04-19)
+
+### Fix
+
+- **migrations/1.2204-001-user_id_prefix**: don't use local validation to migrate id ([#62](https://github.com/PlaceOS/init/pull/62))
 
 ## v0.16.0 (2022-04-13)
 
