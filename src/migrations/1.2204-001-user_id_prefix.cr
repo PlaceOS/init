@@ -33,26 +33,18 @@ module Migrations::UserIdPrefix
         update(table, key, old_id, new_id)
       end
 
-      # Save the user _after_ migration relations.
+      # Save the new user _after_ migration relations.
       # Ensures if there's a failure, subsequent runs will complete correctly.
-      user_json = user.to_json
-      new_user = PlaceOS::Model::User.from_trusted_json(user_json)
-      new_user.id = new_id
-      new_user.valid?
-      if new_user.errors.size == 1 && new_user.errors[0].field == :email_digest
-        new_user.errors.clear
-        new_user._new_flag = true
-        user.delete
-        begin
-          new_user.save!
-        rescue error
-          Log.fatal { "user model error:\n#{user_json}\n---------------\nerrors: #{new_user.errors.map &.to_s}" }
-          raise error
+      unless PlaceOS::Model::User.exists?(new_id)
+        new_user = user.dup
+        new_user.id = new_id
+        PlaceOS::Model::User.table_query do |q|
+          q.insert(RethinkDB.json(new_user.to_json))
         end
-      else
-        Log.fatal { "invalid user model:\n#{user_json}\n---------------\nerrors: #{new_user.errors.map &.to_s}" }
-        raise "invalid user model"
       end
+
+      # Delete the old user _after_ new user created
+      user.delete
     end
   rescue e
     Log.error(exception: e) { "failed to migrate User to prefixed id" }
