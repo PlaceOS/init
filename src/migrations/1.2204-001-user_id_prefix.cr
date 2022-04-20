@@ -41,6 +41,7 @@ module Migrations::UserIdPrefix
       new_user.valid?
       if new_user.errors.size == 1 && new_user.errors[0].field == :email_digest
         new_user.errors.clear
+        new_user._new_flag = true
         user.delete
         begin
           new_user.save!
