@@ -1,3 +1,9 @@
+## v0.16.3 (2022-04-20)
+
+### Fix
+
+- **migration/user-id-prefix**: flag model as new
+
 ## v0.16.2 (2022-04-20)
 
 ### Fix
