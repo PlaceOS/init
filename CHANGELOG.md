@@ -1,3 +1,9 @@
+## v0.16.2 (2022-04-20)
+
+### Fix
+
+- **migrations/user-id-prefix**: solves issue with changing primary key ([#63](https://github.com/PlaceOS/init/pull/63))
+
 ## v0.16.1 (2022-04-19)
 
 ### Fix
