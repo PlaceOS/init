@@ -1,3 +1,9 @@
+## v0.17.0 (2022-04-20)
+
+### Feat
+
+- **tasks:start**: synchronize the start job
+
 ## v0.16.3 (2022-04-20)
 
 ### Fix
