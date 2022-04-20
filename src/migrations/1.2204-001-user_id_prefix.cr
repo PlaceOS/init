@@ -29,12 +29,28 @@ module Migrations::UserIdPrefix
         {PlaceOS::Model::AssetInstance.table_name, "requester_id"},
         {PlaceOS::Model::ApiKey.table_name, "user_id"},
         {PlaceOS::Model::UserAuthLookup.table_name, "user_id"},
-
-        # Save the user _after_ migration relations.
-        # Ensures if there's a failure, subsequent runs will complete correctly.
-        {PlaceOS::Model::User.table_name, "id"},
       }.each do |table, key|
         update(table, key, old_id, new_id)
+      end
+
+      # Save the user _after_ migration relations.
+      # Ensures if there's a failure, subsequent runs will complete correctly.
+      user_json = user.to_json
+      new_user = PlaceOS::Model::User.from_trusted_json(user_json)
+      new_user.id = new_id
+      new_user.valid?
+      if new_user.errors.size == 1 && new_user.errors[0].field == :email_digest
+        new_user.errors.clear
+        user.delete
+        begin
+          new_user.save!
+        rescue error
+          Log.fatal { "user model error:\n#{user_json}\n---------------\nerrors: #{new_user.errors.map &.to_s}" }
+          raise error
+        end
+      else
+        Log.fatal { "invalid user model:\n#{user_json}\n---------------\nerrors: #{new_user.errors.map &.to_s}" }
+        raise "invalid user model"
       end
     end
   rescue e
