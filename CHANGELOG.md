@@ -1,3 +1,9 @@
+## v0.17.1 (2022-04-20)
+
+### Fix
+
+- **migration/user-id-prefix**: skip ORM when creating new user
+
 ## v0.17.0 (2022-04-20)
 
 ### Feat
