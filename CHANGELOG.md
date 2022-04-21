@@ -1,3 +1,9 @@
+## v0.17.3 (2022-04-21)
+
+### Fix
+
+- **migration/user-id-prefix**: raw reql to delete old user
+
 ## v0.17.2 (2022-04-21)
 
 ### Fix
