@@ -44,7 +44,9 @@ module Migrations::UserIdPrefix
       end
 
       # Delete the old user _after_ new user created
-      user.delete
+      PlaceOS::Model::User.table_query do |q|
+        q.get(old_id).delete
+      end
     end
   rescue e
     Log.error(exception: e) { "failed to migrate User to prefixed id" }
