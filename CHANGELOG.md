@@ -1,3 +1,9 @@
+## v0.17.2 (2022-04-21)
+
+### Fix
+
+- **migrations**: lock migration task
+
 ## v0.17.1 (2022-04-20)
 
 ### Fix
