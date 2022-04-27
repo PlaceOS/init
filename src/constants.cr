@@ -1,5 +1,7 @@
 module PlaceOS
-  NAME = "init"
+  APP_NAME = "init"
+  VERSION  = {{ `shards version "#{__DIR__}"`.chomp.stringify.downcase }}
+
   PROD = (ENV["ENV"]? || ENV["SG_ENV"]?) == "production"
 
   # Backup/Restore constants

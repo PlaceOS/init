@@ -37,9 +37,17 @@ shards:
     git: https://github.com/didactic-drunk/crypto-secret.cr.git
     version: 0.2.0+git.commit.a5a5d9de0373466263301a7b79e0b14af7e3104c
 
+  csuuid:
+    git: https://github.com/wyhaines/csuuid.cr.git
+    version: 1.0.0+git.commit.812ee5e1252b27ee2895ec7897094cde3e4a5dc2
+
   db:
     git: https://github.com/crystal-lang/crystal-db.git
     version: 0.11.0
+
+  defined:
+    git: https://github.com/wyhaines/defined.cr.git
+    version: 0.3.3
 
   etcd:
     git: https://github.com/place-labs/crystal-etcd.git
@@ -81,6 +89,10 @@ shards:
     git: https://github.com/luckyframework/lucky_router.git
     version: 0.5.1
 
+  nbchannel:
+    git: https://github.com/wyhaines/nbchannel.cr.git
+    version: 0.1.0+git.commit.ea6517a837270361695244d14c4b03d84660f113
+
   neuroplastic:
     git: https://github.com/spider-gazelle/neuroplastic.git
     version: 1.11.0
@@ -97,17 +109,33 @@ shards:
     git: https://github.com/spider-gazelle/openssl_ext.git
     version: 2.1.5
 
+  opentelemetry-api:
+    git: https://github.com/wyhaines/opentelemetry-api.cr.git
+    version: 0.2.1+git.commit.e5ef4a7be6b738edb3a575b000336089babb1090
+
+  opentelemetry-instrumentation:
+    git: https://github.com/wyhaines/opentelemetry-instrumentation.cr.git
+    version: 0.2.7
+
   pars:
     git: https://github.com/spider-gazelle/pars.git
     version: 1.1.0
 
+  parse_date:
+    git: https://github.com/wyhaines/parsedate.cr.git
+    version: 0.1.2
+
   placeos-log-backend:
     git: https://github.com/place-labs/log-backend.git
-    version: 0.6.0
+    version: 0.7.2
 
   placeos-models:
     git: https://github.com/placeos/models.git
     version: 8.2.9
+
+  protobuf:
+    git: https://github.com/jeromegn/protobuf.cr.git
+    version: 2.2.3
 
   rethinkdb:
     git: https://github.com/kingsleyh/crystal-rethinkdb.git
@@ -133,11 +161,23 @@ shards:
     git: https://github.com/place-labs/sodium.cr.git
     version: 1.2.3+git.commit.f8e12cd435b170d1b02797b9293bd5da4ba88b07
 
+  splay_tree_map:
+    git: https://github.com/wyhaines/splay_tree_map.cr.git
+    version: 0.2.2
+
   tasker:
     git: https://github.com/spider-gazelle/tasker.git
     version: 2.0.5
 
+  time-ext:
+    git: https://github.com/wyhaines/time-ext.cr.git
+    version: 0.1.0+git.commit.175f658235fb6cdc9c804cb96da510fec27f4cd6
+
   tokenizer:
     git: https://github.com/spider-gazelle/tokenizer.git
     version: 1.1.1
+
+  tracer:
+    git: https://github.com/wyhaines/tracer.cr.git
+    version: 0.3.1
 

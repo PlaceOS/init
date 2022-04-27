@@ -25,6 +25,15 @@ docker-compose run --no-deps -it init task create:authority domain="localhost:80
 ```
 
 ```bash
+# Create a backoffice application hosted on `http://localhost:4200`
+docker-compose run --no-deps -it init task create:application \
+    authority_id=<authority_id> \
+    name="development" \
+    base="http://localhost:4200" \
+    redirect_uri="http://localhost:4200/backoffice/oauth-resp.html"
+```
+
+```bash
 # Create a User
 docker-compose run --no-deps -it init task create:user \
     authority_id="s0mek1nd4UUID" \
