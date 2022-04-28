@@ -1,5 +1,6 @@
 require "./tasks"
 require "./migrations"
+require "./logging"
 
 module PlaceOS
   Migrations.apply_all

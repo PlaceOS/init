@@ -7,7 +7,7 @@ module PlaceOS
 
   log_level = PlaceOS.production? ? Log::Severity::Info : Log::Severity::Debug
 
-  backend = if ENV["LOG_LEVEL"]? == "NONE"
+  backend = if ENV["LOG_LEVEL"]?.try(&.downcase.chomp) == "none"
               ::Log::IOBackend.new(File.open(File::NULL, "w"))
             else
               PlaceOS::LogBackend.log_backend

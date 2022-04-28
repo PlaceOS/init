@@ -2,6 +2,7 @@ require "./constants"
 
 require "sam"
 require "./tasks"
+require "./logging"
 
 namespace "backup" do
   desc "Generates a RethinkDB backup and writes it to S3"

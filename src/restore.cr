@@ -1,4 +1,5 @@
 require "./tasks"
+require "./logging"
 
 module PlaceOS
   Tasks::Restore.rethinkdb_restore(

@@ -1,5 +1,3 @@
-require "./logging"
-
 require "placeos-models"
 
 module Migration
