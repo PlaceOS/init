@@ -2,6 +2,3 @@ dependencies:
   retriable:
     github: Sija/retriable.cr
 
-  opentelemetry-api:
-    github: place-labs/opentelemetry-api.cr
-    branch: fix/trace/in_span
