@@ -1,3 +1,6 @@
 dependencies:
   retriable:
     github: Sija/retriable.cr
+  crypto-secret:
+    github: didactic-drunk/crypto-secret.cr
+    commit: a5a5d9de0373466263301a7b79e0b14af7e3104c
