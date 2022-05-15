@@ -115,7 +115,7 @@ shards:
 
   opentelemetry-instrumentation:
     git: https://github.com/wyhaines/opentelemetry-instrumentation.cr.git
-    version: 0.3.0+git.commit.48f4e73ea86838dd7ee0e5a70e39f135ee188b8e
+    version: 0.3.0+git.commit.1e9e8421ec4add04048c305478d4e071b0f08747
 
   pars:
     git: https://github.com/spider-gazelle/pars.git
