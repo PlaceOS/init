@@ -51,7 +51,7 @@ module PlaceOS::Tasks::Initialization
         description: "Admin interface for PlaceOS",
       )
 
-      unless PlaceOS::Tasks.production?
+      unless PlaceOS::Tasks.production? || PlaceOS::SKIP_PLACEHOLDERS
         Log.info { "creating placeholder documents" }
         Entities.create_placeholders
       end
