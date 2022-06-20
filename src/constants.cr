@@ -14,18 +14,19 @@ module PlaceOS
   AWS_S3_BUCKET  = ENV["AWS_S3_BUCKET"]?
   AWS_KMS_KEY_ID = ENV["AWS_KMS_KEY_ID"]?
 
-  RETHINKDB_FORCE_RESTORE = ENV["RETHINKDB_FORCE_RESTORE"]?.try(&.downcase) == "true"
+  RETHINKDB_FORCE_RESTORE = self.boolean_env("RETHINKDB_FORCE_RESTORE")
 
   # Initialization constants
 
-  APPLICATION_NAME        = ENV["PLACE_APPLICATION"]? || "backoffice"
-  DOMAIN                  = ENV["PLACE_DOMAIN"]? || "localhost:8080"
-  TLS                     = ENV["PLACE_TLS"]?.try(&.downcase) == "true"
-  EMAIL                   = ENV["PLACE_EMAIL"]? || abort("missing PLACE_EMAIL")
-  USERNAME                = ENV["PLACE_USERNAME"]? || abort("missing PLACE_USERNAME")
-  PASSWORD                = ENV["PLACE_PASSWORD"]? || abort("missing PLACE_PASSWORD")
-  AUTH_HOST               = ENV["PLACE_AUTH_HOST"]? || "auth"
-  METRICS_ROUTE           = ENV["PLACE_METRICS_ROUTE"]? || "monitor"
+  APPLICATION_NAME = ENV["PLACE_APPLICATION"]? || "backoffice"
+  DOMAIN           = ENV["PLACE_DOMAIN"]? || "localhost:8080"
+  TLS              = self.boolean_env("PLACE_TLS")
+  EMAIL            = ENV["PLACE_EMAIL"]? || abort("missing PLACE_EMAIL")
+  USERNAME         = ENV["PLACE_USERNAME"]? || abort("missing PLACE_USERNAME")
+  PASSWORD         = ENV["PLACE_PASSWORD"]? || abort("missing PLACE_PASSWORD")
+  AUTH_HOST        = ENV["PLACE_AUTH_HOST"]? || "auth"
+  METRICS_ROUTE    = ENV["PLACE_METRICS_ROUTE"]? || "monitor"
+
   ANALYTICS_ROUTE         = ENV["PLACE_ANALYTICS_ROUTE"]? || "analytics"
   ANALYTICS_CALLBACK_PATH = ENV["ANALYTICS_CALLBACK_PATH"]? || "oauth/PlaceOS/callback"
 
@@ -46,4 +47,8 @@ module PlaceOS
   RETHINKDB_PASS = ENV["RETHINKDB_PASS"]?
 
   class_getter? production : Bool = PROD
+
+  protected def self.boolean_env(key) : Bool
+    !!ENV[key]?.try(&.downcase.in?("1", "true"))
+  end
 end
