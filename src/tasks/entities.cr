@@ -118,7 +118,7 @@ module PlaceOS::Tasks::Entities
     application_id = Digest::MD5.hexdigest(redirect_uri)
     scope = "public" if scope.nil? || scope.empty?
 
-    upsert_document(Model::DoorkeeperApplication.find_all([application_id], index: :uid)) do
+    upsert_document(Model::DoorkeeperApplication.where(name: name, redirect_uri: redirect_uri)) do
       Log.info { {
         message:      "creating Application",
         name:         name,
