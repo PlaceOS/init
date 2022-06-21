@@ -30,6 +30,8 @@ module PlaceOS
   ANALYTICS_ROUTE         = ENV["PLACE_ANALYTICS_ROUTE"]? || "analytics"
   ANALYTICS_CALLBACK_PATH = ENV["ANALYTICS_CALLBACK_PATH"]? || "oauth/PlaceOS/callback"
 
+  SKIP_PLACEHOLDERS = self.boolean_env("PLACE_SKIP_PLACEHOLDERS")
+
   # Backoffice
 
   BACKOFFICE_BRANCH = ENV["PLACE_BACKOFFICE_BRANCH"]?.presence || "build/#{production? ? "prod" : "dev"}"
