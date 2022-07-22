@@ -115,7 +115,7 @@ shards:
 
   openssl_ext:
     git: https://github.com/spider-gazelle/openssl_ext.git
-    version: 2.1.5
+    version: 2.2.0
 
   opentelemetry-api:
     git: https://github.com/wyhaines/opentelemetry-api.cr.git
@@ -123,11 +123,11 @@ shards:
 
   opentelemetry-instrumentation:
     git: https://github.com/wyhaines/opentelemetry-instrumentation.cr.git
-    version: 0.3.6+git.commit.2b4477f57da6b593469deadc3a439e5ed83dd23f
+    version: 0.5.0+git.commit.7d83b9a53c9540fbc159f06eeed5d4bdad5c4377
 
   opentelemetry-sdk:
     git: https://github.com/wyhaines/opentelemetry-sdk.cr.git
-    version: 0.5.0+git.commit.5629aa05bfc0837abe6efd8f19ad28b560d9b6b7
+    version: 0.5.1
 
   pars:
     git: https://github.com/spider-gazelle/pars.git
@@ -139,11 +139,11 @@ shards:
 
   placeos-log-backend:
     git: https://github.com/place-labs/log-backend.git
-    version: 0.11.1
+    version: 0.11.0
 
   placeos-models:
     git: https://github.com/placeos/models.git
-    version: 8.11.0
+    version: 8.11.2
 
   protobuf:
     git: https://github.com/jeromegn/protobuf.cr.git
