@@ -28,7 +28,7 @@ targets:
 dependencies:
   action-controller:
     github: spider-gazelle/action-controller
-    version: ~> 4.4
+    version: ~> 5.1
 
   awscr-s3:
     github: taylorfinnell/awscr-s3
