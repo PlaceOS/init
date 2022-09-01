@@ -19,13 +19,6 @@ RUN shards install \
         --skip-executables \
     && \
     ( \
-        cd lib/sodium \
-        && \
-        PKG_CONFIG_PATH=$(which pkg-config) \
-        bash build/libsodium_install.sh \
-    ) \
-    && \
-    ( \
        cd lib/exec_from \
        && \
        make bin && make run_file \
