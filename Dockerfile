@@ -45,7 +45,7 @@ RUN for binary in /app/bin/*; do \
         xargs -I % sh -c 'mkdir -p $(dirname deps%); cp % deps%;'; \
     done
 
-FROM alpine:latest
+FROM alpine:3.16
 
 WORKDIR /app
 
