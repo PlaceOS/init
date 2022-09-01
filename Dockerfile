@@ -74,6 +74,8 @@ RUN apk add \
 
 # TODO: Stuck on 3.12 as `rethinkdb` is no longer packaged.
 RUN apk add \
+  --update \
+  --no-cache \
   --repository=http://dl-cdn.alpinelinux.org/alpine/v3.12/community \
   --repository=http://dl-cdn.alpinelinux.org/alpine/v3.12/main \
     rethinkdb
