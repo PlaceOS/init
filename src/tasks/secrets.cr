@@ -1,11 +1,12 @@
-require "sodium"
+require "ed25519"
 
 module PlaceOS::Tasks::Secrets
   extend self
   Log = ::Log.for(self)
 
   def instance_secret_key
-    Sodium::Sign::SecretKey.new.key.hexstring
+    # Sodium::Sign::SecretKey.new.key.hexstring
+    Ed25519::SigningKey.new.key_bytes.hexstring
   end
 
   macro update_secret(old_secret, model, field, level, id)
