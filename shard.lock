@@ -23,7 +23,7 @@ shards:
 
   backtracer:
     git: https://github.com/sija/backtracer.cr.git
-    version: 1.2.1
+    version: 1.2.2
 
   bindata:
     git: https://github.com/spider-gazelle/bindata.git
@@ -32,10 +32,6 @@ shards:
   cron_parser:
     git: https://github.com/kostya/cron_parser.git
     version: 0.4.0
-
-  crypto-secret: # Overridden
-    git: https://github.com/didactic-drunk/crypto-secret.cr.git
-    version: 0.2.0+git.commit.a5a5d9de0373466263301a7b79e0b14af7e3104c
 
   csuuid:
     git: https://github.com/wyhaines/csuuid.cr.git
@@ -52,6 +48,10 @@ shards:
   defined:
     git: https://github.com/wyhaines/defined.cr.git
     version: 0.3.6
+
+  ed25519:
+    git: https://github.com/spider-gazelle/ed25519.git
+    version: 1.0.1
 
   etcd:
     git: https://github.com/place-labs/crystal-etcd.git
@@ -143,7 +143,7 @@ shards:
 
   placeos-models:
     git: https://github.com/placeos/models.git
-    version: 8.11.2
+    version: 8.12.0
 
   protobuf:
     git: https://github.com/jeromegn/protobuf.cr.git
@@ -169,17 +169,13 @@ shards:
     git: https://github.com/spider-gazelle/simple_retry.git
     version: 1.1.1
 
-  sodium:
-    git: https://github.com/place-labs/sodium.cr.git
-    version: 1.2.3+git.commit.f8e12cd435b170d1b02797b9293bd5da4ba88b07
-
   splay_tree_map:
     git: https://github.com/wyhaines/splay_tree_map.cr.git
     version: 0.2.2
 
   tasker:
     git: https://github.com/spider-gazelle/tasker.git
-    version: 2.0.5
+    version: 2.0.7
 
   time-ext:
     git: https://github.com/wyhaines/time-ext.cr.git

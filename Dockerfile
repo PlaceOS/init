@@ -1,4 +1,4 @@
-ARG CRYSTAL_VERSION=1.2.2
+ARG CRYSTAL_VERSION=1.5.0
 FROM crystallang/crystal:${CRYSTAL_VERSION}-alpine AS build
 WORKDIR /app
 
@@ -17,13 +17,6 @@ RUN shards install \
         --production \
         --skip-postinstall \
         --skip-executables \
-    && \
-    ( \
-        cd lib/sodium \
-        && \
-        PKG_CONFIG_PATH=$(which pkg-config) \
-        bash build/libsodium_install.sh \
-    ) \
     && \
     ( \
        cd lib/exec_from \
@@ -52,8 +45,7 @@ RUN for binary in /app/bin/*; do \
         xargs -I % sh -c 'mkdir -p $(dirname deps%); cp % deps%;'; \
     done
 
-# TODO: Stuck on 3.12 as `rethinkdb` is no longer packaged.
-FROM alpine:3.12
+FROM alpine:3.16
 
 WORKDIR /app
 
@@ -61,7 +53,7 @@ WORKDIR /app
 RUN apk add \
   --update \
   --no-cache \
-  --repository=http://dl-cdn.alpinelinux.org/alpine/v3.15/main \
+  --repository=http://dl-cdn.alpinelinux.org/alpine/edge/main \
     expat \
     git
 
@@ -78,7 +70,14 @@ RUN apk add \
     libsodium \
     openssh \
     openssl \
-    py-pip \
+    py-pip
+
+# TODO: Stuck on 3.12 as `rethinkdb` is no longer packaged.
+RUN apk add \
+  --update \
+  --no-cache \
+  --repository=http://dl-cdn.alpinelinux.org/alpine/v3.12/community \
+  --repository=http://dl-cdn.alpinelinux.org/alpine/v3.12/main \
     rethinkdb
 
 RUN pip install \
