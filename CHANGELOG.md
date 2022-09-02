@@ -1,4 +1,13 @@
-## Unreleased
+## v0.19.0 (2022-09-02)
+
+### Feat
+
+- remove libsodium requirement ([#71](https://github.com/PlaceOS/init/pull/71))
+- **initialization**: use `PLACE_SKIP_PLACEHOLDERS` to skip base entities ([#67](https://github.com/PlaceOS/init/pull/67))
+
+### Fix
+
+- **entities**: upsert appliation on name and redirect_uri ([#66](https://github.com/PlaceOS/init/pull/66))
 
 ## v0.18.2 (2022-05-03)
 
@@ -86,6 +95,25 @@
 
 ## v0.15.0 (2022-03-03)
 
+### Feat
+
+- **chronograf**: Generate secrets for Chronograf running in a docker-compose environment ([#47](https://github.com/PlaceOS/init/pull/47))
+- **scripts/generate-secrets**: server secret
+- **task**: secret:rotate_server_secret ([#49](https://github.com/PlaceOS/init/pull/49))
+- instance telemetry key ([#48](https://github.com/PlaceOS/init/pull/48))
+- **initialization**: support pinning interface
+- **tasks**: add a check for user existence ([#39](https://github.com/PlaceOS/init/pull/39))
+- migration for backoffice branch rename
+- **logging**: configure `Log.progname`
+- **entities**: add zones with a tag for each level of the zone hierarchy
+- **kibana**: set up Metrics tab showing Kibana in authority config
+- **secrets**: generate kibana htpasswd
+- support ordering for migrations
+- settings parent type migration
+- base migration framework
+- **logstash**: add placeos-log-backend
+- add restore entrypoint
+
 ### Fix
 
 - **tasks/entities**: remove `Edge` placeholder
@@ -110,29 +138,8 @@
 
 - central build ci ([#54](https://github.com/PlaceOS/init/pull/54))
 - **user**: use new Email struct
-- **user**: use new Email struct
 - **initialization**: change default backoffice branch to build/(dev/prod)
 - **entities**: cleaner name for dummy entities
-
-### Feat
-
-- **chronograf**: Generate secrets for Chronograf running in a docker-compose environment ([#47](https://github.com/PlaceOS/init/pull/47))
-- **scripts/generate-secrets**: server secret
-- **task**: secret:rotate_server_secret ([#49](https://github.com/PlaceOS/init/pull/49))
-- instance telemetry key ([#48](https://github.com/PlaceOS/init/pull/48))
-- **initialization**: support pinning interface
-- **tasks**: add a check for user existence ([#39](https://github.com/PlaceOS/init/pull/39))
-- migration for backoffice branch rename
-- **logging**: configure `Log.progname`
-- **entities**: add zones with a tag for each level of the zone hierarchy
-- **kibana**: set up Metrics tab showing Kibana in authority config
-- **kibana**: set up Metrics tab showing Kibana in authority config
-- **secrets**: generate kibana htpasswd
-- support ordering for migrations
-- settings parent type migration
-- base migration framework
-- **logstash**: add placeos-log-backend
-- add restore entrypoint
 
 ## v0.9.0 (2021-01-15)
 
@@ -157,6 +164,10 @@
 
 ## v0.7.1 (2020-07-17)
 
+### Feat
+
+- **rethinkdb**: install rethinkdb and python driver
+
 ### Fix
 
 - **entities**: set branch on repo entitity
@@ -164,11 +175,6 @@
 ### Refactor
 
 - use branches for backoffice interfaces
-
-### Feat
-
-- **rethinkdb**: install rethinkdb and python driver
-- **rethinkdb**: install rethinkdb and python driver
 
 ## v0.6.0 (2020-07-02)
 
@@ -178,16 +184,16 @@
 
 ## v0.5.2 (2020-06-19)
 
+### Feat
+
+- **start**: create backoffice interface repository
+- **entitites:application**: support specifying `redirect_uri`
+
 ### Fix
 
 - use latest private drivers for placeholders
 - use ::Log.setup
 - missed owner_id on app registrations
-
-### Feat
-
-- **start**: create backoffice interface repository
-- **entitites:application**: support specifying `redirect_uri`
 
 ### Refactor
 
@@ -227,11 +233,11 @@
 
 ## v0.2.0 (2020-05-07)
 
-### Fix
-
-- **shard.yml**: correct `target` to `targets` and add `executables` declaration
-
 ### Feat
 
 - **tasks**: cleanup of src/tasks
 - init init
+
+### Fix
+
+- **shard.yml**: correct `target` to `targets` and add `executables` declaration
