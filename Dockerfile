@@ -1,33 +1,52 @@
 ARG CRYSTAL_VERSION=1.5.0
-FROM crystallang/crystal:${CRYSTAL_VERSION}-alpine AS build
+FROM alpine:3.16 as build
 WORKDIR /app
 
+# Add trusted CAs for communicating with external services
 RUN apk add --update --no-cache \
+        ca-certificates \
+        curl \
         bash \
-        openssl \
-        yaml-static
+    && \
+    update-ca-certificates
 
-COPY shard.yml .
-COPY shard.override.yml .
-COPY shard.lock .
+# Add crystal lang
+# can look up packages here: https://pkgs.alpinelinux.org/packages?name=crystal
+RUN apk add \
+  --update \
+  --no-cache \
+  --repository=http://dl-cdn.alpinelinux.org/alpine/edge/main \
+  --repository=http://dl-cdn.alpinelinux.org/alpine/edge/community \
+    crystal \
+    shards \
+    yaml-dev \
+    yaml-static \
+    libxml2 \
+    libxml2-dev \
+    openssl-dev \
+    openssl-libs-static \
+    zlib-dev \
+    zlib-static \
+    tzdata
 
-# hadolint ignore=DL3003
+
+# Install shards for caching
+COPY shard.yml shard.yml
+COPY shard.override.yml shard.override.yml
+COPY shard.lock shard.lock
+
 RUN shards install \
         --ignore-crystal-version \
         --production \
         --skip-postinstall \
-        --skip-executables \
-    && \
-    ( \
-       cd lib/exec_from \
-       && \
-       make bin && make run_file \
-    )
+        --skip-executables
 
 COPY src src
 
 RUN mkdir -p /app/bin
 
+# Build init
+# TODO:: build static binaries, no libxml2-static available
 RUN shards build \
         --error-trace \
         --ignore-crystal-version \
@@ -45,6 +64,7 @@ RUN for binary in /app/bin/*; do \
         xargs -I % sh -c 'mkdir -p $(dirname deps%); cp % deps%;'; \
     done
 
+# Build a minimal docker image
 FROM alpine:3.16
 
 WORKDIR /app
@@ -87,8 +107,8 @@ RUN pip install \
 
 RUN apk del py-pip
 
+# copy app
 COPY scripts /app/scripts
-
 COPY --from=build /app/deps /
 COPY --from=build /app/bin /app/bin
 
