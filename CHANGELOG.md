@@ -1,3 +1,9 @@
+## v0.20.0 (2022-09-07)
+
+### Feat
+
+- add support for ARM64 platform ([#72](https://github.com/PlaceOS/init/pull/72))
+
 ## v0.19.0 (2022-09-02)
 
 ### Feat
