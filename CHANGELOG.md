@@ -1,3 +1,9 @@
+## v0.20.1 (2022-09-08)
+
+### Fix
+
+- **Dockerfile**: don't use edge libraries ([#73](https://github.com/PlaceOS/init/pull/73))
+
 ## v0.20.0 (2022-09-07)
 
 ### Feat
