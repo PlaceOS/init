@@ -3,12 +3,20 @@ FROM alpine:3.16 as build
 WORKDIR /app
 
 # Add trusted CAs for communicating with external services
-RUN apk add --update --no-cache \
-        ca-certificates \
-        curl \
-        bash \
-    && \
-    update-ca-certificates
+RUN apk add \
+  --update \
+  --no-cache \
+    ca-certificates \
+    yaml-dev \
+    yaml-static \
+    libxml2-dev \
+    openssl-dev \
+    openssl-libs-static \
+    zlib-dev \
+    zlib-static \
+    tzdata
+
+RUN update-ca-certificates
 
 # Add crystal lang
 # can look up packages here: https://pkgs.alpinelinux.org/packages?name=crystal
@@ -18,16 +26,7 @@ RUN apk add \
   --repository=http://dl-cdn.alpinelinux.org/alpine/edge/main \
   --repository=http://dl-cdn.alpinelinux.org/alpine/edge/community \
     crystal \
-    shards \
-    yaml-dev \
-    yaml-static \
-    libxml2 \
-    libxml2-dev \
-    openssl-dev \
-    openssl-libs-static \
-    zlib-dev \
-    zlib-static \
-    tzdata
+    shards
 
 
 # Install shards for caching
@@ -87,7 +86,6 @@ RUN apk add \
     coreutils \
     jq \
     'libcurl>=7.79.1-r0' \
-    libsodium \
     openssh \
     openssl \
     py-pip
