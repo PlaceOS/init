@@ -7,7 +7,7 @@ module Migrations::CleanupDoorkeeperGrants
     raw_query do |r|
       r
         .table("doorkeeper_grant")
-        .filter(r.row.hasFields("ttl").not)
+        .filter(&.has_fields("ttl").not)
         .delete
     end
   rescue e
