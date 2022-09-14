@@ -1,3 +1,9 @@
+## v0.20.2 (2022-09-14)
+
+### Fix
+
+- **grant**: remove doorkeeper grants without a ttl ([#74](https://github.com/PlaceOS/init/pull/74))
+
 ## v0.20.1 (2022-09-08)
 
 ### Fix
