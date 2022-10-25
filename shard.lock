@@ -11,7 +11,7 @@ shards:
 
   active-model:
     git: https://github.com/spider-gazelle/active-model.git
-    version: 4.0.0
+    version: 4.2.3
 
   awscr-s3:
     git: https://github.com/taylorfinnell/awscr-s3.git
@@ -27,7 +27,7 @@ shards:
 
   bindata:
     git: https://github.com/spider-gazelle/bindata.git
-    version: 1.10.0
+    version: 1.11.0
 
   cron_parser:
     git: https://github.com/kostya/cron_parser.git
@@ -103,7 +103,7 @@ shards:
 
   neuroplastic:
     git: https://github.com/spider-gazelle/neuroplastic.git
-    version: 1.12.0
+    version: 1.12.1
 
   open_api:
     git: https://github.com/elbywan/open_api.cr.git
@@ -143,7 +143,7 @@ shards:
 
   placeos-models:
     git: https://github.com/placeos/models.git
-    version: 8.12.0
+    version: 8.12.1
 
   protobuf:
     git: https://github.com/jeromegn/protobuf.cr.git
