@@ -1,4 +1,6 @@
-FROM placeos/crystal:latest as build
+ARG CRYSTAL_VERSION=latest
+
+FROM placeos/crystal:$CRYSTAL_VERSION as build
 WORKDIR /app
 
 # Install shards for caching
@@ -74,8 +76,6 @@ RUN pip install \
   --no-cache-dir \
     rethinkdb==2.4.8 \
     'urllib3>=1.26.5'
-
-RUN apk del py-pip
 
 # copy app
 COPY scripts /app/scripts
