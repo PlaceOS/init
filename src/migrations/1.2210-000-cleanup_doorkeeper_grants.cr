@@ -5,10 +5,7 @@ module Migrations::CleanupDoorkeeperGrants
 
   def self.up
     raw_query do |r|
-      r
-        .table("doorkeeper_grant")
-        .filter(&.has_fields("ttl").not)
-        .delete
+      r.exec "delete from doorkeeper_grant where ttl is null"
     end
   rescue e
     Log.error(exception: e) { "failed to remove doorkeeper grants without a ttl" }

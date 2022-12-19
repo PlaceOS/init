@@ -7,6 +7,7 @@ WORKDIR /app
 COPY shard.yml shard.yml
 COPY shard.override.yml shard.override.yml
 COPY shard.lock shard.lock
+COPY db db
 
 RUN shards install \
         --ignore-crystal-version \
@@ -42,45 +43,25 @@ FROM alpine:3.16
 
 WORKDIR /app
 
-# Install bash, rethinkdb & python driver
+# Install bash, postgresql-client
 RUN apk add \
   --update \
   --no-cache \
-  --repository=http://dl-cdn.alpinelinux.org/alpine/edge/main \
-    expat \
-    git
-
-# Install bash, rethinkdb & python driver
-RUN apk add \
-  --update \
-  --no-cache \
-    'apache2-utils>=2.4.52-r0' \
-    'apk-tools>=2.10.8-r0' \
-    bash \
-    coreutils \
-    jq \
-    'libcurl>=7.79.1-r0' \
-    openssh \
-    openssl \
-    py-pip
-
-# TODO: Stuck on 3.12 as `rethinkdb` is no longer packaged.
-RUN apk add \
-  --update \
-  --no-cache \
-  --repository=http://dl-cdn.alpinelinux.org/alpine/v3.12/community \
-  --repository=http://dl-cdn.alpinelinux.org/alpine/v3.12/main \
-    rethinkdb
-
-RUN pip install \
-  --no-cache-dir \
-    rethinkdb==2.4.8 \
-    'urllib3>=1.26.5'
+  expat \
+  git \
+  bash \
+  jq \
+  coreutils \
+  'libcurl>=7.79.1-r0' \
+  openssh \
+  openssl \
+  postgresql-client
 
 # copy app
 COPY scripts /app/scripts
 COPY --from=build /app/deps /
 COPY --from=build /app/bin /app/bin
+COPY --from=build /app/db /app/db
 
 ENV PATH="/app/bin:/app/scripts:${PATH}"
 

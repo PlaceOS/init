@@ -15,7 +15,22 @@ Execute scripts as one-off container jobs.
 ## Example
 
 ```bash
-# Create a set of placeholder documents
+# Initialize PostgreSQL database
+docker-compose run --no-deps -it init task db:init host=$PG_HOST port=$PG_PORT db=$PG_DB user=$PG_USER password=$PG_PASSWORD
+```
+
+```bash
+# Dump PostgreSQL database to local filesystem
+docker-compose run --no-deps -it init task db:dump host=$PG_HOST port=$PG_PORT db=$PG_DB user=$PG_USER password=$PG_PASSWORD
+```
+
+```bash
+# Restore PostgreSQL database from local filesystem dump
+docker-compose run --no-deps -it init task db:restore path=DUMP_FILE_LOCATION host=$PG_HOST port=$PG_PORT db=$PG_DB user=$PG_USER password=$PG_PASSWORD
+```
+
+```bash
+# Create a set of placeholder records
 docker-compose run --no-deps -it init task create:placeholder
 ```
 
@@ -43,13 +58,16 @@ docker-compose run --no-deps -it init task create:user \
     sys_admin=true \
     support=true
 ```
-
+ 
 ```bash
 # Restore to a database backup from S3
-docker-compose run --no-deps -it init task restore:rethinkdb \
-    rethinkdb_host=$RETHINKDB_HOST \
-    rethinkdb_port=$RETHINKDB_PORT \
-    force_restore=$RETHINKDB_FORCE_RESTORE \
+docker-compose run --no-deps -it init task restore:pg \
+    pg_host=$PG_HOST \
+    pg_port=$PG_PORT \
+    pg_db=$PG_DB \
+    pg_user=$PG_USER \
+    pg_password=$PG_PASS \
+    force_restore=$PG_FORCE_RESTORE \
     aws_region=$AWS_REGION \
     aws_s3_bucket=$AWS_S3_BUCKET \
     aws_s3_object=$AWS_S3_BUCKET \
@@ -60,8 +78,8 @@ docker-compose run --no-deps -it init task restore:rethinkdb \
 ```bash
 # Restore to a database backup from filesystem
 docker-compose run --no-deps \
-    -v /etc/placeos/rethinkdb_dump_2020-07-14T14_26_19.tar.gz:/rethink-dump.tar.gz:Z \
-    init sh -c 'rethinkdb restore --connect $RETHINKDB_HOST:$RETHINKDB_PORT --force /rethink-dump.tar.gz'
+    -v /etc/placeos/pg_dump_2020-07-14T14_26_19.gz:/pg-dump.gz:Z \
+    init task db:restore user=$PG_USER  password=$PG_PASS db=$PG_DB path=/pg-dump.gz
 ```
 
 ## Initialization
@@ -81,13 +99,15 @@ The default entrypoint to the init container generates a User, Authority, and Ap
 
 ## Backup Container
 
-`Dockerfile.rethinkdb-backup` generates a container that will backup the state of RethinkDB to S3.
+`Dockerfile.pg-backup` generates a container that will backup the state of PG to S3.
 By default, the backup will take place at midnight every day.
 
 - `cron`: `BACKUP_CRON` || `0 0 * * *`
-- `rethinkdb_host`: `RETHINKDB_HOST` || `"localhost"`
-- `rethinkdb_port`: `RETHINKDB_PORT` || `28019`
-- `rethinkdb_db`: `RETHINKDB_DB`
+- `pg_host`: `PG_HOST` || `"localhost"`
+- `pg_port`: `PG_PORT` || `5432`
+- `pg_db`: `PG_DB`, required.
+- `pg_user`: `PG_USER`, required.
+- `pg_password`: `PG_PASS`, required.
 - `aws_region`: `AWS_REGION`, required.
 - `aws_key`: `AWS_KEY`, required,
 - `aws_secret`: `AWS_SECRET`, required.
@@ -123,10 +143,12 @@ By default, the backup will take place at midnight every day.
     * `sys_admin`: Defaults to `false`
     * `support`: Defaults to `false`
 
-- `backup:rethinkdb`: Backup RethinkDB to S3.
-    * `rethinkdb_host`: Defaults to `RETHINKDB_HOST` || `"localhost"`
-    * `rethinkdb_port`: Defaults to `RETHINKDB_PORT` || `28019`
-    * `rethinkdb_db`: Defaults to `RETHINKDB_DB`, or the entire database
+- `backup:pg`: Backup PostgreSQL DB to S3.
+    * `pg_host`: Defaults to `PG_HOST` || `"localhost"`
+    * `pg_port`: Defaults to `PG_PORT` || `5432`
+    * `pg_db`: Defaults to `PG_DB`, or the postgres database
+    * `pg_user`: Defaulto `PG_USER`, or postgres
+    * `pg_password`: Defaults to `PG_PASS`
     * `aws_s3_bucket`: Defaults to `AWS_S3_BUCKET`, required.
     * `aws_region`: Defaults to `AWS_REGION`, required.
     * `aws_key`: Defaults to `AWS_KEY`, required,
@@ -136,10 +158,13 @@ By default, the backup will take place at midnight every day.
 - `secret:rotate_server_secret`: Rotate from old server secret to current value in `PLACE_SERVER_SECRET`
     * `old_secret`: The previous value of `PLACE_SERVER_SECRET`, required.
 
-- `restore:rethinkdb`: Restore RethinkDB from S3.
-    * `rethinkdb_host`: Defaults to `RETHINKDB_HOST` || `"localhost"`
-    * `rethinkdb_port`: Defaults to `RETHINKDB_PORT` || `28019`
-    * `force_restore`: Defaults to `RETHINKDB_FORCE_RESTORE` || `false`
+- `restore:pg`: Restore PostgreSQL DB from S3.
+    * `pg_host`: Defaults to `PG_HOST` || `"localhost"`
+    * `pg_port`: Defaults to `PG_PORT` || `5432`
+    * `pg_db`: Defaults to `PG_DB`, or the postgres database
+    * `pg_user`: Defaulto `PG_USER`, or postgres
+    * `pg_password`: Defaults to `PG_PASS`
+    * `force_restore`: Defaults to `PG_FORCE_RESTORE` || `false`
     * `aws_s3_object`: Object to restore DB from. Defaults to `AWS_S3_BUCKET`, required.
     * `aws_s3_bucket`: Defaults to `AWS_S3_BUCKET`, required.
     * `aws_region`: Defaults to `AWS_REGION`, required.
@@ -147,18 +172,19 @@ By default, the backup will take place at midnight every day.
     * `aws_secret`: Defaults to `AWS_SECRET`, required.
     * `aws_kms_key_id`: Defaults to `AWS_KMS_KEY_ID`
 
-- `drop`: Drops Elasticsearch and RethinkDB
+- `drop`: Drops Elasticsearch and PostgreSQL DB
     * Runs `drop:elastic` and `drop:db` via environmental configuration
 
 - `drop:elastic`: Deletes all elastic indices tables
     * `host`: Defaults to `ES_HOST` || `"localhost"`
     * `port`: Defaults to `ES_PORT` || `9200`
 
-- `drop:db`: Drops all RethinkDB tables
-    * `host`: Defaults to `RETHINKDB_HOST` || `"localhost"`
-    * `port`: Defaults to `RETHINKDB_PORT` || `28015`
-    * `user`: Defaults to `RETHINKDB_USER` || `"admin"`
-    * `password`: Defaults to `RETHINKDB_PASS` || `""`
+- `drop:db`: Drops all PostgreSQL DB tables
+    * `db`: Defaults `PG_DB` || `"postgres"`
+    * `host`: Defaults to `PG_HOST` || `"localhost"`
+    * `port`: Defaults to `PG_PORT` || `5432`
+    * `user`: Defaults to `PG_USER` || `"postgres"`
+    * `password`: Defaults to `PG_PASS` || `""`
 
 ## Development
 

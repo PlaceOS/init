@@ -44,7 +44,7 @@ module PlaceOS::Tasks::Entities
     commit_hash : String = "HEAD"
   )
     upsert_document(Model::Repository.where(
-      repo_type: Model::Repository::Type::Interface,
+      repo_type: Model::Repository::Type::Interface.value,
       folder_name: folder_name.strip.downcase)
     ) do
       Log.info { {
@@ -127,9 +127,6 @@ module PlaceOS::Tasks::Entities
         redirect_uri: redirect_uri,
       } }
       application = Model::DoorkeeperApplication.new
-
-      # Required as we are setting a custom database id
-      application._new_flag = true
 
       application.name = name
       application.secret = secure_string(bytes: 48)
@@ -269,7 +266,7 @@ module PlaceOS::Tasks::Entities
 
   private def log_fail(type : String, exception : Exception)
     Log.error(exception: exception) {
-      Log.context.set(model: exception.model.class.name, model_errors: exception.errors) if exception.is_a?(RethinkORM::Error::DocumentInvalid)
+      Log.context.set(model: exception.model.class.name, model_errors: exception.errors) if exception.is_a?(PgORM::Error::RecordInvalid)
       "#{type} creation failed with: #{exception.inspect_with_backtrace}"
     }
   end

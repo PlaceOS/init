@@ -2,12 +2,13 @@ require "./tasks"
 require "./logging"
 
 module PlaceOS
-  Tasks::Backup.rethinkdb_backup_cron(
+  Tasks::Backup.pg_backup_cron(
     cron: BACKUP_CRON,
-    rethinkdb_host: RETHINKDB_HOST,
-    rethinkdb_port: RETHINKDB_PORT,
-    rethinkdb_db: RETHINKDB_DB,
-    rethinkdb_password: RETHINKDB_PASS,
+    pg_host: PG_HOST,
+    pg_port: PG_PORT,
+    pg_db: PG_DB,
+    pg_user: PG_USER,
+    pg_password: PG_PASS,
     aws_region: AWS_REGION || abort("AWS_REGION is unset"),
     aws_key: AWS_KEY || abort("AWS_KEY is unset"),
     aws_secret: AWS_SECRET || abort("AWS_SECRET is unset"),

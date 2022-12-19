@@ -14,7 +14,7 @@ module PlaceOS
   AWS_S3_BUCKET  = ENV["AWS_S3_BUCKET"]?
   AWS_KMS_KEY_ID = ENV["AWS_KMS_KEY_ID"]?
 
-  RETHINKDB_FORCE_RESTORE = self.boolean_env("RETHINKDB_FORCE_RESTORE")
+  PG_FORCE_RESTORE = self.boolean_env("PG_FORCE_RESTORE")
 
   # Initialization constants
 
@@ -42,11 +42,13 @@ module PlaceOS
   ES_HOST = ENV["ES_HOST"]? || "localhost"
   ES_PORT = ENV["ES_PORT"]?.try &.to_i || 9200
 
-  RETHINKDB_DB   = ENV["RETHINKDB_DB"]?
-  RETHINKDB_HOST = ENV["RETHINKDB_HOST"]? || "localhost"
-  RETHINKDB_PORT = ENV["RETHINKDB_PORT"]?.try &.to_i || 28015
-  RETHINKDB_USER = ENV["RETHINKDB_USER"]?
-  RETHINKDB_PASS = ENV["RETHINKDB_PASS"]?
+  PG_DB   = ENV["PG_DB"]? || "postgres"
+  PG_HOST = ENV["PG_HOST"]? || "localhost"
+  PG_PORT = ENV["PG_PORT"]?.try &.to_i || 5432
+  PG_USER = ENV["PG_USER"]? || "postgres"
+  PG_PASS = ENV["PG_PASS"]?
+
+  PG_DATABASE_URL = ENV["PG_DATABASE_URL"]? || "postgresql://#{PG_USER}:#{PG_PASS}@#{PG_HOST}:#{PG_PORT}/#{PG_DB}"
 
   class_getter? production : Bool = PROD
 

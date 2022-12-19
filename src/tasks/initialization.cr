@@ -1,5 +1,5 @@
-require "rethinkdb-orm"
-require "rethinkdb-orm/lock"
+require "pg-orm"
+require "pg-orm/lock"
 
 require "../logging"
 require "./entities"
@@ -9,8 +9,8 @@ module PlaceOS::Tasks::Initialization
   Log = ::Log.for(self)
 
   # Ensures only _one_ start process runs at once
-  protected class_getter start_lock : RethinkORM::Lock do
-    RethinkORM::Lock.new("placeos_start_lock")
+  protected class_getter start_lock : PgORM::PgAdvisoryLock do
+    PgORM::PgAdvisoryLock.new("placeos_start_lock")
   end
 
   # Initialization script

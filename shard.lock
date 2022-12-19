@@ -27,7 +27,7 @@ shards:
 
   bindata:
     git: https://github.com/spider-gazelle/bindata.git
-    version: 1.11.0
+    version: 1.11.1
 
   cron_parser:
     git: https://github.com/kostya/cron_parser.git
@@ -39,7 +39,7 @@ shards:
 
   db:
     git: https://github.com/crystal-lang/crystal-db.git
-    version: 0.11.0
+    version: 0.10.1
 
   debug:
     git: https://github.com/sija/debug.cr.git
@@ -56,6 +56,10 @@ shards:
   etcd:
     git: https://github.com/place-labs/crystal-etcd.git
     version: 1.2.5
+
+  eventbus:
+    git: https://github.com/spider-gazelle/eventbus.git
+    version: 0.9.9+git.commit.086b2ba92475b88e8481b0387eb56c735cbfd7bd
 
   exception_page:
     git: https://github.com/crystal-loot/exception_page.git
@@ -97,13 +101,17 @@ shards:
     git: https://github.com/luckyframework/lucky_router.git
     version: 0.5.1
 
+  micrate:
+    git: https://github.com/amberframework/micrate.git
+    version: 0.12.0
+
   nbchannel:
     git: https://github.com/wyhaines/nbchannel.cr.git
     version: 0.1.0+git.commit.ea6517a837270361695244d14c4b03d84660f113
 
   neuroplastic:
     git: https://github.com/spider-gazelle/neuroplastic.git
-    version: 1.12.1
+    version: 1.12.2
 
   open_api:
     git: https://github.com/elbywan/open_api.cr.git
@@ -123,7 +131,7 @@ shards:
 
   opentelemetry-instrumentation:
     git: https://github.com/wyhaines/opentelemetry-instrumentation.cr.git
-    version: 0.5.0+git.commit.7d83b9a53c9540fbc159f06eeed5d4bdad5c4377
+    version: 0.5.1+git.commit.30000cdca2d17db6f42db2eafc49f109f57a5afc
 
   opentelemetry-sdk:
     git: https://github.com/wyhaines/opentelemetry-sdk.cr.git
@@ -137,25 +145,33 @@ shards:
     git: https://github.com/wyhaines/parsedate.cr.git
     version: 0.1.2
 
+  pg:
+    git: https://github.com/will/crystal-pg.git
+    version: 0.25.0
+
+  pg-orm:
+    git: https://github.com/spider-gazelle/pg-orm.git
+    version: 1.0.0+git.commit.b41ca0102a48022218e6ad5136486215e8fec11d
+
   placeos-log-backend:
     git: https://github.com/place-labs/log-backend.git
     version: 0.11.0
 
-  placeos-models:
+  placeos-models: # Overridden
     git: https://github.com/placeos/models.git
-    version: 8.12.1
+    version: 8.12.2+git.commit.3606aeea21bd5565aa972c9e5f2e5091d6882c1b
+
+  pool:
+    git: https://github.com/ysbaddaden/pool.git
+    version: 0.2.4
 
   protobuf:
     git: https://github.com/jeromegn/protobuf.cr.git
-    version: 2.2.3
+    version: 2.3.0
 
-  rethinkdb:
-    git: https://github.com/kingsleyh/crystal-rethinkdb.git
-    version: 0.3.1
-
-  rethinkdb-orm:
-    git: https://github.com/spider-gazelle/rethinkdb-orm.git
-    version: 6.0.4
+  redis:
+    git: https://github.com/stefanwille/crystal-redis.git
+    version: 2.8.3
 
   retriable: # Overridden
     git: https://github.com/sija/retriable.cr.git
