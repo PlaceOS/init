@@ -27,7 +27,7 @@ shards:
 
   bindata:
     git: https://github.com/spider-gazelle/bindata.git
-    version: 1.11.0
+    version: 1.11.1
 
   cron_parser:
     git: https://github.com/kostya/cron_parser.git
@@ -103,7 +103,7 @@ shards:
 
   neuroplastic:
     git: https://github.com/spider-gazelle/neuroplastic.git
-    version: 1.12.1
+    version: 1.12.2
 
   open_api:
     git: https://github.com/elbywan/open_api.cr.git
@@ -115,7 +115,7 @@ shards:
 
   openssl_ext:
     git: https://github.com/spider-gazelle/openssl_ext.git
-    version: 2.2.0
+    version: 2.2.1
 
   opentelemetry-api:
     git: https://github.com/wyhaines/opentelemetry-api.cr.git
@@ -123,7 +123,7 @@ shards:
 
   opentelemetry-instrumentation:
     git: https://github.com/wyhaines/opentelemetry-instrumentation.cr.git
-    version: 0.5.0+git.commit.7d83b9a53c9540fbc159f06eeed5d4bdad5c4377
+    version: 0.5.1+git.commit.30000cdca2d17db6f42db2eafc49f109f57a5afc
 
   opentelemetry-sdk:
     git: https://github.com/wyhaines/opentelemetry-sdk.cr.git
@@ -143,11 +143,11 @@ shards:
 
   placeos-models:
     git: https://github.com/placeos/models.git
-    version: 8.12.1
+    version: 8.13.1
 
   protobuf:
     git: https://github.com/jeromegn/protobuf.cr.git
-    version: 2.2.3
+    version: 2.3.0
 
   rethinkdb:
     git: https://github.com/kingsleyh/crystal-rethinkdb.git
