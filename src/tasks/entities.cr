@@ -131,10 +131,8 @@ module PlaceOS::Tasks::Entities
       application.name = name
       application.secret = secure_string(bytes: 48)
       application.redirect_uri = redirect_uri
-      application.id = application_id
       application.uid = application_id
       application.scopes = scope
-      application.skip_authorization = true
       application.owner_id = authority_id
       application
     end
