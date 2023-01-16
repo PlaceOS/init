@@ -29,7 +29,7 @@ CREATE UNIQUE INDEX index_oauth_applications_on_uid ON "oauth_applications" USIN
 
 CREATE TABLE IF NOT EXISTS "oauth_access_grants" (
     id bigint PRIMARY KEY,
-    resource_owner_id bigint NOT NULL,
+    resource_owner_id TEXT NOT NULL,
     application_id bigint NOT NULL,
     token character varying NOT NULL,
     expires_in integer NOT NULL,
@@ -57,7 +57,7 @@ ALTER TABLE ONLY "oauth_access_grants"
 
 CREATE TABLE "oauth_access_tokens" (
     id bigint PRIMARY KEY,
-    resource_owner_id bigint,
+    resource_owner_id TEXT,
     application_id bigint NOT NULL,
     token character varying NOT NULL,
     refresh_token character varying,
