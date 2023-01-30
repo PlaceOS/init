@@ -47,7 +47,7 @@ WORKDIR /app
 RUN apk add \
   --update \
   --no-cache \
-  apache2-utils>=2.4.52-r0 \
+  'apache2-utils>=2.4.52-r0' \
   expat \
   git \
   bash \
