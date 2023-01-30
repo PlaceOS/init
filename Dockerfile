@@ -61,8 +61,7 @@ RUN apk add \
     jq \
     'libcurl>=7.79.1-r0' \
     openssh \
-    openssl \
-    py-pip
+    openssl
 
 # TODO: Stuck on 3.12 as `rethinkdb` is no longer packaged.
 RUN apk add \
@@ -70,7 +69,8 @@ RUN apk add \
   --no-cache \
   --repository=http://dl-cdn.alpinelinux.org/alpine/v3.12/community \
   --repository=http://dl-cdn.alpinelinux.org/alpine/v3.12/main \
-    rethinkdb
+    rethinkdb \
+    py-pip
 
 RUN pip install \
   --no-cache-dir \
