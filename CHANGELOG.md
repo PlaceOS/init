@@ -1,3 +1,9 @@
+## v0.20.3 (2023-01-30)
+
+### Fix
+
+- **Dockerfile**: python compatibility for rethinkdb backups ([#81](https://github.com/PlaceOS/init/pull/81))
+
 ## v0.20.2 (2022-09-14)
 
 ### Fix
