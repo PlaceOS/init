@@ -46,14 +46,8 @@ WORKDIR /app
 RUN apk add \
   --update \
   --no-cache \
-  --repository=http://dl-cdn.alpinelinux.org/alpine/edge/main \
-    expat \
-    git
-
-# Install bash, rethinkdb & python driver
-RUN apk add \
-  --update \
-  --no-cache \
+    curl \
+    git \
     'apache2-utils>=2.4.52-r0' \
     'apk-tools>=2.10.8-r0' \
     bash \
@@ -64,13 +58,21 @@ RUN apk add \
     openssl
 
 # TODO: Stuck on 3.12 as `rethinkdb` is no longer packaged.
+# python needs to be a version before 3.10
 RUN apk add \
   --update \
   --no-cache \
   --repository=http://dl-cdn.alpinelinux.org/alpine/v3.12/community \
   --repository=http://dl-cdn.alpinelinux.org/alpine/v3.12/main \
     rethinkdb \
-    py-pip
+    expat \
+    'python3<=3.8.10-r0' \
+    'python3-dev<=3.8.10-r0' \
+    'py3-setuptools<=47.0.0-r0'
+
+RUN python3 --version 
+
+RUN curl -sS https://bootstrap.pypa.io/get-pip.py | python3
 
 RUN pip install \
   --no-cache-dir \
