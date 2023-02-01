@@ -4,6 +4,7 @@ require "http/client"
 require "pg-orm"
 require "uri"
 require "micrate"
+require "../utils/migrate_data"
 
 module PlaceOS::Tasks::Database
   extend self
@@ -59,5 +60,20 @@ module PlaceOS::Tasks::Database
       scheme: "http"
     )
     HTTP::Client.delete(uri)
+  end
+
+  def migrate_rethink_to_pg(
+    path : String,
+    pg_host : String,
+    pg_port : Int32,
+    pg_db : String,
+    pg_user : String? = nil,
+    pg_password : String? = nil,
+    clean_before : Bool = false
+  )
+    pg_user = "postgres" if pg_user.nil?
+    pg_password = "" if pg_password.nil?
+
+    PlaceOS::Utils::DataMigrator.migrate_rethink(path, "postgresql://#{pg_user}:#{pg_password}@#{pg_host}:#{pg_port}/#{pg_db}", clean_before)
   end
 end

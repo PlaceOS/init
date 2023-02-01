@@ -30,6 +30,11 @@ docker-compose run --no-deps -it init task db:restore path=DUMP_FILE_LOCATION ho
 ```
 
 ```bash
+# Migrate RethinkDB dump to PostgreSQL database
+docker-compose run --no-deps -it init task migrate:rethink_dump path=DUMP_FILE_LOCATION host=$PG_HOST port=$PG_PORT db=$PG_DB user=$PG_USER password=$PG_PASSWORD clean_before=true
+```
+
+```bash
 # Create a set of placeholder records
 docker-compose run --no-deps -it init task create:placeholder
 ```

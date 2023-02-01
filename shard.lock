@@ -33,6 +33,10 @@ shards:
     git: https://github.com/kostya/cron_parser.git
     version: 0.4.0
 
+  crystar:
+    git: https://github.com/naqvis/crystar.git
+    version: 0.3.0
+
   csuuid:
     git: https://github.com/wyhaines/csuuid.cr.git
     version: 1.0.0+git.commit.812ee5e1252b27ee2895ec7897094cde3e4a5dc2
@@ -151,7 +155,7 @@ shards:
 
   pg-orm:
     git: https://github.com/spider-gazelle/pg-orm.git
-    version: 1.0.0+git.commit.b41ca0102a48022218e6ad5136486215e8fec11d
+    version: 1.0.0+git.commit.2bbafec9579f175880281279d33168360176540c
 
   placeos-log-backend:
     git: https://github.com/place-labs/log-backend.git
@@ -159,7 +163,7 @@ shards:
 
   placeos-models: # Overridden
     git: https://github.com/placeos/models.git
-    version: 8.13.1+git.commit.b5da29fc6ef21caaca7078963b08e60ee861c5c5
+    version: 8.13.1+git.commit.4eece1fc1d4fd2bf95bbe97bec8946d5e924c351
 
   pool:
     git: https://github.com/ysbaddaden/pool.git

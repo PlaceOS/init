@@ -91,6 +91,23 @@ namespace "restore" do
   end
 end
 
+namespace "migrate" do
+  desc "Migrate RethinkDB dump to PostgreSQL DB"
+  task "rethink_dump" do |_, args|
+    arguments = {
+      path:         args["path"].to_s,
+      pg_host:      (args["host"]? || PlaceOS::PG_HOST).to_s,
+      pg_port:      (args["port"]? || PlaceOS::PG_PORT).to_i,
+      pg_db:        (args["db"]? || PlaceOS::PG_DB).to_s,
+      pg_user:      (args["user"]? || PlaceOS::PG_USER).try &.to_s,
+      pg_password:  (args["password"]? || PlaceOS::PG_PASS).to_s,
+      clean_before: args["clean_before"]?.try(&.to_s.downcase) == "true" || false,
+    }
+
+    PlaceOS::Tasks.migrate_rethink_to_pg(**arguments)
+  end
+end
+
 desc "Drops Elasticsearch and PostgreSQL DB"
 task "drop", %w[drop:db drop:elastic] do
 end
