@@ -1,7 +1,9 @@
 require "json"
+require "uri"
 require "file_utils"
 require "crystar"
 require "placeos-models"
+require "connect-proxy"
 
 module PlaceOS::Utils::DataMigrator
   extend self
@@ -35,13 +37,9 @@ module PlaceOS::Utils::DataMigrator
   ]
 
   def migrate_rethink(dump : String, uri : String, clear_table = false)
-    unless File.exists?(dump)
-      Log.error { "RethinkDB dump file [#{dump}] not found" }
-      exit
-    end
-    Log.info { "Connecting to PostgreSQL - #{uri}" }
     PgORM::Database.parse(uri)
-    data_dir = decompress_dump(dump)
+    file_path = get_file(dump)
+    data_dir = decompress_dump(file_path)
     begin
       MODELS.each do |table, cls|
         cls.clear if clear_table
@@ -135,6 +133,7 @@ module PlaceOS::Utils::DataMigrator
     id_mapping = {} of String => Int64
 
     File.open(Path[data_dir, "doorkeeper_app.json"]) do |io|
+      OAuthToken.clear if clear # clear tokens before to avoid fk violation
       PlaceOS::Model::DoorkeeperApplication.clear if clear
       cb = AfterSaveCB.new do |old_id, new_id|
         id_mapping[old_id.not_nil!] = new_id.as(Int64)
@@ -146,7 +145,6 @@ module PlaceOS::Utils::DataMigrator
     end
 
     File.open(Path[data_dir, "doorkeeper_token.json"]) do |io|
-      OAuthToken.clear if clear
       load_data(io, OAuthToken) do |row|
         h = row.as_h
         h.delete("id")
@@ -154,6 +152,32 @@ module PlaceOS::Utils::DataMigrator
         h["application_id"] = JSON::Any.new(id_mapping[id]) if id_mapping.has_key?(id)
         nil
       end
+    end
+  end
+
+  private def get_file(dump : String)
+    uri = URI.parse(dump)
+    if uri.scheme || uri.host
+      path = Path[uri.path]
+      fname = path.basename.empty? ? "rethink_dump.tar.gz" : path.basename
+      file_path = File.tempname("rethink_dump_file", fname)
+      FileUtils.mkdir_p(file_path)
+      file_path = Path[file_path, fname]
+      Log.info { "Downloading RethinkDB dump..." }
+      ConnectProxy::HTTPClient.get(uri) do |response|
+        unless response.success?
+          Log.error { "could not found RethinkDB dump. Provided url returned invalid response code #{response.status_code}" }
+          exit
+        end
+        File.write(file_path, response.body_io)
+        file_path
+      end
+    else
+      unless File.exists?(uri.path)
+        Log.error { "RethinkDB dump file [#{uri.path}] not found" }
+        exit
+      end
+      uri.path
     end
   end
 

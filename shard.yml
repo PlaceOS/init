@@ -73,3 +73,6 @@ dependencies:
 
   crystar:
       github: naqvis/crystar
+
+  connect-proxy:
+    github: spider-gazelle/connect-proxy
