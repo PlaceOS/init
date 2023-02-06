@@ -22,13 +22,14 @@ RUN mkdir -p /app/bin
 
 # Build init
 # TODO:: build static binaries, no libxml2-static available
-RUN /app/spinner shards build \
+RUN shards build \
         --error-trace \
         --ignore-crystal-version \
         --production \
         --release \
         --skip-postinstall
 
+RUN crystal build -o bin/task src/sam.cr
 SHELL ["/bin/ash", "-eo", "pipefail", "-c"]
 
 # Extract binary dependencies
