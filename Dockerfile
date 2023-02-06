@@ -21,7 +21,7 @@ RUN mkdir -p /app/bin
 
 # Build init
 # TODO:: build static binaries, no libxml2-static available
-RUN shards build \
+RUN /spinner shards build \
         --error-trace \
         --ignore-crystal-version \
         --production \
