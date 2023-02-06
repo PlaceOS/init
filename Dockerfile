@@ -8,6 +8,7 @@ COPY shard.yml shard.yml
 COPY shard.override.yml shard.override.yml
 COPY shard.lock shard.lock
 COPY db db
+COPY spinner spinner
 
 RUN shards install \
         --ignore-crystal-version \
@@ -21,7 +22,7 @@ RUN mkdir -p /app/bin
 
 # Build init
 # TODO:: build static binaries, no libxml2-static available
-RUN /spinner shards build \
+RUN /app/spinner shards build \
         --error-trace \
         --ignore-crystal-version \
         --production \
