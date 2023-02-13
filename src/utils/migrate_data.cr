@@ -64,8 +64,9 @@ module PlaceOS::Utils::DataMigrator
     errors = Failures.new(model.table_name)
     records.each_with_index do |r, index|
       val = yield r
-      row = model.from_trusted_json(r.to_json)
+      row = nil
       begin
+        row = model.from_trusted_json(r.to_json)
         begin
           row.save!
         rescue ex
@@ -80,7 +81,7 @@ module PlaceOS::Utils::DataMigrator
         after_save.try &.call(val, row.id.not_nil!)
         success += 1
       rescue ex
-        errors << Failure.new(index + 1, row.id.to_s, "#{ex.class}: #{ex.message}")
+        errors << Failure.new(index + 1, row.try &.id.to_s || "", "#{ex.class}: #{ex.message}")
       end
     end
     Log.info { "#{success} of #{records.size} records loaded successfully" }

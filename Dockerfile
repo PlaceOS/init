@@ -49,6 +49,7 @@ WORKDIR /app
 RUN apk add \
   --update \
   --no-cache \
+  tzdata \
   'apache2-utils>=2.4.52-r0' \
   expat \
   git \
