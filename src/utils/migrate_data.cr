@@ -217,7 +217,7 @@ module PlaceOS::Utils::DataMigrator
   end
 end
 
-#nodoc:
+# nodoc:
 module PgORM::Persistence
   private def __create(**options)
     builder = Query::Builder.new(table_name, primary_key.to_s)
