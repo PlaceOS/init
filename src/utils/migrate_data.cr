@@ -55,7 +55,7 @@ module PlaceOS::Utils::DataMigrator
     end
   end
 
-  private def load_data(data : IO, model : PgORM::Base.class, after_save : AfterSaveCB? = nil, on_err : OnErrorCB? = nil)
+  private def load_data(data : IO, model : PgORM::Base.class, after_save : AfterSaveCB? = nil, on_err : OnErrorCB? = nil, &)
     records = JSON.parse(data).as_a
     Log.info { "Loading #{records.size} records into table \"#{model.table_name}\" " }
     return if records.empty?

@@ -249,7 +249,7 @@ module PlaceOS::Tasks::Entities
     raise e
   end
 
-  protected def upsert_document(query)
+  protected def upsert_document(query, &)
     existing = query.is_a?(Iterator) || query.is_a?(Enumerable) ? query.first? : query
     if existing.nil?
       model = yield

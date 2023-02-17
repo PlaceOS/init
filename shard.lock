@@ -167,11 +167,11 @@ shards:
 
   placeos-models: # Overridden
     git: https://github.com/placeos/models.git
-    version: 8.13.1+git.commit.4eece1fc1d4fd2bf95bbe97bec8946d5e924c351
+    version: 8.13.2+git.commit.a1a85d6a67eb64eda40e8ed19beedce2f5aaa78a
 
   pool:
     git: https://github.com/ysbaddaden/pool.git
-    version: 0.2.4
+    version: 0.3.0
 
   protobuf:
     git: https://github.com/jeromegn/protobuf.cr.git

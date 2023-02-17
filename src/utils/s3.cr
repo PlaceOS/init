@@ -25,7 +25,7 @@ class PlaceOS::Utils::S3
     new_file_channel.send(path)
   end
 
-  def read_file(object : String)
+  def read_file(object : String, &)
     s3.get_object(bucket, object, headers: headers) do |io|
       yield io
     end
