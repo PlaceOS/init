@@ -3,7 +3,7 @@ require "./constants"
 require "sam"
 require "./tasks"
 require "./logging"
-
+require "./ext/*"
 namespace "db" do
   desc "Initialize PostgreSQL Database by running the migration scripts"
   task "init" do |_, args|

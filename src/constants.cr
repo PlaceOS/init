@@ -46,7 +46,7 @@ module PlaceOS
   PG_HOST = ENV["PG_HOST"]? || "localhost"
   PG_PORT = ENV["PG_PORT"]?.try &.to_i || 5432
   PG_USER = ENV["PG_USER"]? || "postgres"
-  PG_PASS = ENV["PG_PASS"]?
+  PG_PASS = ENV["PG_PASS"]? || ENV["PG_PASSWORD"]?
 
   PG_DATABASE_URL = ENV["PG_DATABASE_URL"]? || "postgresql://#{PG_USER}:#{PG_PASS}@#{PG_HOST}:#{PG_PORT}/#{PG_DB}"
 

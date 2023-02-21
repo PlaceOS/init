@@ -167,7 +167,7 @@ shards:
 
   placeos-models: # Overridden
     git: https://github.com/placeos/models.git
-    version: 8.13.2+git.commit.a1a85d6a67eb64eda40e8ed19beedce2f5aaa78a
+    version: 8.13.2+git.commit.dd363ccc4714d685727530ffe7870e90839578ed
 
   pool:
     git: https://github.com/ysbaddaden/pool.git
