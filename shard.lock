@@ -131,7 +131,7 @@ shards:
 
   openssl_ext:
     git: https://github.com/spider-gazelle/openssl_ext.git
-    version: 2.2.1
+    version: 2.3.0
 
   opentelemetry-api:
     git: https://github.com/wyhaines/opentelemetry-api.cr.git
@@ -167,7 +167,7 @@ shards:
 
   placeos-models: # Overridden
     git: https://github.com/placeos/models.git
-    version: 8.13.2+git.commit.dd363ccc4714d685727530ffe7870e90839578ed
+    version: 8.13.2+git.commit.5ad66f17f998c499c3dbc943f04d8450946f225b
 
   pool:
     git: https://github.com/ysbaddaden/pool.git
