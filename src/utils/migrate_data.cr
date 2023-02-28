@@ -134,6 +134,7 @@ module PlaceOS::Utils::DataMigrator
     id_mapping = {} of String => Int64
 
     File.open(Path[data_dir, "doorkeeper_app.json"]) do |io|
+      PgORM::Database.exec_sql("delete from oauth_access_grants") if clear
       OAuthToken.clear if clear # clear tokens before to avoid fk violation
       PlaceOS::Model::DoorkeeperApplication.clear if clear
       cb = AfterSaveCB.new do |old_id, new_id|
