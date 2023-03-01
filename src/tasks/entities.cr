@@ -210,6 +210,13 @@ module PlaceOS::Tasks::Entities
       end
     end
 
+    # Set parent
+    # See https://github.com/PlaceOS/init/issues/82
+    zones.first.parent_id = zones[1].id
+    zones.first.save!
+    zones[2].parent_id = zones.first.id
+    zones[2].save!
+
     control_system = upsert_document(Model::ControlSystem.all) do
       Model::ControlSystem.new(name: "System-#{version}")
     end
