@@ -1,3 +1,9 @@
+## v0.20.4 (2023-03-01)
+
+### Fix
+
+- **entities**: adds building, level parent property. Fixes [#82](https://github.com/PlaceOS/init/pull/82) ([#83](https://github.com/PlaceOS/init/pull/83))
+
 ## v0.20.3 (2023-01-30)
 
 ### Fix
