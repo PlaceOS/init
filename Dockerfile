@@ -48,6 +48,7 @@ RUN apk add \
   --no-cache \
     curl \
     git \
+    tzdata \
     'apache2-utils>=2.4.52-r0' \
     'apk-tools>=2.10.8-r0' \
     bash \
