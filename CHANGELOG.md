@@ -1,3 +1,9 @@
+## v0.20.5 (2023-03-06)
+
+### Fix
+
+- **dockerfile**: Add tzdata for timezone in final image ([#84](https://github.com/PlaceOS/init/pull/84))
+
 ## v0.20.4 (2023-03-01)
 
 ### Fix
