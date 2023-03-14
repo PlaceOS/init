@@ -11,7 +11,7 @@ shards:
 
   active-model:
     git: https://github.com/spider-gazelle/active-model.git
-    version: 4.2.3
+    version: 4.3.0
 
   awscr-s3:
     git: https://github.com/taylorfinnell/awscr-s3.git
@@ -107,7 +107,7 @@ shards:
 
   lucky_router:
     git: https://github.com/luckyframework/lucky_router.git
-    version: 0.5.1
+    version: 0.5.2
 
   micrate:
     git: https://github.com/amberframework/micrate.git
@@ -167,7 +167,7 @@ shards:
 
   placeos-models: # Overridden
     git: https://github.com/placeos/models.git
-    version: 8.13.2+git.commit.46a4af0b1bd012b3a752e516bd015ef37b0b7332
+    version: 8.13.2+git.commit.5d4ef0d395045687d7aa6507c3560cbee1414068
 
   pool:
     git: https://github.com/ysbaddaden/pool.git
@@ -179,7 +179,7 @@ shards:
 
   redis:
     git: https://github.com/stefanwille/crystal-redis.git
-    version: 2.8.3
+    version: 2.9.0
 
   retriable: # Overridden
     git: https://github.com/sija/retriable.cr.git

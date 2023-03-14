@@ -10,7 +10,6 @@ executables:
   - start
   - backup
   - restore
-  - task
   - exec_from
 
 targets:
@@ -22,8 +21,6 @@ targets:
     main: lib/exec_from/src/app.cr
   start:
     main: src/start.cr
-  # task:
-  #   main: src/sam.cr
 
 dependencies:
   action-controller:
