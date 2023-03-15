@@ -1,39 +1,55 @@
 require "../logging"
 
 require "http/client"
-require "rethinkdb"
+require "pg-orm"
 require "uri"
+require "micrate"
+require "../utils/migrate_data"
 
 module PlaceOS::Tasks::Database
   extend self
-  include RethinkDB::Shortcuts
   Log = ::Log.for(self)
 
-  def drop_rethinkdb_tables(
-    rethinkdb_db : String,
-    rethinkdb_host : String,
-    rethinkdb_port : Int32,
-    user : String? = nil,
-    password : String? = nil
+  def pg_init_database(
+    pg_db : String,
+    pg_host : String,
+    pg_port : Int32,
+    pg_user : String? = nil,
+    pg_password : String? = nil
   )
-    user = "admin" if user.nil?
-    password = "" if password.nil?
+    pg_user = "postgres" if pg_user.nil?
+    pg_password = "" if pg_password.nil?
 
-    conn = r.connect(
-      host: rethinkdb_host,
-      port: rethinkdb_port,
-      db: rethinkdb_db,
-      user: user,
-      password: password,
-    )
+    Micrate::DB.connection_url = "postgresql://#{pg_user}:#{pg_password}@#{pg_host}:#{pg_port}/#{pg_db}"
+    Micrate::DB.connect do |db|
+      Micrate.up(db)
+    end
+  end
 
-    # Drop all tables in the db
-    r.table_list.for_each do |table|
-      r.table(table).delete
-    end.run(conn)
-  ensure
-    # Close off the RethinkDB connection
-    conn.try &.close
+  def drop_pg_tables(
+    pg_db : String,
+    pg_host : String,
+    pg_port : Int32,
+    pg_user : String? = nil,
+    pg_password : String? = nil
+  )
+    pg_user = "postgres" if pg_user.nil?
+    pg_password = "" if pg_password.nil?
+
+    sql = <<-SQL
+      select 'drop table if exists "' || tablename || '" cascade;' from pg_tables
+        where schemaname = 'public'
+  SQL
+
+    PgORM::Database.configure do |settings|
+      settings.host = pg_host
+      settings.port = pg_port
+      settings.db = pg_db
+      settings.user = pg_user
+      settings.password = pg_password
+    end
+
+    PgORM::Database.exec_sql(sql)
   end
 
   def drop_elastic_indices(elastic_host : String, elastic_port : Int32)
@@ -44,5 +60,20 @@ module PlaceOS::Tasks::Database
       scheme: "http"
     )
     HTTP::Client.delete(uri)
+  end
+
+  def migrate_rethink_to_pg(
+    path : String,
+    pg_host : String,
+    pg_port : Int32,
+    pg_db : String,
+    pg_user : String? = nil,
+    pg_password : String? = nil,
+    clean_before : Bool = false
+  )
+    pg_user = "postgres" if pg_user.nil?
+    pg_password = "" if pg_password.nil?
+
+    PlaceOS::Utils::DataMigrator.migrate_rethink(path, "postgresql://#{pg_user}:#{pg_password}@#{pg_host}:#{pg_port}/#{pg_db}", clean_before)
   end
 end

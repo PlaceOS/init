@@ -10,7 +10,6 @@ executables:
   - start
   - backup
   - restore
-  - task
   - exec_from
 
 targets:
@@ -22,8 +21,6 @@ targets:
     main: lib/exec_from/src/app.cr
   start:
     main: src/start.cr
-  task:
-    main: src/sam.cr
 
 dependencies:
   action-controller:
@@ -57,13 +54,12 @@ dependencies:
     github: placeos/models
     version: ~> 8.1
 
-  rethinkdb:
-    github: kingsleyh/crystal-rethinkdb
-    version: ~> 0.3
+  pg-orm:
+    github: spider-gazelle/pg-orm
 
-  rethinkdb-orm:
-    github: spider-gazelle/rethinkdb-orm
-    version: ">= 4.0.0"
+  micrate:
+    github: amberframework/micrate
+    version: "0.12.0"
 
   sam:
     github: imdrasil/sam.cr
@@ -71,3 +67,9 @@ dependencies:
   tasker:
     github: spider-gazelle/tasker
     version: ~> 2.0
+
+  crystar:
+      github: naqvis/crystar
+
+  connect-proxy:
+    github: spider-gazelle/connect-proxy

@@ -1,3 +1,4 @@
+require "pg-orm"
 require "placeos-models"
 
 module Migration
@@ -7,7 +8,8 @@ module Migration
     Ref = __FILE__
 
     def self.raw_query(&)
-      results = PlaceOS::Model::Connection.raw { |r| yield r }
+      # results = PlaceOS::Model::Connection.raw { |r| yield r }
+      results = PgORM::Database.connection { |db| yield db }
       Log.info { results }
       results
     rescue e
