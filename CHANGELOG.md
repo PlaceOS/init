@@ -1,3 +1,21 @@
+## v0.20.5 (2023-03-06)
+
+### Fix
+
+- **dockerfile**: Add tzdata for timezone in final image ([#84](https://github.com/PlaceOS/init/pull/84))
+
+## v0.20.4 (2023-03-01)
+
+### Fix
+
+- **entities**: adds building, level parent property. Fixes [#82](https://github.com/PlaceOS/init/pull/82) ([#83](https://github.com/PlaceOS/init/pull/83))
+
+## v0.20.3 (2023-01-30)
+
+### Fix
+
+- **Dockerfile**: python compatibility for rethinkdb backups ([#81](https://github.com/PlaceOS/init/pull/81))
+
 ## v0.20.2 (2022-09-14)
 
 ### Fix
