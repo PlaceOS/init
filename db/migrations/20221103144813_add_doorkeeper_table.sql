@@ -15,7 +15,7 @@ CREATE TABLE IF NOT EXISTS "oauth_applications"(
     updated_at timestamp(6) without time zone NOT NULL
 );
 
-CREATE SEQUENCE public.oauth_applications_id_seq
+CREATE SEQUENCE IF NOT EXISTS public.oauth_applications_id_seq
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -24,7 +24,7 @@ CREATE SEQUENCE public.oauth_applications_id_seq
 
 ALTER SEQUENCE public.oauth_applications_id_seq OWNED BY "oauth_applications".id;
 ALTER TABLE ONLY "oauth_applications" ALTER COLUMN id SET DEFAULT nextval('public.oauth_applications_id_seq'::regclass);
-CREATE UNIQUE INDEX index_oauth_applications_on_uid ON "oauth_applications" USING btree (uid);
+CREATE UNIQUE INDEX IF NOT EXISTS index_oauth_applications_on_uid ON "oauth_applications" USING btree (uid);
 
 
 CREATE TABLE IF NOT EXISTS "oauth_access_grants" (
@@ -39,7 +39,7 @@ CREATE TABLE IF NOT EXISTS "oauth_access_grants" (
     scopes character varying DEFAULT ''::character varying NOT NULL
 );
 
-CREATE SEQUENCE public.oauth_access_grants_id_seq
+CREATE SEQUENCE IF NOT EXISTS public.oauth_access_grants_id_seq
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -48,14 +48,16 @@ CREATE SEQUENCE public.oauth_access_grants_id_seq
 
 ALTER SEQUENCE public.oauth_access_grants_id_seq OWNED BY "oauth_access_grants".id;
 ALTER TABLE ONLY "oauth_access_grants" ALTER COLUMN id SET DEFAULT nextval('public.oauth_access_grants_id_seq'::regclass);
-CREATE INDEX index_oauth_access_grants_on_application_id ON "oauth_access_grants" USING btree (application_id);
-CREATE INDEX index_oauth_access_grants_on_resource_owner_id ON "oauth_access_grants" USING btree (resource_owner_id);
-CREATE UNIQUE INDEX index_oauth_access_grants_on_token ON "oauth_access_grants" USING btree (token);
+CREATE INDEX IF NOT EXISTS index_oauth_access_grants_on_application_id ON "oauth_access_grants" USING btree (application_id);
+CREATE INDEX IF NOT EXISTS index_oauth_access_grants_on_resource_owner_id ON "oauth_access_grants" USING btree (resource_owner_id);
+CREATE UNIQUE INDEX IF NOT EXISTS index_oauth_access_grants_on_token ON "oauth_access_grants" USING btree (token);
+ALTER TABLE ONLY "oauth_access_grants"
+    DROP CONSTRAINT IF EXISTS fk_oauth_access_grants_on_oauth_applications_id;
 ALTER TABLE ONLY "oauth_access_grants"
     ADD CONSTRAINT fk_oauth_access_grants_on_oauth_applications_id FOREIGN KEY (application_id) REFERENCES "oauth_applications"(id);
 
 
-CREATE TABLE "oauth_access_tokens" (
+CREATE TABLE IF NOT EXISTS "oauth_access_tokens" (
     id bigint PRIMARY KEY,
     resource_owner_id TEXT,
     application_id bigint NOT NULL,
@@ -68,7 +70,7 @@ CREATE TABLE "oauth_access_tokens" (
     previous_refresh_token character varying DEFAULT ''::character varying NOT NULL
 );
 
-CREATE SEQUENCE public.oauth_access_tokens_id_seq
+CREATE SEQUENCE IF NOT EXISTS public.oauth_access_tokens_id_seq
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -77,10 +79,12 @@ CREATE SEQUENCE public.oauth_access_tokens_id_seq
 
 ALTER SEQUENCE public.oauth_access_tokens_id_seq OWNED BY "oauth_access_tokens".id;
 ALTER TABLE ONLY "oauth_access_tokens" ALTER COLUMN id SET DEFAULT nextval('public.oauth_access_tokens_id_seq'::regclass);
-CREATE INDEX index_oauth_access_tokens_on_application_id ON "oauth_access_tokens" USING btree (application_id);
-CREATE UNIQUE INDEX index_oauth_access_tokens_on_refresh_token ON "oauth_access_tokens" USING btree (refresh_token);
-CREATE INDEX index_oauth_access_tokens_on_resource_owner_id ON "oauth_access_tokens" USING btree (resource_owner_id);
-CREATE UNIQUE INDEX index_oauth_access_tokens_on_token ON "oauth_access_tokens" USING btree (token);
+CREATE INDEX IF NOT EXISTS index_oauth_access_tokens_on_application_id ON "oauth_access_tokens" USING btree (application_id);
+CREATE UNIQUE INDEX IF NOT EXISTS index_oauth_access_tokens_on_refresh_token ON "oauth_access_tokens" USING btree (refresh_token);
+CREATE INDEX IF NOT EXISTS index_oauth_access_tokens_on_resource_owner_id ON "oauth_access_tokens" USING btree (resource_owner_id);
+CREATE UNIQUE INDEX IF NOT EXISTS index_oauth_access_tokens_on_token ON "oauth_access_tokens" USING btree (token);
+ALTER TABLE ONLY "oauth_access_tokens"
+    DROP CONSTRAINT IF EXISTS fk_oauth_access_tokens_on_oauth_applications_id;
 ALTER TABLE ONLY "oauth_access_tokens"
     ADD CONSTRAINT fk_oauth_access_tokens_on_oauth_applications_id FOREIGN KEY (application_id) REFERENCES "oauth_applications"(id);
 

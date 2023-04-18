@@ -1,7 +1,7 @@
 -- +micrate Up
 -- SQL in section 'Up' is executed when this migration is applied
 
-CREATE TABLE "condo_uploads" (
+CREATE TABLE IF NOT EXISTS "condo_uploads" (
     id bigint PRIMARY KEY,
     user_id character varying,
     file_name character varying,
@@ -22,7 +22,7 @@ CREATE TABLE "condo_uploads" (
     part_data text
 );
 
-CREATE SEQUENCE public.condo_uploads_id_seq
+CREATE SEQUENCE IF NOT EXISTS public.condo_uploads_id_seq
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
