@@ -18,7 +18,9 @@ BEGIN
             'NOSHOW',
             'REJECTED',
             'CANCELLED',
-            'ENDED'
+            'ENDED',
+            'VISITOR_CHECKEDIN',
+            'VISITOR_CHECKEDOUT'
         );
   END IF;
 END;
