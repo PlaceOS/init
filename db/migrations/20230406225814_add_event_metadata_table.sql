@@ -33,7 +33,6 @@ ALTER TABLE ONLY "event_metadatas"
     ADD CONSTRAINT event_metadatas_tenant_id_fkey FOREIGN KEY (tenant_id) REFERENCES "tenants"(id) ON DELETE CASCADE;
 
 CREATE INDEX IF NOT EXISTS index_event_metadatas_created_at ON "event_metadatas" USING btree (created_at);
-CREATE UNIQUE INDEX IF NOT EXISTS index_event_metadatas_event_id ON "event_metadatas" USING btree (event_id);
 CREATE INDEX IF NOT EXISTS index_event_metadatas_event_id_idx ON "event_metadatas" USING btree (event_id);
 CREATE INDEX IF NOT EXISTS index_event_metadatas_ical_uid_idx ON "event_metadatas" USING btree (ical_uid);
 CREATE INDEX IF NOT EXISTS index_event_metadatas_system_id ON "event_metadatas" USING btree (system_id);
