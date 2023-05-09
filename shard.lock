@@ -11,7 +11,7 @@ shards:
 
   active-model:
     git: https://github.com/spider-gazelle/active-model.git
-    version: 4.3.0
+    version: 4.3.1
 
   awscr-s3:
     git: https://github.com/taylorfinnell/awscr-s3.git
@@ -61,13 +61,17 @@ shards:
     git: https://github.com/spider-gazelle/ed25519.git
     version: 1.0.3
 
+  email:
+    git: https://github.com/arcage/crystal-email.git
+    version: 0.7.0
+
   etcd:
     git: https://github.com/place-labs/crystal-etcd.git
     version: 1.2.5
 
   eventbus:
     git: https://github.com/spider-gazelle/eventbus.git
-    version: 0.9.9+git.commit.086b2ba92475b88e8481b0387eb56c735cbfd7bd
+    version: 0.9.9+git.commit.1f0e2524e766b10d9dc72705fa6578858e8e0b1b
 
   exception_page:
     git: https://github.com/crystal-loot/exception_page.git
@@ -84,6 +88,10 @@ shards:
   future:
     git: https://github.com/crystal-community/future.cr.git
     version: 1.0.0
+
+  google:
+    git: https://github.com/placeos/google.git
+    version: 3.4.0
 
   habitat:
     git: https://github.com/luckyframework/habitat.git
@@ -119,7 +127,11 @@ shards:
 
   neuroplastic:
     git: https://github.com/spider-gazelle/neuroplastic.git
-    version: 1.12.2
+    version: 1.13.0
+
+  office365:
+    git: https://github.com/placeos/office365.git
+    version: 1.19.0
 
   open_api:
     git: https://github.com/elbywan/open_api.cr.git
@@ -139,11 +151,11 @@ shards:
 
   opentelemetry-instrumentation:
     git: https://github.com/wyhaines/opentelemetry-instrumentation.cr.git
-    version: 0.5.1+git.commit.30000cdca2d17db6f42db2eafc49f109f57a5afc
+    version: 0.5.1+git.commit.d698621cdc7722475e56e6dd8a7c07272432f270
 
   opentelemetry-sdk:
     git: https://github.com/wyhaines/opentelemetry-sdk.cr.git
-    version: 0.5.1
+    version: 0.6.1
 
   pars:
     git: https://github.com/spider-gazelle/pars.git
@@ -153,13 +165,21 @@ shards:
     git: https://github.com/wyhaines/parsedate.cr.git
     version: 0.1.2
 
+  pegmatite:
+    git: https://github.com/jemc/crystal-pegmatite.git
+    version: 0.2.3+git.commit.f1b6d99b71774f82b6bd17b825d6d7fdd5de38f9
+
   pg:
     git: https://github.com/will/crystal-pg.git
     version: 0.25.0
 
   pg-orm:
     git: https://github.com/spider-gazelle/pg-orm.git
-    version: 1.0.0+git.commit.2bbafec9579f175880281279d33168360176540c
+    version: 1.0.0+git.commit.6bbddb37fc24ce3253937b54f12fe86882b83e14
+
+  place_calendar:
+    git: https://github.com/placeos/calendar.git
+    version: 4.17.0
 
   placeos-log-backend:
     git: https://github.com/place-labs/log-backend.git
@@ -167,11 +187,11 @@ shards:
 
   placeos-models:
     git: https://github.com/placeos/models.git
-    version: 9.0.0
+    version: 9.2.0
 
   pool:
     git: https://github.com/ysbaddaden/pool.git
-    version: 0.3.0
+    version: 0.2.4
 
   protobuf:
     git: https://github.com/jeromegn/protobuf.cr.git
@@ -179,7 +199,7 @@ shards:
 
   redis:
     git: https://github.com/stefanwille/crystal-redis.git
-    version: 2.9.0
+    version: 2.9.1
 
   retriable: # Overridden
     git: https://github.com/sija/retriable.cr.git
@@ -212,4 +232,8 @@ shards:
   tracer:
     git: https://github.com/wyhaines/tracer.cr.git
     version: 0.3.1
+
+  ulid:
+    git: https://github.com/place-labs/ulid.git
+    version: 0.1.3+git.commit.0bb8d5d4bee4168acfac2630ce51ce4706253688
 

@@ -26,7 +26,6 @@ RUN shards build \
         --error-trace \
         --ignore-crystal-version \
         --production \
-        --release \
         --skip-postinstall
 
 RUN crystal build -o bin/task src/sam.cr
