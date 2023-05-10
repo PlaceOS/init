@@ -7,7 +7,6 @@ WORKDIR /app
 COPY shard.yml shard.yml
 COPY shard.override.yml shard.override.yml
 COPY shard.lock shard.lock
-COPY db db
 COPY spinner spinner
 
 RUN shards install \
@@ -39,6 +38,8 @@ RUN for binary in /app/bin/*; do \
         xargs -I % sh -c 'mkdir -p $(dirname deps%); cp % deps%;'; \
     done
 
+RUN git clone https://github.com/PlaceOS/models
+
 # Build a minimal docker image
 FROM alpine:3.16
 
@@ -64,7 +65,7 @@ RUN apk add \
 COPY scripts /app/scripts
 COPY --from=build /app/deps /
 COPY --from=build /app/bin /app/bin
-COPY --from=build /app/db /app/db
+COPY --from=build /app/models/migration/db /app/db
 
 ENV PATH="/app/bin:/app/scripts:${PATH}"
 
