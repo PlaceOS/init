@@ -1,4 +1,8 @@
-## Unreleased
+## v0.20.7 (2023-05-10)
+
+### Fix
+
+- **db/migrations**: make models repo the source of truth
 
 ## v0.20.6 (2023-03-15)
 
