@@ -1,3 +1,9 @@
+## v0.20.8 (2023-05-23)
+
+### Fix
+
+- **migrate_data**: don't migrate asset data
+
 ## v0.20.7 (2023-05-10)
 
 ### Fix
