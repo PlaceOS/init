@@ -15,8 +15,8 @@ module PlaceOS::Utils::DataMigrator
   MODELS = [
     {"user", PlaceOS::Model::User},
     {"api_key", PlaceOS::Model::ApiKey},
-    {"ass", PlaceOS::Model::AssetInstance},
-    {"asset", PlaceOS::Model::Asset},
+    # {"ass", PlaceOS::Model::AssetInstance},
+    # {"asset", PlaceOS::Model::Asset},
     {"authority", PlaceOS::Model::Authority},
     {"broker", PlaceOS::Model::Broker},
     {"sys", PlaceOS::Model::ControlSystem},
