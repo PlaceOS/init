@@ -71,7 +71,7 @@ shards:
 
   eventbus:
     git: https://github.com/spider-gazelle/eventbus.git
-    version: 0.9.9+git.commit.8572cf71937680e38df4652fe886e4383b20e4f1
+    version: 0.9.9+git.commit.a26f6f022eed373264e13acbf95ffc1e710df645
 
   exception_page:
     git: https://github.com/crystal-loot/exception_page.git
@@ -91,7 +91,7 @@ shards:
 
   google:
     git: https://github.com/placeos/google.git
-    version: 3.4.0
+    version: 3.5.0
 
   habitat:
     git: https://github.com/luckyframework/habitat.git
@@ -131,7 +131,7 @@ shards:
 
   office365:
     git: https://github.com/placeos/office365.git
-    version: 1.21.2
+    version: 1.22.0
 
   open_api:
     git: https://github.com/elbywan/open_api.cr.git
@@ -179,7 +179,7 @@ shards:
 
   place_calendar:
     git: https://github.com/placeos/calendar.git
-    version: 4.18.3
+    version: 4.19.0
 
   placeos-log-backend:
     git: https://github.com/place-labs/log-backend.git
@@ -187,7 +187,7 @@ shards:
 
   placeos-models:
     git: https://github.com/placeos/models.git
-    version: 9.13.0
+    version: 9.13.2
 
   pool:
     git: https://github.com/ysbaddaden/pool.git
@@ -219,7 +219,7 @@ shards:
 
   tasker:
     git: https://github.com/spider-gazelle/tasker.git
-    version: 2.0.7
+    version: 2.1.4
 
   time-ext:
     git: https://github.com/wyhaines/time-ext.cr.git
