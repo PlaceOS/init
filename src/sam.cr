@@ -102,6 +102,7 @@ namespace "migrate" do
       pg_user:      (args["user"]? || PlaceOS::PG_USER).try &.to_s,
       pg_password:  (args["password"]? || PlaceOS::PG_PASS).to_s,
       clean_before: args["clean_before"]?.try(&.to_s.downcase) == "true" || false,
+      verbose:      args["verbose"]?.try(&.to_s.downcase) == "true" || false,
     }
 
     PlaceOS::Tasks.migrate_rethink_to_pg(**arguments)

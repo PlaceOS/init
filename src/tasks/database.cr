@@ -69,11 +69,12 @@ module PlaceOS::Tasks::Database
     pg_db : String,
     pg_user : String? = nil,
     pg_password : String? = nil,
-    clean_before : Bool = false
+    clean_before : Bool = false,
+    verbose : Bool = false
   )
     pg_user = "postgres" if pg_user.nil?
     pg_password = "" if pg_password.nil?
 
-    PlaceOS::Utils::DataMigrator.migrate_rethink(path, "postgresql://#{pg_user}:#{pg_password}@#{pg_host}:#{pg_port}/#{pg_db}", clean_before)
+    PlaceOS::Utils::DataMigrator.migrate_rethink(path, "postgresql://#{pg_user}:#{pg_password}@#{pg_host}:#{pg_port}/#{pg_db}", clean_before, verbose)
   end
 end

@@ -36,26 +36,28 @@ module PlaceOS::Utils::DataMigrator
     {"authentication", PlaceOS::Model::UserAuthLookup},
   ]
 
-  def migrate_rethink(dump : String, uri : String, clear_table = false)
+  def migrate_rethink(dump : String, uri : String, clear_table = false, verbose = false)
     PgORM::Database.parse(uri)
     file_path = get_file(dump)
     data_dir = decompress_dump(file_path)
     begin
       MODELS.each do |table, cls|
+        Log.info { "Cleaning table '#{table}'" } if verbose
         cls.clear if clear_table
         File.open(Path[data_dir, "#{table}.json"]) do |io|
-          load_data(io, cls) { }
+          Log.info { "Parsing file '#{table}.json'" } if verbose
+          load_data(io, cls, verbose) { }
         end
       end
 
-      load_mod_data(data_dir, clear_table)
-      load_doorkeeper_data(data_dir, clear_table)
+      load_mod_data(data_dir, clear_table, verbose)
+      load_doorkeeper_data(data_dir, clear_table, verbose)
     ensure
       FileUtils.rm_rf(data_dir)
     end
   end
 
-  private def load_data(data : IO, model : PgORM::Base.class, after_save : AfterSaveCB? = nil, on_err : OnErrorCB? = nil, &)
+  private def load_data(data : IO, model : PgORM::Base.class, verbose : Bool, after_save : AfterSaveCB? = nil, on_err : OnErrorCB? = nil, &)
     records = JSON.parse(data).as_a
     Log.info { "Loading #{records.size} records into table \"#{model.table_name}\" " }
     return if records.empty?
@@ -66,10 +68,14 @@ module PlaceOS::Utils::DataMigrator
       val = yield r
       row = nil
       begin
+        Log.info { "Loading record into #{model.name} : '#{r.to_json}'" } if verbose
         row = model.from_trusted_json(r.to_json)
         begin
+          Log.info { "Saving record in table \"#{model.table_name}\"" } if verbose
           row.save!
+          Log.info { "Record saved with id: '#{row.id}'" } if verbose
         rescue ex
+          Log.info { "Received error '#{ex.inspect_with_backtrace}'" } if verbose
           if h = on_err
             v = h.call(r, ex)
             raise v unless v.nil?
@@ -81,6 +87,7 @@ module PlaceOS::Utils::DataMigrator
         after_save.try &.call(val, row.id.not_nil!)
         success += 1
       rescue ex
+        Log.info { "Recevied exception: '#{ex.inspect_with_backtrace}'" } if verbose
         errors << Failure.new(index + 1, row.try &.id.to_s || "", "#{ex.class}: #{ex.message}")
       end
     end
@@ -108,7 +115,7 @@ module PlaceOS::Utils::DataMigrator
     temp_dir
   end
 
-  private def load_mod_data(data_dir, clear = true)
+  private def load_mod_data(data_dir, clear = true, verbose = false)
     File.open(Path[data_dir, "mod.json"]) do |io|
       PlaceOS::Model::Module.clear if clear
       cb = OnErrorCB.new do |r, ex|
@@ -126,11 +133,11 @@ module PlaceOS::Utils::DataMigrator
         end
       end
 
-      load_data(io, PlaceOS::Model::Module, on_err: cb) { }
+      load_data(io, PlaceOS::Model::Module, verbose, on_err: cb) { }
     end
   end
 
-  private def load_doorkeeper_data(data_dir, clear = true)
+  private def load_doorkeeper_data(data_dir, clear = true, verbose = false)
     id_mapping = {} of String => Int64
 
     File.open(Path[data_dir, "doorkeeper_app.json"]) do |io|
@@ -141,13 +148,13 @@ module PlaceOS::Utils::DataMigrator
         id_mapping[old_id.not_nil!] = new_id.as(Int64)
       end
 
-      load_data(io, PlaceOS::Model::DoorkeeperApplication, cb) do |row|
+      load_data(io, PlaceOS::Model::DoorkeeperApplication, verbose, cb) do |row|
         row.as_h.delete("id").to_s
       end
     end
 
     File.open(Path[data_dir, "doorkeeper_token.json"]) do |io|
-      load_data(io, OAuthToken) do |row|
+      load_data(io, OAuthToken, verbose) do |row|
         h = row.as_h
         h.delete("id")
         id = h.delete("application_id").to_s
