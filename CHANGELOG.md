@@ -1,3 +1,9 @@
+## v0.22.0 (2023-07-06)
+
+### Feat
+
+- **migrator**: Added verbose flag to migration task
+
 ## v0.21.0 (2023-06-26)
 
 ### Feat
