@@ -71,7 +71,7 @@ shards:
 
   eventbus:
     git: https://github.com/spider-gazelle/eventbus.git
-    version: 0.9.9+git.commit.a26f6f022eed373264e13acbf95ffc1e710df645
+    version: 0.9.9+git.commit.ca8ef0c5e21ee15da079edd5bcea39bee7e07f26
 
   exception_page:
     git: https://github.com/crystal-loot/exception_page.git
@@ -175,11 +175,11 @@ shards:
 
   pg-orm:
     git: https://github.com/spider-gazelle/pg-orm.git
-    version: 1.0.0+git.commit.d9b9e900ea531fb2920962d72762de6120325892
+    version: 1.0.0+git.commit.e614b076c9f185d0891b505ea74c4b5e7e6307b7
 
   place_calendar:
     git: https://github.com/placeos/calendar.git
-    version: 4.19.0
+    version: 4.19.1
 
   placeos-log-backend:
     git: https://github.com/place-labs/log-backend.git
@@ -187,7 +187,7 @@ shards:
 
   placeos-models:
     git: https://github.com/placeos/models.git
-    version: 9.13.2
+    version: 9.15.0
 
   pool:
     git: https://github.com/ysbaddaden/pool.git
@@ -207,7 +207,7 @@ shards:
 
   sam:
     git: https://github.com/imdrasil/sam.cr.git
-    version: 0.4.2
+    version: 0.5.0
 
   simple_retry:
     git: https://github.com/spider-gazelle/simple_retry.git
