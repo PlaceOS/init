@@ -1,3 +1,9 @@
+## v0.22.1 (2023-09-07)
+
+### Fix
+
+- **generate-secrets**: rails cookie secret is too long for nginx ([#87](https://github.com/PlaceOS/init/pull/87))
+
 ## v0.22.0 (2023-07-06)
 
 ### Feat
