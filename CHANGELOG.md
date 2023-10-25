@@ -1,3 +1,9 @@
+## v0.22.2 (2023-10-25)
+
+### Fix
+
+- **shard.lock**: bump migrations
+
 ## v0.22.1 (2023-09-07)
 
 ### Fix
