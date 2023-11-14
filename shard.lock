@@ -131,7 +131,7 @@ shards:
 
   office365:
     git: https://github.com/placeos/office365.git
-    version: 1.23.1
+    version: 1.23.2
 
   open_api:
     git: https://github.com/elbywan/open_api.cr.git
@@ -187,7 +187,7 @@ shards:
 
   placeos-models:
     git: https://github.com/placeos/models.git
-    version: 9.25.2
+    version: 9.27.0
 
   pool:
     git: https://github.com/ysbaddaden/pool.git
