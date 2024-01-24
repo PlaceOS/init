@@ -75,7 +75,7 @@ shards:
 
   exception_page:
     git: https://github.com/crystal-loot/exception_page.git
-    version: 0.3.1
+    version: 0.4.1
 
   exec_from:
     git: https://github.com/place-labs/exec_from.git
@@ -179,7 +179,7 @@ shards:
 
   place_calendar:
     git: https://github.com/placeos/calendar.git
-    version: 4.19.1
+    version: 4.19.2
 
   placeos-log-backend:
     git: https://github.com/place-labs/log-backend.git
@@ -187,7 +187,7 @@ shards:
 
   placeos-models:
     git: https://github.com/placeos/models.git
-    version: 9.35.7
+    version: 9.36.1
 
   pool:
     git: https://github.com/ysbaddaden/pool.git
