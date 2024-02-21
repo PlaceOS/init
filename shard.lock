@@ -51,7 +51,7 @@ shards:
 
   debug:
     git: https://github.com/sija/debug.cr.git
-    version: 2.0.2
+    version: 2.0.3
 
   defined:
     git: https://github.com/wyhaines/defined.cr.git
@@ -187,7 +187,7 @@ shards:
 
   placeos-models:
     git: https://github.com/placeos/models.git
-    version: 9.37.2
+    version: 9.37.3
 
   pool:
     git: https://github.com/ysbaddaden/pool.git
