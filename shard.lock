@@ -127,7 +127,7 @@ shards:
 
   neuroplastic:
     git: https://github.com/spider-gazelle/neuroplastic.git
-    version: 1.13.0
+    version: 1.13.1
 
   office365:
     git: https://github.com/placeos/office365.git
@@ -175,7 +175,7 @@ shards:
 
   pg-orm:
     git: https://github.com/spider-gazelle/pg-orm.git
-    version: 1.1.0+git.commit.e35e4c535be1ab47b6afb821723ceafb637fa4e8
+    version: 1.1.0+git.commit.27528d29d0b4e6184d9bc52d9e8ffdf2685ec5d3
 
   place_calendar:
     git: https://github.com/placeos/calendar.git
@@ -187,7 +187,7 @@ shards:
 
   placeos-models:
     git: https://github.com/placeos/models.git
-    version: 9.48.0
+    version: 9.53.0
 
   pool:
     git: https://github.com/ysbaddaden/pool.git
