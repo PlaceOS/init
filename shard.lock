@@ -95,7 +95,7 @@ shards:
 
   habitat:
     git: https://github.com/luckyframework/habitat.git
-    version: 0.4.8
+    version: 0.4.9
 
   http-params-serializable:
     git: https://github.com/place-labs/http-params-serializable.git
