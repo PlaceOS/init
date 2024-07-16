@@ -1,3 +1,9 @@
+## v0.23.0 (2024-07-16)
+
+### Feat
+
+- **shard.lock**: add crystal 1.13 support
+
 ## v0.22.2 (2023-10-25)
 
 ### Fix
