@@ -1,3 +1,9 @@
+## v0.23.1 (2024-08-05)
+
+### Fix
+
+- **shard.lock**: add default value to email_domains
+
 ## v0.23.0 (2024-07-16)
 
 ### Feat
