@@ -27,7 +27,7 @@ shards:
 
   bindata:
     git: https://github.com/spider-gazelle/bindata.git
-    version: 2.0.0
+    version: 2.1.0
 
   connect-proxy:
     git: https://github.com/spider-gazelle/connect-proxy.git
@@ -187,7 +187,7 @@ shards:
 
   placeos-models:
     git: https://github.com/placeos/models.git
-    version: 9.53.3
+    version: 9.56.0
 
   pool:
     git: https://github.com/ysbaddaden/pool.git
