@@ -43,7 +43,7 @@ shards:
 
   csuuid:
     git: https://github.com/wyhaines/csuuid.cr.git
-    version: 1.0.1+git.commit.b71cf5c899dd5cde6aff8e922bdabd5e2dfab585
+    version: 1.0.1+git.commit.4cb8656a9214aede9c1840cad4acf8e55e658f2f
 
   db:
     git: https://github.com/crystal-lang/crystal-db.git
@@ -187,7 +187,7 @@ shards:
 
   placeos-models:
     git: https://github.com/placeos/models.git
-    version: 9.56.1
+    version: 9.56.3
 
   pool:
     git: https://github.com/ysbaddaden/pool.git
@@ -215,7 +215,7 @@ shards:
 
   splay_tree_map:
     git: https://github.com/wyhaines/splay_tree_map.cr.git
-    version: 0.2.2
+    version: 0.3.0
 
   tasker:
     git: https://github.com/spider-gazelle/tasker.git
