@@ -67,6 +67,23 @@ namespace "backup" do
 
     PlaceOS::Tasks.pg_backup(**arguments)
   end
+  desc "Generates a PostgreSQL DB backup and writes it to Azure Blob Storage"
+  task "az" do |_, args|
+    arguments = {
+      pg_host:      (args["host"]? || PlaceOS::PG_HOST).to_s,
+      pg_port:      (args["port"]? || PlaceOS::PG_PORT).to_i,
+      pg_db:        (args["db"]? || PlaceOS::PG_DB).to_s,
+      pg_user:      (args["user"]? || PlaceOS::PG_USER).try &.to_s,
+      pg_password:  (args["password"]? || PlaceOS::PG_PASS).try &.to_s,
+      az_account:   (args["az_account"]? || PlaceOS::AZURE_STORAGE_ACCOUNT_NAME).try &.to_s,
+      az_key:       (args["az_key"]? || PlaceOS::AZURE_STORAGE_ACCOUNT_KEY).try &.to_s,
+      az_connstr:   (args["az_connstr"]? || PlaceOS::AZURE_STORAGE_CONNECTION_STRING).try &.to_s,
+      az_container: (args["az_container"]? || PlaceOS::AZURE_STORAGE_CONTAINER || abort "AZURE_STORAGE_CONTAINER unset").to_s,
+    }
+    abort "AZURE_STORAGE_XXXX unset. Use either of az_account/az_key or az_connstr" unless ((arguments["az_account"]? && arguments["az_key"]?) || arguments["az_connstr"])
+
+    PlaceOS::Tasks.az_backup(**arguments)
+  end
 end
 
 namespace "restore" do
@@ -88,6 +105,25 @@ namespace "restore" do
     }
 
     PlaceOS::Tasks.pg_restore(**arguments)
+  end
+  desc "Restores PostgreSQL DB from Azure Blob Storage backup"
+  task "az" do |_, args|
+    arguments = {
+      pg_host:        (args["host"]? || PlaceOS::PG_HOST).to_s,
+      pg_port:        (args["port"]? || PlaceOS::PG_PORT).to_i,
+      pg_db:          (args["db"]? || PlaceOS::PG_DB).to_s,
+      pg_user:        (args["user"]? || PlaceOS::PG_USER).try &.to_s,
+      pg_password:    (args["password"]? || PlaceOS::PG_PASS).try &.to_s,
+      force_restore:  args["force_restore"]?.try(&.to_s.downcase) == "true" || PlaceOS::PG_FORCE_RESTORE,
+      az_account:     (args["az_account"]? || PlaceOS::AZURE_STORAGE_ACCOUNT_NAME).try &.to_s,
+      az_key:         (args["az_key"]? || PlaceOS::AZURE_STORAGE_ACCOUNT_KEY).try &.to_s,
+      az_connstr:     (args["az_connstr"]? || PlaceOS::AZURE_STORAGE_CONNECTION_STRING).try &.to_s,
+      az_container:   (args["az_container"]? || PlaceOS::AZURE_STORAGE_CONTAINER || abort "AZURE_STORAGE_CONTAINER unset").to_s,
+      az_blob_object: (args["az_blob_object"]? || PlaceOS::AZURE_STORAGE_BLOB_OBJECT || abort "AZURE_STORAGE_BLOB_OBJECT unset").to_s,
+    }
+    abort "AZURE_STORAGE_XXXX unset. Use either of az_account/az_key or az_connstr" unless ((arguments["az_account"]? && arguments["az_key"]?) || arguments["az_connstr"])
+
+    PlaceOS::Tasks.az_restore(**arguments)
   end
 end
 

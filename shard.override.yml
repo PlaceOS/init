@@ -1,3 +1,6 @@
 dependencies:
   retriable:
     github: Sija/retriable.cr
+  db:
+    github: crystal-lang/crystal-db
+    version: ">= 0.10.0"
