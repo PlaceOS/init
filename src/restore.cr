@@ -3,7 +3,7 @@ require "./logging"
 
 module PlaceOS
   if (AZURE_STORAGE_ACCOUNT_NAME && AZURE_STORAGE_ACCOUNT_KEY) || AZURE_STORAGE_CONNECTION_STRING
-    Tasks::Backup.az_restore(
+    Tasks::Restore.az_restore(
       pg_host: PG_HOST,
       pg_port: PG_PORT,
       pg_db: PG_DB,
