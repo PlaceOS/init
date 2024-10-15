@@ -1,4 +1,29 @@
+Naming/BlockParameterName:
+  Description: Disallows non-descriptive block parameter names
+  Enabled: false
+  Severity: Convention
+
 Lint/NotNil:
+  Description: Identifies usage of `not_nil!` calls
   Enabled: false
-Style/PredicateName:
+  Severity: Warning
+
+Lint/UselessAssign:
+  Description: Disallows useless variable assignments
   Enabled: false
+  Severity: Warning
+
+Documentation/DocumentationAdmonition:
+  Description: Reports documentation admonitions
+  Enabled: false
+  Severity: Warning
+
+Metrics/CyclomaticComplexity:
+  Description: Disallows methods with a cyclomatic complexity higher than `MaxComplexity`
+  Enabled: false
+  Severity: Warning
+
+Style/ParenthesesAroundCondition:
+  Description: Disallows redundant parentheses around control expressions
+  Enabled: false
+  Severity: Convention

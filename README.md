@@ -104,8 +104,10 @@ The default entrypoint to the init container generates a User, Authority, and Ap
 
 ## Backup Container
 
-`Dockerfile.pg-backup` generates a container that will backup the state of PG to S3.
+`Dockerfile.pg-backup` generates a container that will backup the state of PG to `S3` or `Azure Storage` depending on the environment variables.
 By default, the backup will take place at midnight every day.
+
+#### Common
 
 - `cron`: `BACKUP_CRON` || `0 0 * * *`
 - `pg_host`: `PG_HOST` || `"localhost"`
@@ -113,11 +115,21 @@ By default, the backup will take place at midnight every day.
 - `pg_db`: `PG_DB`, required.
 - `pg_user`: `PG_USER`, required.
 - `pg_password`: `PG_PASS`, required.
+
+#### S3
+
 - `aws_region`: `AWS_REGION`, required.
 - `aws_key`: `AWS_KEY`, required,
 - `aws_secret`: `AWS_SECRET`, required.
 - `aws_s3_bucket`: `AWS_S3_BUCKET`, required.
 - `aws_kms_key_id`: `AWS_KMS_KEY_ID`
+
+#### Azure Storage
+
+- `az_account`: `AZURE_STORAGE_ACCOUNT_NAME`. Use either combination of `az_account/az_key` **OR** `az_connstr`
+- `az_key`: `AZURE_STORAGE_ACCOUNT_KEY`
+- `az_connstr`: `AZURE_STORAGE_CONNECTION_STRING`
+- `az_container`: `AZURE_STORAGE_CONTAINER`, required.
 
 ## Scripts
 
@@ -160,6 +172,17 @@ By default, the backup will take place at midnight every day.
     * `aws_secret`: Defaults to `AWS_SECRET`, required.
     * `aws_kms_key_id`: Defaults to `AWS_KMS_KEY_ID`
 
+- `backup:az`: Backup PostgreSQL DB to Azure Storage.
+    * `pg_host`: Defaults to `PG_HOST` || `"localhost"`
+    * `pg_port`: Defaults to `PG_PORT` || `5432`
+    * `pg_db`: Defaults to `PG_DB`, or the postgres database
+    * `pg_user`: Defaulto `PG_USER`, or postgres
+    * `pg_password`: Defaults to `PG_PASS`
+    * `az_account`: Defaults to `AZURE_STORAGE_ACCOUNT_NAME`. Use either combination of `az_account/az_key` OR `az_connstr`
+    * `az_key`: Defaults to `AZURE_STORAGE_ACCOUNT_KEY`.
+    * `az_connstr`: Defaults to `AZURE_STORAGE_CONNECTION_STRING`,
+    * `az_container`: Defaults to `AZURE_STORAGE_CONTAINER`, required.
+
 - `secret:rotate_server_secret`: Rotate from old server secret to current value in `PLACE_SERVER_SECRET`
     * `old_secret`: The previous value of `PLACE_SERVER_SECRET`, required.
 
@@ -176,6 +199,19 @@ By default, the backup will take place at midnight every day.
     * `aws_key`: Defaults to `AWS_KEY`, required,
     * `aws_secret`: Defaults to `AWS_SECRET`, required.
     * `aws_kms_key_id`: Defaults to `AWS_KMS_KEY_ID`
+
+- `restore:pg`: Restore PostgreSQL DB from Azure Storage Blob.
+    * `pg_host`: Defaults to `PG_HOST` || `"localhost"`
+    * `pg_port`: Defaults to `PG_PORT` || `5432`
+    * `pg_db`: Defaults to `PG_DB`, or the postgres database
+    * `pg_user`: Defaulto `PG_USER`, or postgres
+    * `pg_password`: Defaults to `PG_PASS`
+    * `force_restore`: Defaults to `PG_FORCE_RESTORE` || `false`
+    * `az_account`: Defaults to `AZURE_STORAGE_ACCOUNT_NAME`. Use either combination of `az_account/az_key` OR `az_connstr`
+    * `az_key`: Defaults to `AZURE_STORAGE_ACCOUNT_KEY`.
+    * `az_connstr`: Defaults to `AZURE_STORAGE_CONNECTION_STRING`,
+    * `az_container`: Defaults to `AZURE_STORAGE_CONTAINER`, required.
+    * `az_blob_object`: Object to restore DB from. Defaults to `AZURE_STORAGE_BLOB_OBJECT`, required.
 
 - `drop`: Drops Elasticsearch and PostgreSQL DB
     * Runs `drop:elastic` and `drop:db` via environmental configuration

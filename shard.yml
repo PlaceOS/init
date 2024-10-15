@@ -69,7 +69,10 @@ dependencies:
     version: ">= 2.0"
 
   crystar:
-      github: naqvis/crystar
+    github: naqvis/crystar
 
   connect-proxy:
     github: spider-gazelle/connect-proxy
+
+  azblob:
+    github: spider-gazelle/azblob.cr

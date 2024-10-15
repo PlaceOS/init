@@ -21,6 +21,10 @@ shards:
     git: https://github.com/taylorfinnell/awscr-signer.git
     version: 0.8.2
 
+  azblob:
+    git: https://github.com/spider-gazelle/azblob.cr.git
+    version: 0.1.0+git.commit.155ac70392406455e7d1076efbdaf6fb03fada05
+
   backtracer:
     git: https://github.com/sija/backtracer.cr.git
     version: 1.2.2
@@ -45,9 +49,9 @@ shards:
     git: https://github.com/wyhaines/csuuid.cr.git
     version: 1.0.1+git.commit.4cb8656a9214aede9c1840cad4acf8e55e658f2f
 
-  db:
+  db: # Overridden
     git: https://github.com/crystal-lang/crystal-db.git
-    version: 0.10.1
+    version: 0.13.1
 
   debug:
     git: https://github.com/sija/debug.cr.git
@@ -139,7 +143,7 @@ shards:
 
   office365:
     git: https://github.com/placeos/office365.git
-    version: 1.25.3
+    version: 1.25.4
 
   openssl_ext:
     git: https://github.com/spider-gazelle/openssl_ext.git
@@ -171,7 +175,7 @@ shards:
 
   pg:
     git: https://github.com/will/crystal-pg.git
-    version: 0.25.0
+    version: 0.28.0
 
   pg-orm:
     git: https://github.com/spider-gazelle/pg-orm.git
@@ -187,7 +191,7 @@ shards:
 
   placeos-models:
     git: https://github.com/placeos/models.git
-    version: 9.58.1
+    version: 9.59.0
 
   pool:
     git: https://github.com/ysbaddaden/pool.git
