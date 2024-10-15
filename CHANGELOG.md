@@ -1,3 +1,9 @@
+## v0.24.0 (2024-10-15)
+
+### Feat
+
+- PPT-1516 Add support for Azure Blob storage to init ([#89](https://github.com/PlaceOS/init/pull/89))
+
 ## v0.23.1 (2024-08-05)
 
 ### Fix
