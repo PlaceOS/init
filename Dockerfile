@@ -1,6 +1,6 @@
 ARG CRYSTAL_VERSION=latest
 
-FROM placeos/crystal:$CRYSTAL_VERSION as build
+FROM placeos/crystal:$CRYSTAL_VERSION AS build
 WORKDIR /app
 
 # Install shards for caching
@@ -41,7 +41,7 @@ RUN for binary in /app/bin/*; do \
 RUN git clone https://github.com/PlaceOS/models
 
 # Build a minimal docker image
-FROM alpine:3.16
+FROM alpine:3.20
 
 WORKDIR /app
 
@@ -59,7 +59,7 @@ RUN apk add \
   'libcurl>=7.79.1-r0' \
   openssh \
   openssl \
-  postgresql-client
+  postgresql15-client
 
 # copy app
 COPY scripts /app/scripts
