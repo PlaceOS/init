@@ -22,6 +22,7 @@ module PlaceOS
   AZURE_STORAGE_CONNECTION_STRING = ENV["AZURE_STORAGE_CONNECTION_STRING"]?
 
   PG_FORCE_RESTORE = self.boolean_env("PG_FORCE_RESTORE")
+  PG_DUMP_POSTFIX  = ENV["PG_DUMP_POSTFIX"]? || ""
 
   # Initialization constants
 

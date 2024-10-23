@@ -13,7 +13,8 @@ module PlaceOS
       az_account: AZURE_STORAGE_ACCOUNT_NAME,
       az_key: AZURE_STORAGE_ACCOUNT_KEY,
       az_connstr: AZURE_STORAGE_CONNECTION_STRING,
-      az_container: AZURE_STORAGE_CONTAINER || abort("AZURE_STORAGE_CONTAINER is unset")
+      az_container: AZURE_STORAGE_CONTAINER || abort("AZURE_STORAGE_CONTAINER is unset"),
+      postfix: PG_DUMP_POSTFIX
     )
   else
     Tasks::Backup.pg_backup_cron(
@@ -28,6 +29,7 @@ module PlaceOS
       aws_secret: AWS_SECRET || abort("AWS_SECRET is unset"),
       aws_s3_bucket: AWS_S3_BUCKET || abort("AWS_S3_BUCKET is unset"),
       aws_kms_key_id: AWS_KMS_KEY_ID,
+      postfix: PG_DUMP_POSTFIX
     )
   end
 end

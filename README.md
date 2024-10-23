@@ -115,6 +115,7 @@ By default, the backup will take place at midnight every day.
 - `pg_db`: `PG_DB`, required.
 - `pg_user`: `PG_USER`, required.
 - `pg_password`: `PG_PASS`, required.
+- `postfix`: `PG_DUMP_POSTFIX`
 
 #### S3
 
@@ -166,6 +167,7 @@ By default, the backup will take place at midnight every day.
     * `pg_db`: Defaults to `PG_DB`, or the postgres database
     * `pg_user`: Defaulto `PG_USER`, or postgres
     * `pg_password`: Defaults to `PG_PASS`
+    * `postfix`: Defaults to `PG_DUMP_POSTFIX`
     * `aws_s3_bucket`: Defaults to `AWS_S3_BUCKET`, required.
     * `aws_region`: Defaults to `AWS_REGION`, required.
     * `aws_key`: Defaults to `AWS_KEY`, required,
@@ -178,6 +180,7 @@ By default, the backup will take place at midnight every day.
     * `pg_db`: Defaults to `PG_DB`, or the postgres database
     * `pg_user`: Defaulto `PG_USER`, or postgres
     * `pg_password`: Defaults to `PG_PASS`
+    * `postfix`: Defaults to `PG_DUMP_POSTFIX`
     * `az_account`: Defaults to `AZURE_STORAGE_ACCOUNT_NAME`. Use either combination of `az_account/az_key` OR `az_connstr`
     * `az_key`: Defaults to `AZURE_STORAGE_ACCOUNT_KEY`.
     * `az_connstr`: Defaults to `AZURE_STORAGE_CONNECTION_STRING`,
@@ -200,7 +203,7 @@ By default, the backup will take place at midnight every day.
     * `aws_secret`: Defaults to `AWS_SECRET`, required.
     * `aws_kms_key_id`: Defaults to `AWS_KMS_KEY_ID`
 
-- `restore:pg`: Restore PostgreSQL DB from Azure Storage Blob.
+- `restore:az`: Restore PostgreSQL DB from Azure Storage Blob.
     * `pg_host`: Defaults to `PG_HOST` || `"localhost"`
     * `pg_port`: Defaults to `PG_PORT` || `5432`
     * `pg_db`: Defaults to `PG_DB`, or the postgres database
