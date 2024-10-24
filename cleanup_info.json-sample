@@ -1,0 +1,12 @@
+{
+    "tables": [
+        {
+            "table": "bookings",
+            "interval": "1 year 6 months"
+        },
+        {
+            "table": "event_metadatas",
+            "interval": "3 years"
+        }
+    ]
+}
