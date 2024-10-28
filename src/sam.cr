@@ -48,6 +48,20 @@ namespace "db" do
     ret = PlaceOS::Utils::PostgresDB.restore(**arguments)
     puts "PostgreSQL database '#{args["db"]}' restored successfully from dump file '#{args["path"]}'" if ret
   end
+
+  desc "Clean PostgreSQL Database by deleting old records"
+  task "clean" do |_, args|
+    arguments = {
+      host:     (args["host"]? || PlaceOS::PG_HOST).to_s,
+      port:     (args["port"]? || PlaceOS::PG_PORT).to_i,
+      db:       (args["db"]? || PlaceOS::PG_DB).to_s,
+      user:     (args["user"]? || PlaceOS::PG_USER).try &.to_s,
+      password: (args["password"]? || PlaceOS::PG_PASS).to_s,
+      config:   (args["config"]? || abort "config file is required").to_s,
+    }
+
+    PlaceOS::Tasks::CleanUp.cleanup(**arguments)
+  end
 end
 
 namespace "backup" do
