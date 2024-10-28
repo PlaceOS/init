@@ -24,7 +24,8 @@ module PlaceOS::Tasks::Backup
     aws_kms_key_id : String? = nil,
     pg_db : String? = nil,
     pg_user : String? = nil,
-    pg_password : String? = nil
+    pg_password : String? = nil,
+    postfix : String = ""
   )
     Log.context.set(
       pg_host: pg_host,
@@ -49,6 +50,7 @@ module PlaceOS::Tasks::Backup
       db: pg_db.not_nil!,
       user: pg_user.not_nil!,
       password: pg_password.not_nil!,
+      postfix: postfix
     )
 
     if path
@@ -69,7 +71,8 @@ module PlaceOS::Tasks::Backup
     az_container : String,
     pg_db : String? = nil,
     pg_user : String? = nil,
-    pg_password : String? = nil
+    pg_password : String? = nil,
+    postfix : String = ""
   )
     Log.context.set(
       pg_host: pg_host,
@@ -92,6 +95,7 @@ module PlaceOS::Tasks::Backup
       db: pg_db.not_nil!,
       user: pg_user.not_nil!,
       password: pg_password.not_nil!,
+      postfix: postfix
     )
 
     if path
@@ -116,7 +120,8 @@ module PlaceOS::Tasks::Backup
     pg_db : String? = nil,
     pg_user : String? = nil,
     pg_password : String? = nil,
-    cron : String = BACKUP_CRON
+    cron : String = BACKUP_CRON,
+    postfix : String = ""
   )
     Log.context.set(
       pg_host: pg_host,
@@ -143,6 +148,7 @@ module PlaceOS::Tasks::Backup
         db: pg_db.not_nil!,
         user: pg_user.not_nil!,
         password: pg_password.not_nil!,
+        postfix: postfix
       )
       writer.send_file(path) unless path.nil?
     end
@@ -162,7 +168,8 @@ module PlaceOS::Tasks::Backup
     pg_db : String? = nil,
     pg_user : String? = nil,
     pg_password : String? = nil,
-    cron : String = BACKUP_CRON
+    cron : String = BACKUP_CRON,
+    postfix : String = ""
   )
     Log.context.set(
       pg_host: pg_host,
@@ -188,6 +195,7 @@ module PlaceOS::Tasks::Backup
         db: pg_db.not_nil!,
         user: pg_user.not_nil!,
         password: pg_password.not_nil!,
+        postfix: postfix
       )
       if path
         File.open(path) do |file|

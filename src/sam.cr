@@ -26,6 +26,7 @@ namespace "db" do
       db:       (args["db"]? || PlaceOS::PG_DB).to_s,
       user:     (args["user"]? || PlaceOS::PG_USER).try &.to_s,
       password: (args["password"]? || PlaceOS::PG_PASS).to_s,
+      postfix:  (args["postfix"]? || PlaceOS::PG_DUMP_POSTFIX).to_s,
     }
 
     ret = PlaceOS::Utils::PostgresDB.dump(**arguments)
@@ -58,6 +59,7 @@ namespace "backup" do
       pg_db:          (args["db"]? || PlaceOS::PG_DB).to_s,
       pg_user:        (args["user"]? || PlaceOS::PG_USER).try &.to_s,
       pg_password:    (args["password"]? || PlaceOS::PG_PASS).try &.to_s,
+      postfix:        (args["postfix"]? || PlaceOS::PG_DUMP_POSTFIX).to_s,
       aws_region:     (args["aws_region"]? || PlaceOS::AWS_REGION || abort "AWS_REGION unset").to_s,
       aws_key:        (args["aws_key"]? || PlaceOS::AWS_KEY || abort "AWS_KEY unset").to_s,
       aws_secret:     (args["aws_secret"]? || PlaceOS::AWS_SECRET || abort "AWS_SECRET unset").to_s,
@@ -75,6 +77,7 @@ namespace "backup" do
       pg_db:        (args["db"]? || PlaceOS::PG_DB).to_s,
       pg_user:      (args["user"]? || PlaceOS::PG_USER).try &.to_s,
       pg_password:  (args["password"]? || PlaceOS::PG_PASS).try &.to_s,
+      postfix:      (args["postfix"]? || PlaceOS::PG_DUMP_POSTFIX).to_s,
       az_account:   (args["az_account"]? || PlaceOS::AZURE_STORAGE_ACCOUNT_NAME).try &.to_s,
       az_key:       (args["az_key"]? || PlaceOS::AZURE_STORAGE_ACCOUNT_KEY).try &.to_s,
       az_connstr:   (args["az_connstr"]? || PlaceOS::AZURE_STORAGE_CONNECTION_STRING).try &.to_s,
