@@ -236,30 +236,9 @@ By default, the backup will take place at midnight every day.
     * `port`: Defaults to `PG_PORT` || `5432`
     * `user`: Defaults to `PG_USER` || `"postgres"`
     * `password`: Defaults to `PG_PASS` || `""`
-    * `config`: Config file in json, required
+    * `interval`: Data interval, required
 
-#### db:clean config file
-Task config file is a json file containing table name and respective duration.
-Refer to [cleanup_info.json-sample](cleanup_info.json-sample) for template
-
-For Interval syntax refer to [Postgresql Interval datatype](https://www.postgresql.org/docs/current/datatype-datetime.html#DATATYPE-INTERVAL-INPUT)
-
-**Config Schema**
-```json
-
-{
-    "tables": [
-        {
-            "table": "table name",
-            "interval": "interval e.g. 1 year 6 months"
-        },
-        {
-            "table": "some other table",
-            "interval": "interval e.g. 3 years"
-        }
-    ]
-}
-
+> For `interval` syntax refer to [Postgresql Interval datatype](https://www.postgresql.org/docs/current/datatype-datetime.html#DATATYPE-INTERVAL-INPUT)
 ```
 
 ## Development
