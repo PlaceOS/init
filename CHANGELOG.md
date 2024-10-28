@@ -1,3 +1,9 @@
+## v0.25.0 (2024-10-28)
+
+### Feat
+
+- PPT-1621 updated backup/restore tasks ([#91](https://github.com/PlaceOS/init/pull/91))
+
 ## v0.24.0 (2024-10-15)
 
 ### Feat
