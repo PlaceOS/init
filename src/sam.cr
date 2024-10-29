@@ -57,7 +57,7 @@ namespace "db" do
       db:       (args["db"]? || PlaceOS::PG_DB).to_s,
       user:     (args["user"]? || PlaceOS::PG_USER).try &.to_s,
       password: (args["password"]? || PlaceOS::PG_PASS).to_s,
-      config:   (args["config"]? || abort "config file is required").to_s,
+      interval: (args["interval"]? || abort "interval is required").to_s,
     }
 
     PlaceOS::Tasks::CleanUp.cleanup(**arguments)
