@@ -1,3 +1,9 @@
+## v0.27.0 (2024-10-29)
+
+### Feat
+
+- PPT-1623 cleanup task ([#93](https://github.com/PlaceOS/init/pull/93))
+
 ## v0.26.0 (2024-10-28)
 
 ### Feat
