@@ -25,7 +25,7 @@ module PlaceOS::Tasks::Entities
     upsert_document(Model::Authority.find_by_domain(domain)) do
       Log.info { {message: "creating Authority", name: name, domain: domain} }
       auth = Model::Authority.new
-      auth.name = domain
+      auth.name = name.presence || domain
       auth.domain = domain
       auth.config = config
       auth

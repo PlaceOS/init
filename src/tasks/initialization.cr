@@ -32,7 +32,7 @@ module PlaceOS::Tasks::Initialization
     metrics_config = {"metrics" => JSON::Any.new(metrics_url)}
 
     start_lock.synchronize do
-      authority = Entities.create_authority(name: application_name, domain: application_base, config: metrics_config)
+      authority = Entities.create_authority(name: application_base, domain: application_base, config: metrics_config)
 
       Entities.create_user(authority: authority, name: username, email: email, password: password, sys_admin: true)
       Entities.create_application(authority: authority, name: application_name, base: application_base)
