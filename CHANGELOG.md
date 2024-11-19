@@ -1,3 +1,9 @@
+## v0.27.1 (2024-11-19)
+
+### Fix
+
+- **authority**: use provided name to create authority, provide correc… ([#95](https://github.com/PlaceOS/init/pull/95))
+
 ## v0.27.0 (2024-10-29)
 
 ### Feat
