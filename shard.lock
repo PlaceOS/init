@@ -45,21 +45,9 @@ shards:
     git: https://github.com/naqvis/crystar.git
     version: 0.4.0
 
-  csuuid:
-    git: https://github.com/wyhaines/csuuid.cr.git
-    version: 1.0.2
-
   db: # Overridden
     git: https://github.com/crystal-lang/crystal-db.git
     version: 0.13.1
-
-  debug:
-    git: https://github.com/sija/debug.cr.git
-    version: 2.0.4
-
-  defined:
-    git: https://github.com/wyhaines/defined.cr.git
-    version: 0.3.6
 
   ed25519:
     git: https://github.com/spider-gazelle/ed25519.git
@@ -133,10 +121,6 @@ shards:
     git: https://github.com/amberframework/micrate.git
     version: 0.12.0
 
-  nbchannel:
-    git: https://github.com/wyhaines/nbchannel.cr.git
-    version: 0.1.0
-
   neuroplastic:
     git: https://github.com/spider-gazelle/neuroplastic.git
     version: 1.13.1
@@ -149,25 +133,9 @@ shards:
     git: https://github.com/spider-gazelle/openssl_ext.git
     version: 2.4.4
 
-  opentelemetry-api:
-    git: https://github.com/wyhaines/opentelemetry-api.cr.git
-    version: 0.5.2+git.commit.77c9232ca6ff7de52529f309a0cb20b8459f7b20
-
-  opentelemetry-instrumentation:
-    git: https://github.com/wyhaines/opentelemetry-instrumentation.cr.git
-    version: 0.6.0+git.commit.6978cfe19aa590fb61fd7fdc0a25eb0c78674309
-
-  opentelemetry-sdk:
-    git: https://github.com/wyhaines/opentelemetry-sdk.cr.git
-    version: 0.6.4+git.commit.c7237732135f6d0cab84abc6bb6d438c9f8f9d66
-
   pars:
     git: https://github.com/spider-gazelle/pars.git
     version: 1.1.0
-
-  parse_date:
-    git: https://github.com/wyhaines/parsedate.cr.git
-    version: 0.1.2
 
   pegmatite:
     git: https://github.com/jemc/crystal-pegmatite.git
@@ -187,27 +155,19 @@ shards:
 
   placeos-log-backend:
     git: https://github.com/place-labs/log-backend.git
-    version: 0.11.4
+    version: 0.13.0
 
   placeos-models:
     git: https://github.com/placeos/models.git
-    version: 9.61.0
+    version: 9.61.1
 
   pool:
     git: https://github.com/ysbaddaden/pool.git
     version: 0.2.4
 
-  protobuf:
-    git: https://github.com/jeromegn/protobuf.cr.git
-    version: 2.3.1
-
   redis:
     git: https://github.com/stefanwille/crystal-redis.git
     version: 2.9.1
-
-  retriable: # Overridden
-    git: https://github.com/sija/retriable.cr.git
-    version: 0.2.5
 
   sam:
     git: https://github.com/imdrasil/sam.cr.git
@@ -217,25 +177,13 @@ shards:
     git: https://github.com/spider-gazelle/simple_retry.git
     version: 1.1.1
 
-  splay_tree_map:
-    git: https://github.com/wyhaines/splay_tree_map.cr.git
-    version: 0.3.0
-
   tasker:
     git: https://github.com/spider-gazelle/tasker.git
     version: 2.1.4
 
-  time-ext:
-    git: https://github.com/wyhaines/time-ext.cr.git
-    version: 1.0.1
-
   tokenizer:
     git: https://github.com/spider-gazelle/tokenizer.git
     version: 1.1.1
-
-  tracer:
-    git: https://github.com/wyhaines/tracer.cr.git
-    version: 0.3.2
 
   ulid:
     git: https://github.com/place-labs/ulid.git
