@@ -7,7 +7,7 @@ shards:
 
   action-controller:
     git: https://github.com/spider-gazelle/action-controller.git
-    version: 7.4.3
+    version: 7.5.1
 
   active-model:
     git: https://github.com/spider-gazelle/active-model.git
@@ -55,7 +55,7 @@ shards:
 
   debug:
     git: https://github.com/sija/debug.cr.git
-    version: 2.0.3
+    version: 2.0.4
 
   defined:
     git: https://github.com/wyhaines/defined.cr.git
@@ -151,15 +151,15 @@ shards:
 
   opentelemetry-api:
     git: https://github.com/wyhaines/opentelemetry-api.cr.git
-    version: 0.5.1
+    version: 0.5.2+git.commit.77c9232ca6ff7de52529f309a0cb20b8459f7b20
 
   opentelemetry-instrumentation:
     git: https://github.com/wyhaines/opentelemetry-instrumentation.cr.git
-    version: 0.5.4+git.commit.9b26aabef208b9eb0bf4612788362fa41768790b
+    version: 0.6.0+git.commit.6978cfe19aa590fb61fd7fdc0a25eb0c78674309
 
   opentelemetry-sdk:
     git: https://github.com/wyhaines/opentelemetry-sdk.cr.git
-    version: 0.6.2
+    version: 0.6.4+git.commit.c7237732135f6d0cab84abc6bb6d438c9f8f9d66
 
   pars:
     git: https://github.com/spider-gazelle/pars.git
@@ -179,7 +179,7 @@ shards:
 
   pg-orm:
     git: https://github.com/spider-gazelle/pg-orm.git
-    version: 1.1.2+git.commit.9b340ee269cd4a10ed6c5b51235cbaf45fc380e1
+    version: 1.1.2+git.commit.7714bb4d3e57fadcfded9d2e17247b5d3506e379
 
   place_calendar:
     git: https://github.com/placeos/calendar.git
@@ -187,11 +187,11 @@ shards:
 
   placeos-log-backend:
     git: https://github.com/place-labs/log-backend.git
-    version: 0.11.0
+    version: 0.11.4
 
   placeos-models:
     git: https://github.com/placeos/models.git
-    version: 9.60.0
+    version: 9.61.0
 
   pool:
     git: https://github.com/ysbaddaden/pool.git
@@ -199,7 +199,7 @@ shards:
 
   protobuf:
     git: https://github.com/jeromegn/protobuf.cr.git
-    version: 2.3.0
+    version: 2.3.1
 
   redis:
     git: https://github.com/stefanwille/crystal-redis.git
