@@ -1,4 +1,5 @@
 require "awscr-s3"
+require "simple_retry"
 
 class PlaceOS::Utils::S3
   getter files_written : UInt64 = 0
@@ -35,11 +36,12 @@ class PlaceOS::Utils::S3
     uploader = Awscr::S3::FileUploader.new(s3)
     File.open(path) do |io|
       begin
-        rewind_io = ->(e : Exception, _a : Int32, _t : Time::Span, _n : Time::Span) {
-          Log.error(exception: e) { "failed to write to S3" }
-          io.rewind
-        }
-        retry times: 10, max_interval: 1.minute, on_retry: rewind_io do
+        SimpleRetry.try_to(base_interval: 0.seconds, max_attempts: 10, max_interval: 1.minute) do |attempt, error|
+          if attempt > 1
+            Log.error(exception: error) { "failed to write to S3" }
+            io.rewind
+          end
+
           Log.info { "attempting to write #{path.basename} to S3" }
           uploader.upload(bucket, path.basename, io, headers)
           @files_written += 1

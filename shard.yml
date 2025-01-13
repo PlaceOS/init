@@ -68,6 +68,9 @@ dependencies:
     github: spider-gazelle/tasker
     version: ">= 2.0"
 
+  simple_retry:
+    github: spider-gazelle/simple_retry
+
   crystar:
     github: naqvis/crystar
 

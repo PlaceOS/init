@@ -1,5 +1,4 @@
 require "placeos-log-backend"
-require "placeos-log-backend/telemetry"
 require "log_helper"
 
 module PlaceOS
@@ -17,11 +16,6 @@ module PlaceOS
     default_sources: "*",
     default_level: log_level,
     backend: backend
-  )
-
-  PlaceOS::LogBackend.configure_opentelemetry(
-    service_name: APP_NAME,
-    service_version: VERSION,
   )
 end
 

@@ -1,7 +1,6 @@
 require "../logging"
 
 require "exec_from"
-require "retriable/core_ext/kernel"
 require "tasker"
 require "azblob"
 
