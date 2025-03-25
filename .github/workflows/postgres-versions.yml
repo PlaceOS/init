@@ -1,0 +1,35 @@
+name: Update Postgres Version Branches
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  update-postgres-versions:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0  # Need full history for merging
+
+      - name: Set up Git
+        run: |
+          git config user.name "GitHub Actions"
+          git config user.email "github-actions@github.com"
+
+      - name: Merge master into postgresql-15
+        run: |
+          git checkout postgresql-15
+          git merge --no-ff master -m "Merge master into postgresql-15"
+          sed -i 's/apk add postgresql[0-9]*-client/apk add postgresql15-client/g' Dockerfile
+          git commit -am "Ensure postgresql15-client is maintained" || echo "No changes to commit"
+          git push origin postgresql-15
+
+      - name: Merge master into postgresql-16
+        run: |
+          git checkout postgresql-16
+          git merge --no-ff master -m "Merge master into postgresql-16"
+          sed -i 's/apk add postgresql[0-9]*-client/apk add postgresql16-client/g' Dockerfile
+          git commit -am "Ensure postgresql16-client is maintained" || echo "No changes to commit"
+          git push origin postgresql-16
