@@ -59,7 +59,7 @@ RUN apk add \
   'libcurl>=7.79.1-r0' \
   openssh \
   openssl \
-  postgresql15-client
+  postgresql16-client
 
 # copy app
 COPY scripts /app/scripts
