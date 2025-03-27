@@ -1,3 +1,9 @@
+## v0.28.2 (2025-03-27)
+
+### Fix
+
+- **ci**: simplify postgres branch merge
+
 ## v0.28.1 (2025-03-27)
 
 ### Fix
