@@ -21,15 +21,15 @@ jobs:
       - name: Merge master into postgresql-15
         run: |
           git checkout postgresql-15
-          git merge --no-ff -X theirs master -m "Merge master into postgresql-15"
-          sed -i 's/apk add postgresql[0-9]*-client/apk add postgresql15-client/g' Dockerfile
-          git commit -am "Ensure postgresql15-client is maintained" || echo "No changes to commit"
+          git merge -X theirs origin/master
+          sed -i 's/postgresql[0-9]*-client/postgresql15-client/g' Dockerfile
+          git commit -am "Ensure postgresql15-client is maintained"
           git push origin postgresql-15
 
       - name: Merge master into postgresql-16
         run: |
           git checkout postgresql-16
-          git merge --no-ff -X theirs master -m "Merge master into postgresql-16"
-          sed -i 's/apk add postgresql[0-9]*-client/apk add postgresql16-client/g' Dockerfile
-          git commit -am "Ensure postgresql16-client is maintained" || echo "No changes to commit"
+          git merge -X theirs origin/master
+          sed -i 's/postgresql[0-9]*-client/postgresql16-client/g' Dockerfile
+          git commit -am "Ensure postgresql16-client is maintained"
           git push origin postgresql-16

@@ -1,3 +1,9 @@
+## v0.28.1 (2025-03-27)
+
+### Fix
+
+- **ci**: avoid merge conflicts on postgres branch update
+
 ## v0.28.0 (2025-03-27)
 
 ### Feat
