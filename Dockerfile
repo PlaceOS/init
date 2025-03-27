@@ -41,7 +41,7 @@ RUN for binary in /app/bin/*; do \
 RUN git clone https://github.com/PlaceOS/models
 
 # Build a minimal docker image
-FROM alpine:3.20
+FROM alpine:3.21
 
 WORKDIR /app
 
@@ -59,7 +59,7 @@ RUN apk add \
   'libcurl>=7.79.1-r0' \
   openssh \
   openssl \
-  postgresql16-client
+  postgresql17-client
 
 # copy app
 COPY scripts /app/scripts

@@ -1,3 +1,9 @@
+## v0.28.0 (2025-03-27)
+
+### Feat
+
+- **postgres**: postgres 17 client ([#97](https://github.com/PlaceOS/init/pull/97))
+
 ## v0.27.1 (2024-11-19)
 
 ### Fix
