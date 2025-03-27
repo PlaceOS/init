@@ -6,6 +6,14 @@
 
 A set of scripts for initialization of PlaceOS.
 
+## Database Compatibility
+
+PostgreSQL 17 is recommended (and required by `placeos/init` image)
+
+PostgreSQL 15 & 16 compatible images are also available: `placeos/init_pg15`, `placeos/init_pg16`
+
+The PostgreSQL client version must match the PostgreSQL server's major version for backup tasks to function.
+
 ## Usage
 
 The scripts are methods wrapped by a [sam.cr](https://github.com/imdrasil/sam.cr) interface. Most use named arguments which are used as [described here](https://github.com/imdrasil/sam.cr#tasks-with-arguments).
