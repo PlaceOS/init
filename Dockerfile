@@ -45,7 +45,7 @@ FROM alpine:3.21
 
 WORKDIR /app
 
-# Install bash, postgresql-client
+# Install bash, postgresql16-client
 RUN apk add \
   --update \
   --no-cache \
@@ -59,7 +59,7 @@ RUN apk add \
   'libcurl>=7.79.1-r0' \
   openssh \
   openssl \
-  postgresql17-client
+  postgresql16-client
 
 # copy app
 COPY scripts /app/scripts
