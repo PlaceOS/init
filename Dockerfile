@@ -45,6 +45,9 @@ FROM alpine:3.21
 
 WORKDIR /app
 
+# Use more recent apk repos for security updates
+RUN sed -i 's/3.21/3.22/g' /etc/apk/repositories && apk update && apk --no-cache --quiet upgrade
+
 # Install bash, postgresql-client
 RUN apk add \
   --update \
