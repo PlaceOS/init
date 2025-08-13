@@ -1,3 +1,9 @@
+## v0.29.0 (2025-08-13)
+
+### Feat
+
+- **dockerfile**: use latest alpine packages ([#99](https://github.com/PlaceOS/init/pull/99))
+
 ## v0.28.3 (2025-04-16)
 
 ### Fix
