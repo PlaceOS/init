@@ -41,7 +41,7 @@ RUN for binary in /app/bin/*; do \
 RUN git clone https://github.com/PlaceOS/models
 
 # Build a minimal docker image
-FROM alpine:3.21
+FROM alpine:3.22
 
 WORKDIR /app
 
