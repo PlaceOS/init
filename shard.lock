@@ -63,7 +63,7 @@ shards:
 
   eventbus:
     git: https://github.com/spider-gazelle/eventbus.git
-    version: 1.0.0+git.commit.af63536d718348885a553dc4aa6debccc2946289
+    version: 1.0.0+git.commit.fab6102d472ce324db4df74c8df9f4a5fa22dafd
 
   exception_page:
     git: https://github.com/crystal-loot/exception_page.git
@@ -160,14 +160,6 @@ shards:
   placeos-models:
     git: https://github.com/placeos/models.git
     version: 9.76.2
-
-  pool:
-    git: https://github.com/ysbaddaden/pool.git
-    version: 0.2.4
-
-  redis:
-    git: https://github.com/stefanwille/crystal-redis.git
-    version: 2.9.1
 
   sam:
     git: https://github.com/imdrasil/sam.cr.git
