@@ -45,6 +45,9 @@ FROM alpine:3.22
 
 WORKDIR /app
 
+# Install package updates since image release
+RUN apk update && apk --no-cache --quiet upgrade
+
 # Install bash, postgresql-client
 RUN apk add \
   --update \
