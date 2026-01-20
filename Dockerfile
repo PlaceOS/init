@@ -41,11 +41,14 @@ RUN for binary in /app/bin/*; do \
 RUN git clone https://github.com/PlaceOS/models
 
 # Build a minimal docker image
-FROM alpine:3.21
+FROM alpine:3.22
 
 WORKDIR /app
 
-# Install bash, postgresql15-client
+# Install package updates since image release
+RUN apk update && apk --no-cache --quiet upgrade
+
+# Install bash, postgresql-client
 RUN apk add \
   --update \
   --no-cache \
