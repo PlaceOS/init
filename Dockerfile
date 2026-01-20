@@ -48,7 +48,7 @@ WORKDIR /app
 # Install package updates since image release
 RUN apk update && apk --no-cache --quiet upgrade
 
-# Install bash, postgresql-client
+# Install bash, postgresql16-client
 RUN apk add \
   --update \
   --no-cache \
