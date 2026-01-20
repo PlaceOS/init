@@ -20,7 +20,7 @@ module PlaceOS::Tasks::Entities
   def create_authority(
     name : String,
     domain : String,
-    config : Hash(String, JSON::Any)
+    config : Hash(String, JSON::Any),
   )
     upsert_document(Model::Authority.find_by_domain(domain)) do
       Log.info { {message: "creating Authority", name: name, domain: domain} }
@@ -41,7 +41,7 @@ module PlaceOS::Tasks::Entities
     description : String,
     uri : String,
     branch : String,
-    commit_hash : String = "HEAD"
+    commit_hash : String = "HEAD",
   )
     upsert_document(Model::Repository.where(
       repo_type: Model::Repository::Type::Interface.value,
@@ -77,7 +77,7 @@ module PlaceOS::Tasks::Entities
     email : String? = nil,
     password : String? = nil,
     sys_admin : Bool = false,
-    support : Bool = false
+    support : Bool = false,
   )
     authority = Model::Authority.find!(authority) if authority.is_a?(String)
     name = "PlaceOS Support (#{authority.name})" if name.nil?
@@ -109,7 +109,7 @@ module PlaceOS::Tasks::Entities
     name : String,
     base : String,
     redirect_uri : String? = nil,
-    scope : String? = nil
+    scope : String? = nil,
   )
     authority = Model::Authority.find!(authority) if authority.is_a?(String)
     authority_id = authority.id.as(String)
@@ -260,7 +260,11 @@ module PlaceOS::Tasks::Entities
     existing = query.is_a?(Iterator) || query.is_a?(Enumerable) ? query.first? : query
     if existing.nil?
       model = yield
-      model.save!
+      model.run_create_callbacks do
+        model.run_save_callbacks do
+          model.save!
+        end
+      end
       Log.info { "created #{model.class}<#{model.id}>" }
       model
     else

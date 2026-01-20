@@ -1,3 +1,21 @@
+## v0.29.0 (2025-08-13)
+
+### Feat
+
+- **dockerfile**: use latest alpine packages ([#99](https://github.com/PlaceOS/init/pull/99))
+
+## v0.28.3 (2025-04-16)
+
+### Fix
+
+- **entities**: fix + upgrade to pg-orm v2 ([#98](https://github.com/PlaceOS/init/pull/98))
+
+## v0.28.2 (2025-03-27)
+
+### Fix
+
+- **ci**: simplify postgres branch merge
+
 ## v0.28.1 (2025-03-27)
 
 ### Fix
