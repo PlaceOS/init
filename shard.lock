@@ -159,7 +159,7 @@ shards:
 
   placeos-models:
     git: https://github.com/placeos/models.git
-    version: 9.82.0
+    version: 9.82.1
 
   sam:
     git: https://github.com/imdrasil/sam.cr.git
