@@ -18,7 +18,7 @@ module PlaceOS::Tasks::Restore
     force_restore : Bool = false,
     pg_user : String? = nil,
     pg_password : String? = nil,
-    aws_kms_key_id : String? = nil
+    aws_kms_key_id : String? = nil,
   )
     Log.context.set({
       pg_host:       pg_host,
@@ -68,7 +68,7 @@ module PlaceOS::Tasks::Restore
     force_restore : Bool = false,
     pg_db : String? = nil,
     pg_user : String? = nil,
-    pg_password : String? = nil
+    pg_password : String? = nil,
   )
     Log.context.set(
       pg_host: pg_host,
