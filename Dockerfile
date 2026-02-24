@@ -23,14 +23,16 @@ RUN mkdir -p /app/bin
 # TODO:: build static binaries, no libxml2-static available
 RUN shards build \
         --error-trace \
+        --static \
         --ignore-crystal-version \
         --production \
         --skip-postinstall
 
-RUN crystal build -o bin/task src/sam.cr
+RUN crystal build --static -o bin/task src/sam.cr
 SHELL ["/bin/ash", "-eo", "pipefail", "-c"]
 
 # Extract binary dependencies
+RUN mkdir deps
 RUN for binary in /app/bin/*; do \
         ldd "$binary" | \
         tr -s '[:blank:]' '\n' | \
@@ -41,7 +43,7 @@ RUN for binary in /app/bin/*; do \
 RUN git clone https://github.com/PlaceOS/models
 
 # Build a minimal docker image
-FROM alpine:3.22
+FROM alpine:latest
 
 WORKDIR /app
 
