@@ -15,7 +15,7 @@ module PlaceOS::Tasks::Database
     pg_host : String,
     pg_port : Int32,
     pg_user : String? = nil,
-    pg_password : String? = nil
+    pg_password : String? = nil,
   )
     pg_user = "postgres" if pg_user.nil?
     pg_password = "" if pg_password.nil?
@@ -31,7 +31,7 @@ module PlaceOS::Tasks::Database
     pg_host : String,
     pg_port : Int32,
     pg_user : String? = nil,
-    pg_password : String? = nil
+    pg_password : String? = nil,
   )
     pg_user = "postgres" if pg_user.nil?
     pg_password = "" if pg_password.nil?
@@ -70,7 +70,7 @@ module PlaceOS::Tasks::Database
     pg_user : String? = nil,
     pg_password : String? = nil,
     clean_before : Bool = false,
-    verbose : Bool = false
+    verbose : Bool = false,
   )
     pg_user = "postgres" if pg_user.nil?
     pg_password = "" if pg_password.nil?

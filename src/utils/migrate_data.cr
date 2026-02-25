@@ -221,6 +221,6 @@ module PlaceOS::Utils::DataMigrator
     attribute expires_in : Int32
     attribute scopes : String
     attribute previous_refresh_token : String = ""
-    attribute created_at : Time = ->{ Time.utc }, converter: PlaceOS::Model::Timestamps::EpochConverter
+    attribute created_at : Time = -> { Time.utc }, converter: PlaceOS::Model::Timestamps::EpochConverter
   end
 end

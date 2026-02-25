@@ -17,8 +17,6 @@ targets:
     main: src/backup.cr
   restore:
     main: src/restore.cr
-  exec_from:
-    main: lib/exec_from/src/app.cr
   start:
     main: src/start.cr
 
@@ -35,10 +33,6 @@ dependencies:
 
   etcd:
     github: place-labs/crystal-etcd
-
-  exec_from:
-    github: place-labs/exec_from
-    version: ~> 2.0
 
   faker:
     github: askn/faker
