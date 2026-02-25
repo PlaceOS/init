@@ -102,9 +102,7 @@ SHELL ["/bin/busybox", "sh", "-euo", "pipefail", "-c"]
 # chmod for setting permissions on /tmp
 COPY --from=build /tmp /tmp
 
-# hadolint ignore=SC1008 # ignore false positive - "This shebang was unrecognized"
 RUN /bin/busybox chmod -R a+rwX /tmp
-# hadolint ignore=SC1008 # ignore false positive - "This shebang was unrecognized"
 RUN /bin/busybox rm -rf /bin/busybox
 
 # Copy the app into place
