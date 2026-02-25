@@ -24,7 +24,7 @@ RUN apk add \
   openssh \
   openssl \
   wget \
-  postgresql17-client
+  postgresql18-client
 
 # Install shards for caching
 COPY shard.yml shard.yml
