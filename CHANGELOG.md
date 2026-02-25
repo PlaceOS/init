@@ -1,3 +1,9 @@
+## v0.30.1 (2026-02-25)
+
+### Fix
+
+- **task**: use OLD_PLACE_SERVER_SECRET for secret rotate task ([#102](https://github.com/PlaceOS/init/pull/102))
+
 ## v0.30.0 (2026-02-25)
 
 ### Feat
