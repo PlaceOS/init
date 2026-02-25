@@ -73,7 +73,7 @@ RUN case "${TARGETARCH}" in \
       arm64) ARCH=armv8l ;; \
       *) echo "Unsupported arch: ${TARGETARCH}" && exit 1 ;; \
     esac && \
-    wget -O /busybox https://busybox.net/downloads/binaries/1.31.0-defconfig-multiarch-musl/busybox-${ARCH} && \
+    wget --progress=dot:giga -O /busybox "https://busybox.net/downloads/binaries/1.31.0-defconfig-multiarch-musl/busybox-${ARCH}" && \
     chmod +x /busybox
 
 # Create tmp directory with proper permissions
@@ -101,7 +101,9 @@ SHELL ["/bin/busybox", "sh", "-euo", "pipefail", "-c"]
 
 # chmod for setting permissions on /tmp
 COPY --from=build /tmp /tmp
+# hadolint ignore=SC1008 - ignore shell script check
 RUN /bin/busybox chmod -R a+rwX /tmp
+# hadolint ignore=SC1008 - ignore shell script check
 RUN /bin/busybox rm -rf /bin/busybox
 
 # Copy the app into place
