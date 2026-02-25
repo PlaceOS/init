@@ -9,7 +9,7 @@ RUN apk update && apk --no-cache --quiet upgrade
 # Update CA certificates
 RUN update-ca-certificates
 
-# Install bash, postgresql-client
+# Install bash, postgresql17-client
 RUN apk add \
   --update \
   --no-cache \
@@ -24,7 +24,7 @@ RUN apk add \
   openssh \
   openssl \
   wget \
-  postgresql18-client
+  postgresql17-client
 
 # Install shards for caching
 COPY shard.yml shard.yml
