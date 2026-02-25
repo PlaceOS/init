@@ -55,6 +55,7 @@ module PlaceOS::Tasks::Backup
       writer.write_file(path)
     else
       Log.error { "failed to capture postgresql backup" }
+      exit(1)
     end
   end
 
@@ -102,6 +103,7 @@ module PlaceOS::Tasks::Backup
       end
     else
       Log.error { "failed to capture postgresql backup" }
+      exit(1)
     end
   end
 
