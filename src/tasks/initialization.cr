@@ -25,7 +25,7 @@ module PlaceOS::Tasks::Initialization
     metrics_route : String,
     backoffice_branch : String,
     backoffice_commit : String,
-    analytics_route : String? = nil
+    analytics_route : String? = nil,
   )
     application_base = "#{tls ? "https" : "http"}://#{domain}"
     metrics_url = "#{application_base}/#{metrics_route}/"

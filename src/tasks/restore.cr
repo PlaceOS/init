@@ -18,7 +18,7 @@ module PlaceOS::Tasks::Restore
     force_restore : Bool = false,
     pg_user : String? = nil,
     pg_password : String? = nil,
-    aws_kms_key_id : String? = nil
+    aws_kms_key_id : String? = nil,
   )
     Log.context.set({
       pg_host:       pg_host,
@@ -46,7 +46,7 @@ module PlaceOS::Tasks::Restore
     end
 
     Log.info { "restoring PostgreSQL DB" }
-    PlaceOS::Utils::PostgresDB.restore(
+    success = PlaceOS::Utils::PostgresDB.restore(
       path: Path[file.path],
       host: pg_host,
       port: pg_port,
@@ -54,7 +54,14 @@ module PlaceOS::Tasks::Restore
       user: pg_user.not_nil!,
       password: pg_password.not_nil!,
       force_restore: force_restore,
-    ).tap { Log.info { "successfully restored PostgreSQL DB" } }
+    )
+
+    if success
+      Log.info { "successfully restored PostgreSQL DB" }
+    else
+      Log.error { "failed to restore PostgreSQL DB" }
+      exit(1)
+    end
   end
 
   def az_restore(
@@ -68,7 +75,7 @@ module PlaceOS::Tasks::Restore
     force_restore : Bool = false,
     pg_db : String? = nil,
     pg_user : String? = nil,
-    pg_password : String? = nil
+    pg_password : String? = nil,
   )
     Log.context.set(
       pg_host: pg_host,
@@ -91,7 +98,7 @@ module PlaceOS::Tasks::Restore
     end
 
     Log.info { "restoring PostgreSQL DB" }
-    PlaceOS::Utils::PostgresDB.restore(
+    success = PlaceOS::Utils::PostgresDB.restore(
       path: Path[file.path],
       host: pg_host,
       port: pg_port,
@@ -99,6 +106,13 @@ module PlaceOS::Tasks::Restore
       user: pg_user.not_nil!,
       password: pg_password.not_nil!,
       force_restore: force_restore,
-    ).tap { Log.info { "successfully restored PostgreSQL DB" } }
+    )
+
+    if success
+      Log.info { "successfully restored PostgreSQL DB" }
+    else
+      Log.error { "failed to restore PostgreSQL DB" }
+      exit(1)
+    end
   end
 end
