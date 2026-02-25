@@ -1,6 +1,5 @@
 require "../logging"
 
-require "exec_from"
 require "tasker"
 require "azblob"
 
@@ -24,7 +23,7 @@ module PlaceOS::Tasks::Backup
     pg_db : String? = nil,
     pg_user : String? = nil,
     pg_password : String? = nil,
-    postfix : String = ""
+    postfix : String = "",
   )
     Log.context.set(
       pg_host: pg_host,
@@ -56,6 +55,7 @@ module PlaceOS::Tasks::Backup
       writer.write_file(path)
     else
       Log.error { "failed to capture postgresql backup" }
+      exit(1)
     end
   end
 
@@ -71,7 +71,7 @@ module PlaceOS::Tasks::Backup
     pg_db : String? = nil,
     pg_user : String? = nil,
     pg_password : String? = nil,
-    postfix : String = ""
+    postfix : String = "",
   )
     Log.context.set(
       pg_host: pg_host,
@@ -103,6 +103,7 @@ module PlaceOS::Tasks::Backup
       end
     else
       Log.error { "failed to capture postgresql backup" }
+      exit(1)
     end
   end
 
@@ -120,7 +121,7 @@ module PlaceOS::Tasks::Backup
     pg_user : String? = nil,
     pg_password : String? = nil,
     cron : String = BACKUP_CRON,
-    postfix : String = ""
+    postfix : String = "",
   )
     Log.context.set(
       pg_host: pg_host,
@@ -168,7 +169,7 @@ module PlaceOS::Tasks::Backup
     pg_user : String? = nil,
     pg_password : String? = nil,
     cron : String = BACKUP_CRON,
-    postfix : String = ""
+    postfix : String = "",
   )
     Log.context.set(
       pg_host: pg_host,
