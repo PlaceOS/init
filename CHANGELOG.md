@@ -1,3 +1,9 @@
+## v0.31.0 (2026-02-25)
+
+### Feat
+
+- add support for postgresql 18
+
 ## v0.30.1 (2026-02-25)
 
 ### Fix
