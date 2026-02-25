@@ -18,14 +18,6 @@ jobs:
           git config user.name "GitHub Actions"
           git config user.email "github-actions@github.com"
 
-      - name: Merge master into postgresql-15
-        run: |
-          git checkout postgresql-15
-          git merge -X theirs origin/master
-          sed -i 's/postgresql[0-9]*-client/postgresql15-client/g' Dockerfile
-          git commit -am "Ensure postgresql15-client is maintained"
-          git push origin postgresql-15
-
       - name: Merge master into postgresql-16
         run: |
           git checkout postgresql-16
@@ -33,3 +25,11 @@ jobs:
           sed -i 's/postgresql[0-9]*-client/postgresql16-client/g' Dockerfile
           git commit -am "Ensure postgresql16-client is maintained"
           git push origin postgresql-16
+
+      - name: Merge master into postgresql-17
+        run: |
+          git checkout postgresql-17
+          git merge -X theirs origin/master
+          sed -i 's/postgresql[0-9]*-client/postgresql17-client/g' Dockerfile
+          git commit -am "Ensure postgresql17-client is maintained"
+          git push origin postgresql-17

@@ -202,7 +202,7 @@ namespace "secret" do
   task "rotate_server_secret" do |_, args|
     abort("PLACE_SERVER_SECRET is unset") if ENV["PLACE_SERVER_SECRET"]?.presence.nil?
 
-    old_secret = required_argument(args, "old_secret").to_s
+    old_secret = (args["old_secret"]? || ENV["OLD_PLACE_SERVER_SECRET"]? || abort("old_secret argument or OLD_PLACE_SERVER_SECRET environment variable is required")).to_s
     PlaceOS::Tasks.rotate_secret(old_secret)
   end
 end

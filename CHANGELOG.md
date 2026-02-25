@@ -1,4 +1,14 @@
-## Unreleased
+## v0.30.1 (2026-02-25)
+
+### Fix
+
+- **task**: use OLD_PLACE_SERVER_SECRET for secret rotate task ([#102](https://github.com/PlaceOS/init/pull/102))
+
+## v0.30.0 (2026-02-25)
+
+### Feat
+
+- migrate to a scratch image ([#101](https://github.com/PlaceOS/init/pull/101))
 
 ## v0.29.0 (2025-08-13)
 
