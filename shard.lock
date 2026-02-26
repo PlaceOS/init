@@ -155,7 +155,7 @@ shards:
 
   placeos-models:
     git: https://github.com/placeos/models.git
-    version: 9.82.2
+    version: 9.84.0
 
   sam:
     git: https://github.com/imdrasil/sam.cr.git
