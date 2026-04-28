@@ -49,6 +49,59 @@ namespace "db" do
     puts "PostgreSQL database '#{args["db"]}' restored successfully from dump file '#{args["path"]}'" if ret
   end
 
+  desc "Roll back the last migration, or down to `target=<version>`"
+  task "down" do |_, args|
+    arguments = {
+      pg_host:     (args["host"]? || PlaceOS::PG_HOST).to_s,
+      pg_port:     (args["port"]? || PlaceOS::PG_PORT).to_i,
+      pg_db:       (args["db"]? || PlaceOS::PG_DB).to_s,
+      pg_user:     (args["user"]? || PlaceOS::PG_USER).try &.to_s,
+      pg_password: (args["password"]? || PlaceOS::PG_PASS).to_s,
+      target:      args["target"]?.try(&.to_s.to_i64),
+    }
+
+    PlaceOS::Tasks.pg_migrate_down(**arguments)
+  end
+
+  desc "Re-run the last migration"
+  task "redo" do |_, args|
+    arguments = {
+      pg_host:     (args["host"]? || PlaceOS::PG_HOST).to_s,
+      pg_port:     (args["port"]? || PlaceOS::PG_PORT).to_i,
+      pg_db:       (args["db"]? || PlaceOS::PG_DB).to_s,
+      pg_user:     (args["user"]? || PlaceOS::PG_USER).try &.to_s,
+      pg_password: (args["password"]? || PlaceOS::PG_PASS).to_s,
+    }
+
+    PlaceOS::Tasks.pg_migrate_redo(**arguments)
+  end
+
+  desc "Show migration status for the PostgreSQL DB"
+  task "status" do |_, args|
+    arguments = {
+      pg_host:     (args["host"]? || PlaceOS::PG_HOST).to_s,
+      pg_port:     (args["port"]? || PlaceOS::PG_PORT).to_i,
+      pg_db:       (args["db"]? || PlaceOS::PG_DB).to_s,
+      pg_user:     (args["user"]? || PlaceOS::PG_USER).try &.to_s,
+      pg_password: (args["password"]? || PlaceOS::PG_PASS).to_s,
+    }
+
+    PlaceOS::Tasks.pg_migration_status(**arguments)
+  end
+
+  desc "Print the current PostgreSQL DB migration version"
+  task "version" do |_, args|
+    arguments = {
+      pg_host:     (args["host"]? || PlaceOS::PG_HOST).to_s,
+      pg_port:     (args["port"]? || PlaceOS::PG_PORT).to_i,
+      pg_db:       (args["db"]? || PlaceOS::PG_DB).to_s,
+      pg_user:     (args["user"]? || PlaceOS::PG_USER).try &.to_s,
+      pg_password: (args["password"]? || PlaceOS::PG_PASS).to_s,
+    }
+
+    PlaceOS::Tasks.pg_database_version(**arguments)
+  end
+
   desc "Clean PostgreSQL Database by deleting old records"
   task "clean" do |_, args|
     arguments = {
