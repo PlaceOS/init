@@ -28,6 +28,22 @@ docker-compose run --no-deps -it init task db:init host=$PG_HOST port=$PG_PORT d
 ```
 
 ```bash
+# Roll back the last migration
+docker-compose run --no-deps -it init task db:down host=$PG_HOST port=$PG_PORT db=$PG_DB user=$PG_USER password=$PG_PASSWORD
+```
+
+```bash
+# Roll back to a specific migration version (rolls down until current <= target)
+docker-compose run --no-deps -it init task db:down target=20240101000000 host=$PG_HOST port=$PG_PORT db=$PG_DB user=$PG_USER password=$PG_PASSWORD
+```
+
+```bash
+# Inspect migration status / current version
+docker-compose run --no-deps -it init task db:status host=$PG_HOST port=$PG_PORT db=$PG_DB user=$PG_USER password=$PG_PASSWORD
+docker-compose run --no-deps -it init task db:version host=$PG_HOST port=$PG_PORT db=$PG_DB user=$PG_USER password=$PG_PASSWORD
+```
+
+```bash
 # Dump PostgreSQL database to local filesystem
 docker-compose run --no-deps -it init task db:dump host=$PG_HOST port=$PG_PORT db=$PG_DB user=$PG_USER password=$PG_PASSWORD
 ```
@@ -237,6 +253,20 @@ By default, the backup will take place at midnight every day.
     * `port`: Defaults to `PG_PORT` || `5432`
     * `user`: Defaults to `PG_USER` || `"postgres"`
     * `password`: Defaults to `PG_PASS` || `""`
+
+- `db:down`: Roll back the last migration, or down to a specific version.
+    * `db`: Defaults `PG_DB` || `"postgres"`
+    * `host`: Defaults to `PG_HOST` || `"localhost"`
+    * `port`: Defaults to `PG_PORT` || `5432`
+    * `user`: Defaults to `PG_USER` || `"postgres"`
+    * `password`: Defaults to `PG_PASS` || `""`
+    * `target`: Optional version (e.g. `20240101000000`). When supplied, rolls down repeatedly until the current version is `<= target`. Use `target=0` to revert all migrations.
+
+- `db:redo`: Re-run the last migration (rolls back, then re-applies).
+
+- `db:status`: Show migration status for each migration.
+
+- `db:version`: Print the current database migration version.
 
 - `db:clean`: Clean PostgreSQL Database by deleting old records.
     * `db`: Defaults `PG_DB` || `"postgres"`
