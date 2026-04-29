@@ -1,3 +1,9 @@
+## v0.32.0 (2026-04-29)
+
+### Feat
+
+- add rollback CLI ([#103](https://github.com/PlaceOS/init/pull/103))
+
 ## v0.31.0 (2026-02-25)
 
 ### Feat
