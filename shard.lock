@@ -11,7 +11,7 @@ shards:
 
   active-model:
     git: https://github.com/spider-gazelle/active-model.git
-    version: 4.3.3
+    version: 4.4.2
 
   awscr-s3:
     git: https://github.com/taylorfinnell/awscr-s3.git
@@ -155,11 +155,15 @@ shards:
 
   placeos-models:
     git: https://github.com/placeos/models.git
-    version: 9.91.0
+    version: 9.93.0
 
   sam:
     git: https://github.com/imdrasil/sam.cr.git
     version: 0.5.0
+
+  sanitize:
+    git: https://github.com/straight-shoota/sanitize.git
+    version: 0.1.0+git.commit.c17d933fed22c6d3d615cca91a895166414389af
 
   simple_retry:
     git: https://github.com/spider-gazelle/simple_retry.git
@@ -167,7 +171,7 @@ shards:
 
   tasker:
     git: https://github.com/spider-gazelle/tasker.git
-    version: 2.1.4
+    version: 3.0.0
 
   tokenizer:
     git: https://github.com/spider-gazelle/tokenizer.git
