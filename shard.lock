@@ -99,7 +99,7 @@ shards:
 
   json-schema:
     git: https://github.com/spider-gazelle/json-schema.git
-    version: 1.3.2
+    version: 1.3.3
 
   jwt:
     git: https://github.com/crystal-community/jwt.git
@@ -155,7 +155,7 @@ shards:
 
   placeos-models:
     git: https://github.com/placeos/models.git
-    version: 9.97.0
+    version: 9.98.0
 
   sam:
     git: https://github.com/imdrasil/sam.cr.git
