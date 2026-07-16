@@ -35,7 +35,7 @@ shards:
 
   connect-proxy:
     git: https://github.com/spider-gazelle/connect-proxy.git
-    version: 2.0.3
+    version: 2.0.5
 
   cron_parser:
     git: https://github.com/kostya/cron_parser.git
@@ -143,11 +143,11 @@ shards:
 
   pg-orm:
     git: https://github.com/spider-gazelle/pg-orm.git
-    version: 2.2.2
+    version: 2.2.3
 
   place_calendar:
     git: https://github.com/placeos/calendar.git
-    version: 4.29.4
+    version: 4.30.0
 
   placeos-log-backend:
     git: https://github.com/place-labs/log-backend.git
@@ -155,7 +155,7 @@ shards:
 
   placeos-models:
     git: https://github.com/placeos/models.git
-    version: 9.100.0
+    version: 9.100.1
 
   sam:
     git: https://github.com/imdrasil/sam.cr.git
@@ -171,7 +171,7 @@ shards:
 
   tasker:
     git: https://github.com/spider-gazelle/tasker.git
-    version: 3.0.1
+    version: 3.1.0
 
   tokenizer:
     git: https://github.com/spider-gazelle/tokenizer.git
