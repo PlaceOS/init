@@ -44,11 +44,15 @@ RUN mkdir -p /app/bin
 
 # Build init
 RUN shards build \
-        --error-trace \
-        --static \
-        --ignore-crystal-version \
-        --production \
-        --skip-postinstall
+      --debug \
+      --ignore-crystal-version \
+      --skip-postinstall \
+      --error-trace \
+      --no-color \
+      --static \
+      -O1 \
+      --frame-pointers=always \
+      --link-flags "-no-pie -Wl,-no-pie -Wl,--eh-frame-hdr -Wl,--build-id -rdynamic -Wl,--export-dynamic -lunwind -llzma"
 
 RUN crystal build --static -o bin/task src/sam.cr
 RUN crystal build --static -o bin/generate-secrets src/generate-secrets.cr
@@ -57,7 +61,7 @@ SHELL ["/bin/ash", "-eo", "pipefail", "-c"]
 # Extract binary dependencies
 RUN mkdir deps
 RUN for binary in /app/bin/* /usr/bin/pg_dump /usr/bin/pg_restore /usr/bin/psql; do \
-        [ -x "$binary" ] || continue; \
+        file "$binary" | grep -q "dynamically linked" || continue; \
         ldd "$binary" | \
         tr -s '[:blank:]' '\n' | \
         grep '^/' | \
