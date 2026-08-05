@@ -215,18 +215,11 @@ namespace "migrate" do
   end
 end
 
-desc "Drops Elasticsearch and PostgreSQL DB"
-task "drop", %w[drop:db drop:elastic] do
+desc "Drops the PostgreSQL DB"
+task "drop", %w[drop:db] do
 end
 
 namespace "drop" do
-  desc "Deletes all elastic indices tables"
-  task "elastic" do |_, args|
-    host = (args["host"]? || PlaceOS::ES_HOST).to_s
-    port = (args["port"]? || PlaceOS::ES_PORT).to_i
-    PlaceOS::Tasks.drop_elastic_indices(host, port)
-  end
-
   desc "Drops all PostgreSQL DB tables"
   task "db" do |_, args|
     arguments = {
