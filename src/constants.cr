@@ -47,9 +47,6 @@ module PlaceOS
 
   # Resource configurations
 
-  ES_HOST = ENV["ES_HOST"]? || "localhost"
-  ES_PORT = ENV["ES_PORT"]?.try &.to_i || 9200
-
   PG_DB   = ENV["PG_DB"]? || "postgres"
   PG_HOST = ENV["PG_HOST"]? || "localhost"
   PG_PORT = ENV["PG_PORT"]?.try &.to_i || 5432
