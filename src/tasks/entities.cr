@@ -260,11 +260,7 @@ module PlaceOS::Tasks::Entities
     existing = query.is_a?(Iterator) || query.is_a?(Enumerable) ? query.first? : query
     if existing.nil?
       model = yield
-      model.run_create_callbacks do
-        model.run_save_callbacks do
-          model.save!
-        end
-      end
+      model.save!
       Log.info { "created #{model.class}<#{model.id}>" }
       model
     else

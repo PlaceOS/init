@@ -50,12 +50,24 @@ RUN shards build \
       --error-trace \
       --no-color \
       --static \
-      -O1 \
       --frame-pointers=always \
       --link-flags "-no-pie -Wl,-no-pie -Wl,--eh-frame-hdr -Wl,--build-id -rdynamic -Wl,--export-dynamic -lunwind -llzma"
 
-RUN crystal build --static -o bin/task src/sam.cr
-RUN crystal build --static -o bin/generate-secrets src/generate-secrets.cr
+RUN crystal build src/sam.cr -o bin/task \
+      --debug \
+      --error-trace \
+      --no-color \
+      --static \
+      --frame-pointers=always \
+      --link-flags "-no-pie -Wl,-no-pie -Wl,--eh-frame-hdr -Wl,--build-id -rdynamic -Wl,--export-dynamic -lunwind -llzma"
+
+RUN crystal build src/generate-secrets.cr -o bin/generate-secrets \
+      --debug \
+      --error-trace \
+      --no-color \
+      --static \
+      --frame-pointers=always \
+      --link-flags "-no-pie -Wl,-no-pie -Wl,--eh-frame-hdr -Wl,--build-id -rdynamic -Wl,--export-dynamic -lunwind -llzma"
 SHELL ["/bin/ash", "-eo", "pipefail", "-c"]
 
 # Extract binary dependencies

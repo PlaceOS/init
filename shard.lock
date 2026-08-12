@@ -11,7 +11,7 @@ shards:
 
   active-model:
     git: https://github.com/spider-gazelle/active-model.git
-    version: 4.4.2
+    version: 4.5.0
 
   awscr-s3:
     git: https://github.com/taylorfinnell/awscr-s3.git
@@ -143,7 +143,7 @@ shards:
 
   pg-orm:
     git: https://github.com/spider-gazelle/pg-orm.git
-    version: 2.2.4
+    version: 2.3.0
 
   place_calendar:
     git: https://github.com/placeos/calendar.git
@@ -155,7 +155,7 @@ shards:
 
   placeos-models:
     git: https://github.com/placeos/models.git
-    version: 9.107.1
+    version: 9.107.3
 
   sam:
     git: https://github.com/imdrasil/sam.cr.git

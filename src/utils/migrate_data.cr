@@ -12,7 +12,11 @@ module PlaceOS::Utils::DataMigrator
   alias AfterSaveCB = (String?, String | Int64) ->
   alias OnErrorCB = (JSON::Any, Exception) -> Exception?
 
-  MODELS = [
+  # A tuple rather than an array so that `each` is unrolled at compile time and
+  # each iteration sees a concrete model class. An array would give every
+  # element the union of all the metaclasses, which erases the type on the way
+  # into `load_data` and makes the resulting `save!` an abstract dispatch.
+  MODELS = {
     {"user", PlaceOS::Model::User},
     {"api_key", PlaceOS::Model::ApiKey},
     # {"ass", PlaceOS::Model::AssetInstance},
@@ -34,7 +38,7 @@ module PlaceOS::Utils::DataMigrator
     {"trigger", PlaceOS::Model::Trigger},
     {"trig", PlaceOS::Model::TriggerInstance},
     {"authentication", PlaceOS::Model::UserAuthLookup},
-  ]
+  }
 
   def migrate_rethink(dump : String, uri : String, clear_table = false, verbose = false)
     PgORM::Database.parse(uri)
@@ -57,7 +61,10 @@ module PlaceOS::Utils::DataMigrator
     end
   end
 
-  private def load_data(data : IO, model : PgORM::Base.class, verbose : Bool, after_save : AfterSaveCB? = nil, on_err : OnErrorCB? = nil, &)
+  # Generic over the model so `row` stays concrete and `row.save!` binds
+  # directly. Taking a `PgORM::Base.class` erased the type, which turned every
+  # `self` call in the save path into a dispatch across all 65 models.
+  private def load_data(data : IO, model : T.class, verbose : Bool, after_save : AfterSaveCB? = nil, on_err : OnErrorCB? = nil, &) forall T
     records = JSON.parse(data).as_a
     Log.info { "Loading #{records.size} records into table \"#{model.table_name}\" " }
     return if records.empty?
