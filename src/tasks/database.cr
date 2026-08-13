@@ -4,6 +4,7 @@ require "http/client"
 require "pg-orm"
 require "uri"
 require "micrate"
+require "../migration_check"
 require "../utils/migrate_data"
 
 module PlaceOS::Tasks::Database
@@ -22,7 +23,7 @@ module PlaceOS::Tasks::Database
 
     Micrate::DB.connection_url = "postgresql://#{pg_user}:#{pg_password}@#{pg_host}:#{pg_port}/#{pg_db}"
     Micrate::DB.connect do |db|
-      Micrate.up(db)
+      PlaceOS.check_migration!(Micrate.up(db), "database migration")
     end
   end
 
@@ -43,13 +44,13 @@ module PlaceOS::Tasks::Database
     configure_micrate_connection(pg_db, pg_host, pg_port, pg_user, pg_password)
     Micrate::DB.connect do |db|
       if target.nil?
-        Micrate.down(db)
+        PlaceOS.check_migration!(Micrate.down(db), "rollback")
       else
         # Public API only exposes one-step `down`; loop until at or below target.
         loop do
           current = Micrate.dbversion(db)
           break if current <= target
-          Micrate.down(db)
+          PlaceOS.check_migration!(Micrate.down(db), "rollback")
           break if Micrate.dbversion(db) == current
         end
       end
@@ -65,7 +66,16 @@ module PlaceOS::Tasks::Database
   )
     configure_micrate_connection(pg_db, pg_host, pg_port, pg_user, pg_password)
     Micrate::DB.connect do |db|
-      Micrate.redo(db)
+      # NOTE: micrate's `redo` only reports the re-apply. If the rollback half
+      # fails it returns nil, so compare the version instead of trusting it.
+      before = Micrate.dbversion(db)
+      PlaceOS.check_migration!(Micrate.redo(db), "re-applying the last migration")
+      after = Micrate.dbversion(db)
+      if before != after
+        raise PlaceOS::MigrationError.new(
+          "re-applying the last migration left the database at version #{after}, expected #{before}"
+        )
+      end
     end
   end
 

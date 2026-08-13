@@ -2,6 +2,7 @@ require "micrate"
 require "pg"
 require "pg-orm"
 require "./migration"
+require "./migration_check"
 require "./constants"
 
 module Migrations
@@ -9,7 +10,7 @@ module Migrations
   def self.apply_all
     Micrate::DB.connection_url = PlaceOS::PG_DATABASE_URL
     Micrate::DB.connect do |db|
-      Micrate.up(db)
+      PlaceOS.check_migration!(Micrate.up(db), "database migration")
     end
 
     PgORM::PgAdvisoryLock.new("placeos-migrations").synchronize do
