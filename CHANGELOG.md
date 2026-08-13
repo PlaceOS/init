@@ -1,3 +1,9 @@
+## v0.33.0 (2026-08-13)
+
+### Feat
+
+- remove Elasticsearch drop task and constants (PPT-2644) ([#104](https://github.com/PlaceOS/init/pull/104))
+
 ## v0.32.2 (2026-08-13)
 
 ### Fix
