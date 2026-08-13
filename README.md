@@ -240,12 +240,8 @@ By default, the backup will take place at midnight every day.
     * `az_container`: Defaults to `AZURE_STORAGE_CONTAINER`, required.
     * `az_blob_object`: Object to restore DB from. Defaults to `AZURE_STORAGE_BLOB_OBJECT`, required.
 
-- `drop`: Drops Elasticsearch and PostgreSQL DB
-    * Runs `drop:elastic` and `drop:db` via environmental configuration
-
-- `drop:elastic`: Deletes all elastic indices tables
-    * `host`: Defaults to `ES_HOST` || `"localhost"`
-    * `port`: Defaults to `ES_PORT` || `9200`
+- `drop`: Drops the PostgreSQL DB
+    * Runs `drop:db` via environmental configuration
 
 - `drop:db`: Drops all PostgreSQL DB tables
     * `db`: Defaults `PG_DB` || `"postgres"`

@@ -136,16 +136,6 @@ module PlaceOS::Tasks::Database
     PgORM::Database.exec_sql(sql)
   end
 
-  def drop_elastic_indices(elastic_host : String, elastic_port : Int32)
-    uri = URI.new(
-      host: elastic_host,
-      port: elastic_port,
-      path: "/_all",
-      scheme: "http"
-    )
-    HTTP::Client.delete(uri)
-  end
-
   def migrate_rethink_to_pg(
     path : String,
     pg_host : String,
