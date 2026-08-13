@@ -1,3 +1,9 @@
+## v0.32.2 (2026-08-13)
+
+### Fix
+
+- raise error on failed migration
+
 ## v0.32.1 (2026-08-12)
 
 ### Fix
