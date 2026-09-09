@@ -74,7 +74,7 @@ SHELL ["/bin/ash", "-eo", "pipefail", "-c"]
 # Extract binary dependencies
 RUN mkdir deps
 RUN for binary in /app/bin/* /usr/bin/pg_dump /usr/bin/pg_restore /usr/bin/psql; do \
-        file "$binary" | grep -q "dynamically linked" || continue; \
+        file -L "$binary" | grep -q "dynamically linked" || continue; \
         ldd "$binary" | \
         tr -s '[:blank:]' '\n' | \
         grep '^/' | \
