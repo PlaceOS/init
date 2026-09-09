@@ -1,8 +1,14 @@
+## v0.34.1 (2026-09-09)
+
 ## v0.34.0 (2026-09-09)
 
 ### Feat
 
 - **Dockerfile**: don't manually download busybox
+
+### Fix
+
+- **Dockerfile**: pg_dump dynamic link libs
 
 ## v0.33.0 (2026-08-13)
 
