@@ -1,3 +1,9 @@
+## v0.34.0 (2026-09-09)
+
+### Feat
+
+- **Dockerfile**: don't manually download busybox
+
 ## v0.33.0 (2026-08-13)
 
 ### Feat
