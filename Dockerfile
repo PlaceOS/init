@@ -14,6 +14,7 @@ RUN apk add \
   --update \
   --no-cache \
   tzdata \
+  busybox-static \
   'apache2-utils>=2.4.52-r0' \
   expat \
   git \
@@ -82,16 +83,6 @@ RUN for binary in /app/bin/* /usr/bin/pg_dump /usr/bin/pg_restore /usr/bin/psql;
 
 RUN git clone https://github.com/PlaceOS/models
 
-# obtain busy box for file ops in scratch image
-ARG TARGETARCH
-RUN case "${TARGETARCH}" in \
-      amd64) ARCH=x86_64 ;; \
-      arm64) ARCH=armv8l ;; \
-      *) echo "Unsupported arch: ${TARGETARCH}" && exit 1 ;; \
-    esac && \
-    wget --progress=dot:giga -O /busybox "https://busybox.net/downloads/binaries/1.31.0-defconfig-multiarch-musl/busybox-${ARCH}" && \
-    chmod +x /busybox
-
 # Create tmp directory with proper permissions
 RUN rm -rf /tmp && mkdir -p /tmp && chmod 1777 /tmp
 
@@ -112,7 +103,9 @@ ENV GIT_SSL_CAINFO=/etc/ssl/certs/ca-certificates.crt
 # This is required for Timezone support
 COPY --from=build /usr/share/zoneinfo/ /usr/share/zoneinfo/
 
-COPY --from=build /busybox /bin/busybox
+# static busybox (alpine busybox-static package) for file ops in the scratch image.
+# It must be static as it runs before the musl loader in /app/deps is copied over.
+COPY --from=build /bin/busybox.static /bin/busybox
 SHELL ["/bin/busybox", "sh", "-euo", "pipefail", "-c"]
 
 # chmod for setting permissions on /tmp
