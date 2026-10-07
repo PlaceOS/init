@@ -261,7 +261,9 @@ namespace "create" do
 
   desc "Creates a representative set of documents in PostgreSQL DB"
   task "placeholders" do
-    PlaceOS::Tasks.create_placeholders
+    # placeholders belong to the staff organisation when one exists
+    staff = PlaceOS::Model::Organisation.where(partner_staff: true).first?
+    PlaceOS::Tasks.create_placeholders(staff.try(&.id))
   end
 
   desc "Creates an authority"
