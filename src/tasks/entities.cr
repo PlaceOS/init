@@ -35,6 +35,41 @@ module PlaceOS::Tasks::Entities
     raise e
   end
 
+  # The platform operator's partner and staff organisation. The first domain
+  # belongs to that organisation, so its admins have cluster reach once
+  # tenancy enforcement is on.
+  def create_management_organisation(
+    authority : Model::Authority,
+    partner_name : String = "PlaceOS",
+  ) : Model::Organisation
+    partner = upsert_document(Model::Partner.where(management: true)) do
+      Log.info { {message: "creating management Partner", name: partner_name} }
+      Model::Partner.new(name: partner_name, description: "Platform operator (management partner)").tap do |new_partner|
+        new_partner.management = true
+      end
+    end
+
+    organisation = upsert_document(Model::Organisation.where(partner_id: partner.id, partner_staff: true)) do
+      Log.info { {message: "creating staff Organisation", name: authority.name} }
+      Model::Organisation.new(name: "#{partner_name} staff", description: "Staff of the management partner").tap do |new_org|
+        new_org.partner_id = partner.id
+        new_org.partner_staff = true
+        new_org.payer = Model::Organisation::PAYER_ORGANISATION
+      end
+    end
+
+    if authority.organisation_id.nil?
+      authority.organisation_id = organisation.id
+      authority.save!
+      Log.info { {message: "attached Authority to staff Organisation", authority: authority.id, organisation: organisation.id.to_s} }
+    end
+
+    organisation
+  rescue e
+    log_fail("Organisation", e)
+    raise e
+  end
+
   def create_interface(
     name : String,
     folder_name : String,
@@ -141,7 +176,7 @@ module PlaceOS::Tasks::Entities
     raise e
   end
 
-  def create_placeholders
+  def create_placeholders(organisation_id : UUID? = nil)
     version = UUID.random.to_s.split('-').first
 
     private_repository_uri = "https://github.com/placeos/private-drivers"
@@ -201,6 +236,7 @@ module PlaceOS::Tasks::Entities
         Model::Zone.new.tap do |zone|
           zone.name = "Zone-#{tag}-#{version}"
           zone.tags = Set{tag}
+          zone.organisation_id = organisation_id
         end
       end
     end
@@ -213,7 +249,9 @@ module PlaceOS::Tasks::Entities
     zones[2].save!
 
     control_system = upsert_document(Model::ControlSystem.all) do
-      Model::ControlSystem.new(name: "System-#{version}")
+      Model::ControlSystem.new(name: "System-#{version}").tap do |sys|
+        sys.organisation_id = organisation_id
+      end
     end
 
     upsert_document(Model::Settings.for_parent(control_system.id.as(String))) do
@@ -227,6 +265,7 @@ module PlaceOS::Tasks::Entities
     mod = upsert_document(Model::Module.where(driver_id: driver.id.as(String), control_system_id: control_system.id.as(String))) do
       Model::Generator.module(driver: driver, control_system: control_system).tap do |new_module|
         new_module.custom_name = "Module-#{version}"
+        new_module.organisation_id = organisation_id
       end
     end
 
@@ -241,6 +280,7 @@ module PlaceOS::Tasks::Entities
       trigger_description = "An automatically generated Trigger."
       new_trigger = Model::Trigger.new(name: trigger_name, description: trigger_description)
       new_trigger.control_system = control_system
+      new_trigger.organisation_id = organisation_id
       new_trigger
     end
 

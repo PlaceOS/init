@@ -33,6 +33,7 @@ module PlaceOS::Tasks::Initialization
 
     start_lock.synchronize do
       authority = Entities.create_authority(name: application_base, domain: application_base, config: metrics_config)
+      organisation = Entities.create_management_organisation(authority)
 
       Entities.create_user(authority: authority, name: username, email: email, password: password, sys_admin: true)
       Entities.create_application(authority: authority, name: application_name, base: application_base)
@@ -53,7 +54,7 @@ module PlaceOS::Tasks::Initialization
 
       unless PlaceOS::Tasks.production? || PlaceOS::SKIP_PLACEHOLDERS
         Log.info { "creating placeholder documents" }
-        Entities.create_placeholders
+        Entities.create_placeholders(organisation.id)
       end
     end
   end
