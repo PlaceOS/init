@@ -1,4 +1,9 @@
 dependencies:
+  # PPT-526: build against the multi-tenancy data layer until models #332 merges
+  placeos-models:
+    github: placeos/models
+    branch: PPT-526-partner-client
+
   retriable:
     github: Sija/retriable.cr
   db:
