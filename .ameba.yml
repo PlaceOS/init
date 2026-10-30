@@ -27,3 +27,7 @@ Style/ParenthesesAroundCondition:
   Description: Disallows redundant parentheses around control expressions
   Enabled: false
   Severity: Convention
+
+Lint/SpecFilename:
+  Excluded:
+    - spec/migration/**/*.cr

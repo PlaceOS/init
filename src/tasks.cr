@@ -6,6 +6,7 @@ module PlaceOS::Tasks
 
   include Backup
   include Database
+  include DeskAssets
   include Entities
   include Initialization
   include Restore
