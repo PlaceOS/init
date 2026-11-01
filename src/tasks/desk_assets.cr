@@ -3,8 +3,9 @@ require "pg-orm"
 require "placeos-models"
 
 # Migrates desks from the `desks` metadata on level zones into the asset table,
-# remaps desk bookings and short URLs (QR codes) to the new asset ids and enables
-# `desks.use_assets` in the org zone settings. Everything is written in a single
+# remaps desk bookings and short URLs (QR codes) to the new asset ids, backfills
+# the zone path of every asset and enables `desks.use_assets` in the org zone
+# settings. Everything is written in a single
 # transaction and the task can be re-run: existing assets are matched on
 # (asset type, zone_id, map_id).
 module PlaceOS::Tasks::DeskAssets
@@ -72,6 +73,7 @@ module PlaceOS::Tasks::DeskAssets
     getter bookings = RemapStats.new
     getter instances = RemapStats.new
     getter shorteners = RemapStats.new
+    getter asset_zones = RemapStats.new
     property? dry_run : Bool = false
     property? committed : Bool = false
 
@@ -88,6 +90,7 @@ module PlaceOS::Tasks::DeskAssets
       write_stats(io, "desk bookings", bookings)
       write_stats(io, "booking instances", instances)
       write_stats(io, "short urls", shorteners, "unresolved asset ids")
+      write_stats(io, "asset zones", asset_zones, "unknown asset zone ids")
     end
 
     private def write_stats(io, label, stats, missed_label = "missed desk ids")
@@ -118,7 +121,7 @@ module PlaceOS::Tasks::DeskAssets
     summary.dry_run = dry_run
 
     # 1 & 2. collect and prepare
-    collect(summary)
+    zones = collect(summary)
 
     # 3. migrate
     PgORM::Database.transaction do
@@ -133,6 +136,7 @@ module PlaceOS::Tasks::DeskAssets
       remap_bookings(lookup, desk_asset_ids, summary.bookings)
       remap_instances(lookup, desk_asset_ids, summary.instances)
       remap_shorteners(lookup, desk_asset_ids, summary.shorteners)
+      backfill_asset_zones(zones, summary.asset_zones)
 
       raise DB::Rollback.new if dry_run
       summary.committed = true
@@ -149,7 +153,7 @@ module PlaceOS::Tasks::DeskAssets
 
   private record ZoneNode, id : String, parent_id : String?, tags : Array(String)
 
-  protected def collect(summary : Summary) : Nil
+  protected def collect(summary : Summary) : Hash(String, ZoneNode)
     zones = load_zones
     children = Hash(String, Array(ZoneNode)).new { |hash, key| hash[key] = [] of ZoneNode }
     zones.each_value { |zone| zone.parent_id.try { |parent_id| children[parent_id] << zone } }
@@ -195,6 +199,8 @@ module PlaceOS::Tasks::DeskAssets
         end
       end
     end
+
+    zones
   end
 
   private def load_zones : Hash(String, ZoneNode)
@@ -450,6 +456,55 @@ module PlaceOS::Tasks::DeskAssets
     updates.each_slice(BATCH_SIZE) do |batch|
       PgORM::Database.connection { |db| db.exec(update_sql, args: [batch.to_json]) }
     end
+  end
+
+  # Backfill asset zones
+  ###############################################################################################
+
+  # Assets are found by building or region with the `zones` filter, so every asset
+  # lists the zone path of its `zone_id` (org, region, building and level).
+  # Additional zones an asset is in (areas etc) are kept.
+  private def backfill_asset_zones(zones : Hash(String, ZoneNode), stats : RemapStats) : Nil
+    updates = [] of JSON::Any
+
+    PgORM::Database.connection do |db|
+      db.query_each(%(SELECT id, zone_id, zones FROM "asset" WHERE zone_id IS NOT NULL)) do |rs|
+        id, zone_id = rs.read(String), rs.read(String)
+        existing = rs.read(Array(String)?) || [] of String
+        stats.total += 1
+
+        path = zone_path(zone_id, zones)
+        if path.empty?
+          stats.missed += 1
+          stats.missed_ids << zone_id
+        elsif path.all? { |zone| existing.includes?(zone) }
+          stats.already_migrated += 1
+        else
+          updated = path + (existing - path)
+          updates << JSON::Any.new({"id" => JSON::Any.new(id), "zones" => JSON::Any.new(updated.map { |zone| JSON::Any.new(zone) })})
+          stats.remapped += 1
+        end
+      end
+    end
+
+    updates.each_slice(BATCH_SIZE) do |batch|
+      PgORM::Database.connection { |db| db.exec(<<-SQL, args: [batch.to_json]) }
+        UPDATE "asset" AS a SET zones = u.zones
+        FROM jsonb_to_recordset($1::jsonb) AS u(id text, zones text[])
+        WHERE a.id = u.id
+        SQL
+    end
+  end
+
+  # the zone and its ancestors, root first. Empty when the zone doesn't exist
+  private def zone_path(zone_id : String, zones : Hash(String, ZoneNode)) : Array(String)
+    path = [] of String
+    current = zones[zone_id]?
+    while current && !path.includes?(current.id)
+      path.unshift(current.id)
+      current = current.parent_id.try { |parent_id| zones[parent_id]? }
+    end
+    path
   end
 
   # Remap short urls

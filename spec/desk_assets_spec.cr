@@ -299,6 +299,45 @@ module PlaceOS::Tasks
       second.shorteners.missed.should eq 2
     end
 
+    it "backfills the zone path of every asset" do
+      org = zone("org")
+      region = zone("region", org)
+      building = zone("building", region)
+      level = zone("level", building)
+      area = zone("area", level)
+      authority = domain("https://one.example.com", org)
+      desks(level, %([{"id": "desk-1"}]))
+
+      category = Generator.asset_category(authority).save!
+      asset_type = Generator.asset_type(category).save!
+      new_asset = ->(zone_id : String, zones : Array(String)) {
+        asset = Model::Asset.new
+        asset.asset_type_id = asset_type.id
+        asset.zone_id = zone_id
+        asset.zones = zones
+        asset.save!
+      }
+      parking = new_asset.call(level.id.as(String), [level.id.as(String)])
+      locker = new_asset.call(level.id.as(String), [area.id.as(String), level.id.as(String)])
+      bank = new_asset.call(building.id.as(String), [] of String)
+
+      summary = DeskAssets.migrate_desk_assets
+      # the migrated desk already has its zone path
+      summary.asset_zones.total.should eq 4
+      summary.asset_zones.remapped.should eq 3
+      summary.asset_zones.already_migrated.should eq 1
+
+      path = [org.id, region.id, building.id, level.id]
+      Model::Asset.find(parking.id).zones.should eq path
+      # additional zones are kept
+      Model::Asset.find(locker.id).zones.should eq path + [area.id]
+      Model::Asset.find(bank.id).zones.should eq [org.id, region.id, building.id]
+
+      second = DeskAssets.migrate_desk_assets
+      second.asset_zones.remapped.should eq 0
+      second.asset_zones.already_migrated.should eq 4
+    end
+
     it "can be run multiple times" do
       tenant = Generator.tenant
       org = zone("org")
