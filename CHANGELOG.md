@@ -1,3 +1,9 @@
+## v0.35.0 (2026-11-01)
+
+### Feat
+
+- add migrate:desk_assets task ([#107](https://github.com/PlaceOS/init/pull/107))
+
 ## v0.34.1 (2026-09-09)
 
 ## v0.34.0 (2026-09-09)
