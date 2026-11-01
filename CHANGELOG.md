@@ -1,3 +1,9 @@
+## v0.36.0 (2026-11-01)
+
+### Feat
+
+- **desk_assets**: store unmapped desk fields in other_data
+
 ## v0.35.0 (2026-11-01)
 
 ### Feat
