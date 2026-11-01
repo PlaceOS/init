@@ -213,6 +213,20 @@ namespace "migrate" do
 
     PlaceOS::Tasks.migrate_rethink_to_pg(**arguments)
   end
+
+  desc "Migrate desks from level zone metadata to assets, remapping desk bookings. `dry_run=true` rolls back"
+  task "desk_assets" do |_, args|
+    arguments = {
+      host:     (args["host"]? || PlaceOS::PG_HOST).to_s,
+      port:     (args["port"]? || PlaceOS::PG_PORT).to_i,
+      db:       (args["db"]? || PlaceOS::PG_DB).to_s,
+      user:     (args["user"]? || PlaceOS::PG_USER).try &.to_s,
+      password: (args["password"]? || PlaceOS::PG_PASS).try &.to_s,
+      dry_run:  args["dry_run"]?.try(&.to_s.downcase) == "true",
+    }
+
+    PlaceOS::Tasks.migrate_desk_assets(**arguments)
+  end
 end
 
 desc "Drops the PostgreSQL DB"

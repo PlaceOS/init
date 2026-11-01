@@ -59,6 +59,12 @@ docker-compose run --no-deps -it init task migrate:rethink_dump path=DUMP_FILE_L
 ```
 
 ```bash
+# Migrate desks from level zone `desks` metadata to assets, remap desk bookings and enable `desk.use_assets`
+# runs in a single transaction and is safe to re-run, `dry_run=true` prints the summary and rolls back
+docker-compose run --no-deps -it init task migrate:desk_assets dry_run=true
+```
+
+```bash
 # Create a set of placeholder records
 docker-compose run --no-deps -it init task create:placeholder
 ```

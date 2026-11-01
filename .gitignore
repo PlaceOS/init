@@ -8,3 +8,4 @@ docs
 lib
 sam.cr
 *.swp
+coverage
