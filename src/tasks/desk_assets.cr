@@ -3,15 +3,23 @@ require "pg-orm"
 require "placeos-models"
 
 # Migrates desks from the `desks` metadata on level zones into the asset table,
-# remaps desk bookings to the new asset ids and enables `desk.use_assets` in the
-# org zone settings. Everything is written in a single transaction and the task
-# can be re-run: existing assets are matched on (asset type, zone_id, map_id).
+# remaps desk bookings and short URLs (QR codes) to the new asset ids and enables
+# `desks.use_assets` in the org zone settings. Everything is written in a single
+# transaction and the task can be re-run: existing assets are matched on
+# (asset type, zone_id, map_id).
 module PlaceOS::Tasks::DeskAssets
   extend self
   Log = ::Log.for(self)
 
   DESKS      = "_DESKS_"
   BATCH_SIZE = 1000
+
+  # apps read `app.desks.use_assets` from the org zone `settings` metadata
+  SETTINGS_KEY        = "desks"
+  LEGACY_SETTINGS_KEY = "desk"
+
+  # url params that can disambiguate a desk id that exists on multiple levels
+  LINK_ZONE_PARAMS = {"level_id", "zone_id", "building_id"}
 
   # desk metadata keys with an asset field, the rest are kept in `other_data`
   MAPPED_KEYS = {"id", "map_id", "name", "bookable", "assigned_to", "assigned_name", "groups", "features", "images", "notes", "security"}
@@ -44,6 +52,7 @@ module PlaceOS::Tasks::DeskAssets
     property created : Int32 = 0
     property updated : Int32 = 0
     property settings : String = "unchanged"
+    property category : String = "unchanged"
 
     def initialize(@authority_id, @domain, @org_zone_id)
     end
@@ -62,6 +71,7 @@ module PlaceOS::Tasks::DeskAssets
     getter skipped_authorities = [] of String
     getter bookings = RemapStats.new
     getter instances = RemapStats.new
+    getter shorteners = RemapStats.new
     property? dry_run : Bool = false
     property? committed : Bool = false
 
@@ -73,17 +83,18 @@ module PlaceOS::Tasks::DeskAssets
         io << "    levels: " << domain.levels << ", with desks: " << domain.levels_with_desks << '\n'
         io << "    desks: " << domain.desks.size << ", created: " << domain.created << ", updated: " << domain.updated << ", skipped: " << domain.skipped.size << '\n'
         domain.skipped.each { |reason| io << "      skipped " << reason << '\n' }
-        io << "    settings: " << domain.settings << '\n'
+        io << "    category: " << domain.category << ", settings: " << domain.settings << '\n'
       end
       write_stats(io, "desk bookings", bookings)
       write_stats(io, "booking instances", instances)
+      write_stats(io, "short urls", shorteners, "unresolved asset ids")
     end
 
-    private def write_stats(io, label, stats)
+    private def write_stats(io, label, stats, missed_label = "missed desk ids")
       io << "  " << label << ": " << stats.total << ", remapped: " << stats.remapped
       io << ", already migrated: " << stats.already_migrated << ", missed: " << stats.missed << '\n'
       unless stats.missed_ids.empty?
-        io << "    missed desk ids (" << stats.missed_ids.size << "): " << stats.missed_ids.first(20).join(", ")
+        io << "    " << missed_label << " (" << stats.missed_ids.size << "): " << stats.missed_ids.first(20).join(", ")
         io << ", ..." if stats.missed_ids.size > 20
         io << '\n'
       end
@@ -121,6 +132,7 @@ module PlaceOS::Tasks::DeskAssets
 
       remap_bookings(lookup, desk_asset_ids, summary.bookings)
       remap_instances(lookup, desk_asset_ids, summary.instances)
+      remap_shorteners(lookup, desk_asset_ids, summary.shorteners)
 
       raise DB::Rollback.new if dry_run
       summary.committed = true
@@ -258,7 +270,7 @@ module PlaceOS::Tasks::DeskAssets
   ###############################################################################################
 
   private def migrate_domain(domain : Domain, lookup, desk_asset_ids) : Nil
-    asset_type = desks_asset_type(domain.authority_id)
+    asset_type = desks_asset_type(domain)
     type_id = asset_type.id.as(String)
 
     existing = Model::Asset.where(asset_type_id: type_id).to_a
@@ -292,16 +304,26 @@ module PlaceOS::Tasks::DeskAssets
 
       asset_id = asset.id.as(String)
       desk_asset_ids << asset_id
-      (lookup[desk.legacy_id] ||= [] of Candidate) << Candidate.new(asset_id, desk.zone_id)
+      (lookup[desk.legacy_id] ||= [] of Candidate) << Candidate.new(asset_id, desk.zone_id, desk.zones, domain.authority_id)
     end
   end
 
-  private def desks_asset_type(authority_id : String) : Model::AssetType
-    category = Model::AssetCategory.find_by?(authority_id: authority_id, name: DESKS) ||
-               Model::AssetCategory.new(name: DESKS, authority_id: authority_id).save!
+  # the oldest `_DESKS_` category and type, matching how apps and staff-api resolve them.
+  # The category is hidden so desks don't appear as generic assets (apps only search hidden categories)
+  private def desks_asset_type(domain : Domain) : Model::AssetType
+    authority_id = domain.authority_id
+    category = Model::AssetCategory.where(authority_id: authority_id, name: DESKS).order(:created_at).first?
+    if category.nil?
+      category = Model::AssetCategory.new(name: DESKS, authority_id: authority_id, hidden: true).save!
+      domain.category = "created"
+    elsif !category.hidden
+      category.hidden = true
+      category.save!
+      domain.category = "hidden"
+    end
 
     category_id = category.id.as(String)
-    Model::AssetType.find_by?(category_id: category_id, name: DESKS) ||
+    Model::AssetType.where(category_id: category_id, name: DESKS).order(:created_at).first? ||
       Model::AssetType.new(name: DESKS, brand: DESKS, category_id: category_id).save!
   end
 
@@ -312,28 +334,48 @@ module PlaceOS::Tasks::DeskAssets
 
     # copies, mutating the existing details in place hides the change from dirty tracking
     details = metadata.details.as_h?.try(&.dup) || {} of String => JSON::Any
-    desk = details["desk"]?.try(&.as_h?).try(&.dup)
-    unless desk
-      Log.warn { "#{domain.org_zone_id} settings.desk is not an object, replacing it" } if details.has_key?("desk")
-      desk = {} of String => JSON::Any
+    changed = remove_legacy_setting(details)
+
+    desks = details[SETTINGS_KEY]?.try(&.as_h?).try(&.dup)
+    unless desks
+      Log.warn { "#{domain.org_zone_id} settings.#{SETTINGS_KEY} is not an object, replacing it" } if details.has_key?(SETTINGS_KEY)
+      desks = {} of String => JSON::Any
     end
 
-    if desk["use_assets"]?.try(&.as_bool?) == true
+    unless desks["use_assets"]?.try(&.as_bool?) == true
+      desks["use_assets"] = JSON::Any.new(true)
+      details[SETTINGS_KEY] = JSON::Any.new(desks)
+      changed = true
+    end
+
+    unless changed
       domain.settings = "unchanged"
       return
     end
 
-    desk["use_assets"] = JSON::Any.new(true)
-    details["desk"] = JSON::Any.new(desk)
     metadata.details = JSON::Any.new(details)
     metadata.save!
+  end
+
+  # earlier versions of this task wrote `desk.use_assets`, which apps don't read
+  private def remove_legacy_setting(details : Hash(String, JSON::Any)) : Bool
+    return false unless legacy = details[LEGACY_SETTINGS_KEY]?.try(&.as_h?)
+    return false unless legacy.has_key?("use_assets")
+
+    legacy = legacy.reject("use_assets")
+    if legacy.empty?
+      details.delete(LEGACY_SETTINGS_KEY)
+    else
+      details[LEGACY_SETTINGS_KEY] = JSON::Any.new(legacy)
+    end
+    true
   end
 
   # Remap bookings
   ###############################################################################################
 
   # an asset created for a legacy desk id, desk ids are only unique within a level
-  private record Candidate, asset_id : String, level_id : String
+  private record Candidate, asset_id : String, level_id : String, zones : Array(String), authority_id : String
 
   private record Row, key : JSON::Any, asset_id : String?, asset_ids : Array(String), zones : Array(String)
 
@@ -408,6 +450,84 @@ module PlaceOS::Tasks::DeskAssets
     updates.each_slice(BATCH_SIZE) do |batch|
       PgORM::Database.connection { |db| db.exec(update_sql, args: [batch.to_json]) }
     end
+  end
+
+  # Remap short urls
+  ###############################################################################################
+
+  # short urls (typically QR codes) link to desks with an `asset_id` param, e.g.
+  # `/redirect/?continue=%2Fworkplace%2F%23%2Fbook%2Fcode%3Fasset_id%3Ddesk-1%26building_id%3Dzone-1`
+  private def remap_shorteners(lookup, desk_asset_ids, stats : RemapStats) : Nil
+    Model::Shortener.where("uri LIKE ?", "%asset_id%").each do |shortener|
+      linked = false
+      missed = [] of String
+
+      uri = rewrite_url(shortener.uri) do |id, params|
+        linked = true
+        next id if desk_asset_ids.includes?(id)
+        resolve_link(id, params, shortener.authority_id, lookup).tap { |asset_id| missed << id unless asset_id }
+      end
+      next unless linked
+
+      stats.total += 1
+      stats.missed_ids.concat(missed)
+      if uri != shortener.uri
+        shortener.name = uri if shortener.name == shortener.uri
+        shortener.uri = uri
+        shortener.save!
+        stats.remapped += 1
+      elsif missed.empty?
+        stats.already_migrated += 1
+      else
+        stats.missed += 1
+      end
+    end
+  end
+
+  # rewrites `asset_id` query params, including params nested in other params
+  # (`?continue=...`) and in fragment routes (`#/book/code?asset_id=...`).
+  # Returns the url unchanged when no `asset_id` changes
+  protected def rewrite_url(url : String, &resolve : String, URI::Params -> String?) : String
+    head, hash, fragment = url.partition('#')
+    head = rewrite_query(head, &resolve)
+    hash.empty? ? head : "#{head}##{rewrite_query(fragment, &resolve)}"
+  end
+
+  private def rewrite_query(part : String, &resolve : String, URI::Params -> String?) : String
+    path, mark, query = part.partition('?')
+    return part if mark.empty? || query.empty?
+
+    params = URI::Params.parse(query)
+    changed = false
+    rewritten = URI::Params.build do |form|
+      params.each do |key, value|
+        updated = if key == "asset_id"
+                    resolve.call(value, params) || value
+                  elsif value.includes?('?')
+                    rewrite_url(value, &resolve)
+                  else
+                    value
+                  end
+        changed ||= updated != value
+        form.add key, updated
+      end
+    end
+
+    changed ? "#{path}?#{rewritten}" : part
+  end
+
+  # desk ids are only unique within a level, links usually include the building
+  private def resolve_link(id : String, params : URI::Params, authority_id : String?, lookup) : String?
+    return unless candidates = lookup[id]?.try(&.select(&.authority_id.==(authority_id)))
+    return if candidates.empty?
+    return candidates.first.asset_id if candidates.size == 1
+
+    LINK_ZONE_PARAMS.each do |key|
+      next unless zone_id = params[key]?
+      matches = candidates.select(&.zones.includes?(zone_id))
+      return matches.first.asset_id if matches.size == 1
+    end
+    nil
   end
 
   # prefer the candidate on one of the booking zones when a desk id exists on multiple levels

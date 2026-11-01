@@ -29,6 +29,10 @@ module PlaceOS::Tasks
     Model::Asset.all.to_a.sort_by!(&.zone_id.to_s)
   end
 
+  def self.short_url(authority : Model::Authority, uri : String) : Model::Shortener
+    Generator.shortener(uri, user: Generator.user(authority).save!, authority: authority).save!
+  end
+
   def self.settings(org : Model::Zone) : JSON::Any?
     Model::Metadata.for(org.id.as(String), "settings").first?.try(&.details)
   end
@@ -131,12 +135,14 @@ module PlaceOS::Tasks
       desk.map_id.should eq "desk-1"
       Model::Asset.count.should eq 4
 
-      # one category and type per migrated authority
+      # one hidden category and type per migrated authority
       Model::AssetCategory.where(name: DeskAssets::DESKS).count.should eq 2
+      Model::AssetCategory.where(name: DeskAssets::DESKS).to_a.all?(&.hidden).should be_true
+      summary.domains.map(&.category).should eq ["created", "created"]
       Model::AssetType.where(name: DeskAssets::DESKS).count.should eq 2
     end
 
-    it "reuses an existing _DESKS_ category and type" do
+    it "reuses an existing _DESKS_ category and type, hiding the category" do
       org = zone("org")
       authority = domain("https://one.example.com", org)
       desks(zone("level", zone("building", org)), %([{"id": "desk-1"}]))
@@ -144,7 +150,9 @@ module PlaceOS::Tasks
       category = Model::AssetCategory.new(name: DeskAssets::DESKS, authority_id: authority.id).save!
       asset_type = Model::AssetType.new(name: DeskAssets::DESKS, brand: "existing", category_id: category.id).save!
 
-      DeskAssets.migrate_desk_assets
+      summary = DeskAssets.migrate_desk_assets
+      summary.domains.first.category.should eq "hidden"
+      Model::AssetCategory.find(category.id).hidden.should be_true
       Model::AssetCategory.count.should eq 1
       Model::AssetType.count.should eq 1
       Model::Asset.find_by(map_id: "desk-1").asset_type_id.should eq asset_type.id
@@ -207,12 +215,88 @@ module PlaceOS::Tasks
       Model::Metadata.new(
         name: "settings",
         parent_id: org2.id.as(String),
-        details: JSON.parse(%({"app": {"title": "Place"}, "desk": {"auto_release": true}}))
+        details: JSON.parse(%({"app": {"title": "Place"}, "desks": {"auto_release": true}}))
       ).save!
 
-      DeskAssets.migrate_desk_assets
-      settings(org).should eq JSON.parse(%({"desk": {"use_assets": true}}))
-      settings(org2).should eq JSON.parse(%({"app": {"title": "Place"}, "desk": {"auto_release": true, "use_assets": true}}))
+      # migrated by an earlier version of the task, which wrote `desk.use_assets`
+      org3 = zone("org")
+      domain("https://three.example.com", org3)
+      Model::Metadata.new(
+        name: "settings",
+        parent_id: org3.id.as(String),
+        details: JSON.parse(%({"desk": {"use_assets": true}, "desks": {"use_assets": true}}))
+      ).save!
+      org4 = zone("org")
+      domain("https://four.example.com", org4)
+      Model::Metadata.new(
+        name: "settings",
+        parent_id: org4.id.as(String),
+        details: JSON.parse(%({"desk": {"use_assets": true, "other": 1}}))
+      ).save!
+
+      summary = DeskAssets.migrate_desk_assets
+      settings(org).should eq JSON.parse(%({"desks": {"use_assets": true}}))
+      settings(org2).should eq JSON.parse(%({"app": {"title": "Place"}, "desks": {"auto_release": true, "use_assets": true}}))
+      settings(org3).should eq JSON.parse(%({"desks": {"use_assets": true}}))
+      settings(org4).should eq JSON.parse(%({"desk": {"other": 1}, "desks": {"use_assets": true}}))
+      summary.domains.to_h { |domain| {domain.org_zone_id, domain.settings} }.should eq({
+        org.id => "created", org2.id => "updated", org3.id => "updated", org4.id => "updated",
+      })
+
+      DeskAssets.migrate_desk_assets.domains.map(&.settings).uniq.should eq ["unchanged"]
+    end
+
+    it "remaps desk ids in short urls" do
+      org = zone("org")
+      building1 = zone("building", org)
+      building2 = zone("building", org)
+      level1 = zone("level", building1)
+      level2 = zone("level", building2)
+      authority = domain("https://one.example.com", org)
+      desks(level1, %([{"id": "desk-6.09.08"}, {"id": "desk-1"}]))
+      desks(level2, %([{"id": "desk-6.09.08"}]))
+
+      # another domain with the same desk id
+      other_org = zone("org")
+      other_authority = domain("https://two.example.com", other_org)
+      desks(zone("level", zone("building", other_org)), %([{"id": "desk-1"}]))
+
+      redirect = "https://spacefinder.example.com/redirect/?continue=%2Fworkplace%2F%23%2Fbook%2Fcode%3Fasset_id%3Ddesk-6.09.08%26building_id%3D#{building2.id}%26region_id%3Dzone-region"
+      code = short_url(authority, redirect)
+      direct = short_url(authority, "https://spacefinder.example.com/workplace/#/book/desk?asset_id=desk-1&date=1")
+      other = short_url(other_authority, "https://two.example.com/workplace/#/book/code?asset_id=desk-1")
+      ambiguous = short_url(authority, "https://spacefinder.example.com/workplace/#/book/code?asset_id=desk-6.09.08")
+      removed = short_url(authority, "https://spacefinder.example.com/workplace/#/book/code?asset_id=desk-removed")
+      unrelated = short_url(authority, "https://spacefinder.example.com/workplace/#/explore?zone=#{level1.id}")
+
+      summary = DeskAssets.migrate_desk_assets
+      summary.shorteners.total.should eq 5
+      summary.shorteners.remapped.should eq 3
+      summary.shorteners.missed.should eq 2
+      summary.shorteners.missed_ids.should eq Set{"desk-6.09.08", "desk-removed"}
+
+      # the building_id param picks the desk on the right level
+      on_building2 = Model::Asset.find_by(zone_id: level2.id.as(String), map_id: "desk-6.09.08")
+      code = Model::Shortener.find(code.id)
+      code.uri.should eq redirect.sub("desk-6.09.08", on_building2.id.as(String))
+      code.name.should eq code.uri
+
+      desk1 = Model::Asset.find_by(zone_id: level1.id.as(String), map_id: "desk-1")
+      Model::Shortener.find(direct.id).uri.should eq "https://spacefinder.example.com/workplace/#/book/desk?asset_id=#{desk1.id}&date=1"
+
+      # desk ids are resolved within the short url's authority
+      other_desk = Model::Asset.where(map_id: "desk-1").to_a.find!(&.id.!=(desk1.id))
+      Model::Shortener.find(other.id).uri.should eq "https://two.example.com/workplace/#/book/code?asset_id=#{other_desk.id}"
+
+      # left unchanged when the desk can't be identified
+      Model::Shortener.find(ambiguous.id).uri.should eq ambiguous.uri
+      Model::Shortener.find(removed.id).uri.should eq removed.uri
+      Model::Shortener.find(unrelated.id).uri.should eq unrelated.uri
+
+      second = DeskAssets.migrate_desk_assets
+      second.shorteners.remapped.should eq 0
+      second.shorteners.already_migrated.should eq 3
+      second.shorteners.missed.should eq 2
     end
 
     it "can be run multiple times" do

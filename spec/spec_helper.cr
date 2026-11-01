@@ -8,7 +8,7 @@ PgORM::Database.configure { |_| }
 def clear_tables
   PgORM::Database.exec_sql <<-SQL
     TRUNCATE "asset", "asset_type", "asset_category", "metadata", "zone",
-      "booking_instances", "bookings", "tenants", "authority", "history" CASCADE
+      "booking_instances", "bookings", "tenants", "shortener", "user", "authority", "history" CASCADE
     SQL
 end
 
