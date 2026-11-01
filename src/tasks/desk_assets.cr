@@ -13,6 +13,9 @@ module PlaceOS::Tasks::DeskAssets
   DESKS      = "_DESKS_"
   BATCH_SIZE = 1000
 
+  # desk metadata keys with an asset field, the rest are kept in `other_data`
+  MAPPED_KEYS = {"id", "map_id", "name", "bookable", "assigned_to", "assigned_name", "groups", "features", "images", "notes", "security"}
+
   record Desk,
     legacy_id : String,
     map_id : String,
@@ -26,7 +29,8 @@ module PlaceOS::Tasks::DeskAssets
     features : Array(String),
     images : Array(String),
     notes : String?,
-    security_system_groups : Array(String)
+    security_system_groups : Array(String),
+    other_data : JSON::Any
 
   # The desks collected for a single authority
   class Domain
@@ -232,7 +236,14 @@ module PlaceOS::Tasks::DeskAssets
       images: strings(desk["images"]?),
       notes: string(desk["notes"]?),
       security_system_groups: string(desk["security"]?).try { |group| [group] } || [] of String,
+      other_data: other_data(desk),
     )
+  end
+
+  # custom fields, such as third party ids (`floorsense_id`). Always an object
+  # so consumers can safely look up keys (a nil is stored as JSON null)
+  private def other_data(desk : Hash(String, JSON::Any)) : JSON::Any
+    JSON::Any.new(desk.reject { |key, _| MAPPED_KEYS.includes?(key) })
   end
 
   private def string(value : JSON::Any?) : String?
@@ -276,6 +287,7 @@ module PlaceOS::Tasks::DeskAssets
       asset.images = desk.images
       asset.notes = desk.notes
       asset.security_system_groups = desk.security_system_groups
+      asset.other_data = desk.other_data
       asset.save!
 
       asset_id = asset.id.as(String)

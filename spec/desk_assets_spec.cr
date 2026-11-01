@@ -46,7 +46,9 @@ module PlaceOS::Tasks
         "features": ["Standard Office"],
         "security": "DWN 6.06A",
         "assigned_to": "Charles.Yeo@cdu.edu.au",
-        "assigned_name": "Charles Yeo"
+        "assigned_name": "Charles Yeo",
+        "floorsense_id": "fs-1234",
+        "custom": {"colour": "blue"}
       },
       {
         "id": "desk-6.06.2",
@@ -108,12 +110,14 @@ module PlaceOS::Tasks
       desk.features.should eq ["Standard Office"]
       desk.images.should eq ["https://example.com/desk.png"]
       desk.security_system_groups.should eq ["DWN 6.06A"]
+      desk.other_data.should eq JSON.parse(%({"floorsense_id": "fs-1234", "custom": {"colour": "blue"}}))
 
       desk = assets["desk-6.06.2"]
       desk.identifier.should eq "desk-6.06.2"
       desk.bookable.should be_false
       desk.assigned_to.should be_nil
       desk.notes.should eq "by the window"
+      desk.other_data.should eq JSON.parse("{}")
       desk.features.should eq ["Standard Office"]
       desk.security_system_groups.should be_empty
 
