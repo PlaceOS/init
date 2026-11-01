@@ -1,3 +1,9 @@
+## v0.36.1 (2026-11-01)
+
+### Fix
+
+- **desk_assets**: match app settings, hide desk category, remap short urls
+
 ## v0.36.0 (2026-11-01)
 
 ### Feat
