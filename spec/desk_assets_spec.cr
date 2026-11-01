@@ -243,7 +243,7 @@ module PlaceOS::Tasks
         org.id => "created", org2.id => "updated", org3.id => "updated", org4.id => "updated",
       })
 
-      DeskAssets.migrate_desk_assets.domains.map(&.settings).uniq.should eq ["unchanged"]
+      DeskAssets.migrate_desk_assets.domains.map(&.settings).uniq!.should eq ["unchanged"]
     end
 
     it "remaps desk ids in short urls" do
