@@ -1,3 +1,9 @@
+## v0.37.0 (2026-11-01)
+
+### Feat
+
+- **desk_assets**: backfill the zone path of every asset
+
 ## v0.36.1 (2026-11-01)
 
 ### Fix
