@@ -52,6 +52,8 @@ module PlaceOS::Tasks
         "assigned_to": "Charles.Yeo@cdu.edu.au",
         "assigned_name": "Charles Yeo",
         "floorsense_id": "fs-1234",
+        "homebase": "engineering",
+        "tags": ["quiet"],
         "custom": {"colour": "blue"}
       },
       {
@@ -68,7 +70,8 @@ module PlaceOS::Tasks
       },
       {"id": "desk-6.06.3", "security": null},
       {"name": "no id"},
-      {"id": "desk-6.06.4", "map_id": "desk-6.06.1"}
+      {"id": "desk-6.06.4", "map_id": "desk-6.06.1"},
+      {"id": "desk-6.06.5", "map_id": "map-6.06.5"}
     ]
     JSON
 
@@ -98,11 +101,11 @@ module PlaceOS::Tasks
       summary.skipped_authorities.should eq ["ignored.example.com"]
 
       first = summary.domains.find!(&.org_zone_id.==(org.id))
-      first.created.should eq 3
+      first.created.should eq 4
       first.skipped.size.should eq 2
 
       assets = Model::Asset.where(zone_id: level.id.as(String)).to_a.to_h { |asset| {asset.map_id.as(String), asset} }
-      assets.keys.sort!.should eq ["desk-6.06.1", "desk-6.06.2", "desk-6.06.3"]
+      assets.keys.sort!.should eq ["desk-6.06.1", "desk-6.06.2", "desk-6.06.3", "map-6.06.5"]
 
       desk = assets["desk-6.06.1"]
       desk.identifier.should eq "6.06.01"
@@ -114,13 +117,16 @@ module PlaceOS::Tasks
       desk.features.should eq ["Standard Office"]
       desk.images.should eq ["https://example.com/desk.png"]
       desk.security_system_groups.should eq ["DWN 6.06A"]
-      desk.other_data.should eq JSON.parse(%({"floorsense_id": "fs-1234", "custom": {"colour": "blue"}}))
+      # third party ids in client_ids, the original id matches the map id
+      desk.client_ids.should eq JSON.parse(%({"floorsense_id": "fs-1234"}))
+      desk.other_data.should eq JSON.parse(%({"homebase": "engineering", "tags": ["quiet"], "custom": {"colour": "blue"}}))
 
       desk = assets["desk-6.06.2"]
       desk.identifier.should eq "desk-6.06.2"
       desk.bookable.should be_false
       desk.assigned_to.should be_nil
       desk.notes.should eq "by the window"
+      desk.client_ids.should eq JSON.parse("{}")
       desk.other_data.should eq JSON.parse("{}")
       desk.features.should eq ["Standard Office"]
       desk.security_system_groups.should be_empty
@@ -133,7 +139,11 @@ module PlaceOS::Tasks
       desk = Model::Asset.find_by(zone_id: level2.id.as(String))
       desk.zones.should eq [org2.id, building2.id, level2.id]
       desk.map_id.should eq "desk-1"
-      Model::Asset.count.should eq 4
+      # the original desk id is kept when it differs from the map id
+      assets["map-6.06.5"].client_ids.should eq JSON.parse(%({"place_id": "desk-6.06.5"}))
+      assets["map-6.06.5"].identifier.should eq "desk-6.06.5"
+
+      Model::Asset.count.should eq 5
 
       # one hidden category and type per migrated authority
       Model::AssetCategory.where(name: DeskAssets::DESKS).count.should eq 2

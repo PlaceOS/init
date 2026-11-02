@@ -22,8 +22,13 @@ module PlaceOS::Tasks::DeskAssets
   # url params that can disambiguate a desk id that exists on multiple levels
   LINK_ZONE_PARAMS = {"level_id", "zone_id", "building_id"}
 
-  # desk metadata keys with an asset field, the rest are kept in `other_data`
+  # desk metadata keys with an asset field. Of the rest, string values (third
+  # party ids such as `floorsense_id`) are kept in `client_ids`, everything else
+  # in `other_data`
   MAPPED_KEYS = {"id", "map_id", "name", "bookable", "assigned_to", "assigned_name", "groups", "features", "images", "notes", "security"}
+
+  # unmapped string keys that are desk attributes rather than ids
+  OTHER_DATA_KEYS = {"homebase"}
 
   record Desk,
     legacy_id : String,
@@ -39,6 +44,7 @@ module PlaceOS::Tasks::DeskAssets
     images : Array(String),
     notes : String?,
     security_system_groups : Array(String),
+    client_ids : JSON::Any,
     other_data : JSON::Any
 
   # The desks collected for a single authority
@@ -254,14 +260,28 @@ module PlaceOS::Tasks::DeskAssets
       images: strings(desk["images"]?),
       notes: string(desk["notes"]?),
       security_system_groups: string(desk["security"]?).try { |group| [group] } || [] of String,
+      client_ids: client_ids(desk, id, map_id),
       other_data: other_data(desk),
     )
   end
 
-  # custom fields, such as third party ids (`floorsense_id`). Always an object
-  # so consumers can safely look up keys (a nil is stored as JSON null)
+  # third party ids (`floorsense_id`), and the original desk id as `place_id` when
+  # the asset's map_id differs. Always an object (a nil is stored as JSON null)
+  private def client_ids(desk : Hash(String, JSON::Any), id : String?, map_id : String) : JSON::Any
+    ids = {} of String => JSON::Any
+    desk.each do |key, value|
+      next if MAPPED_KEYS.includes?(key) || OTHER_DATA_KEYS.includes?(key)
+      value.as_s?.presence.try { |string| ids[key] = JSON::Any.new(string) }
+    end
+    ids["place_id"] = JSON::Any.new(id) if id && id != map_id
+    JSON::Any.new(ids)
+  end
+
+  # the remaining custom fields, such as `tags` and `homebase`. Always an object
   private def other_data(desk : Hash(String, JSON::Any)) : JSON::Any
-    JSON::Any.new(desk.reject { |key, _| MAPPED_KEYS.includes?(key) })
+    JSON::Any.new(desk.reject do |key, value|
+      MAPPED_KEYS.includes?(key) || (value.as_s? && !OTHER_DATA_KEYS.includes?(key))
+    end)
   end
 
   private def string(value : JSON::Any?) : String?
@@ -305,6 +325,7 @@ module PlaceOS::Tasks::DeskAssets
       asset.images = desk.images
       asset.notes = desk.notes
       asset.security_system_groups = desk.security_system_groups
+      asset.client_ids = desk.client_ids
       asset.other_data = desk.other_data
       asset.save!
 
