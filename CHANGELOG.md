@@ -1,3 +1,9 @@
+## v0.37.1 (2026-11-02)
+
+### Fix
+
+- **desk_assets**: keep desk ids in client_ids
+
 ## v0.37.0 (2026-11-01)
 
 ### Feat
