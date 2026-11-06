@@ -35,9 +35,16 @@ module PlaceOS::Tasks::Entities
     raise e
   end
 
+  # Tables whose rows an organisation owns through `organisation_id`
+  OWNED_TABLES = {"authority", "zone", "sys", "mod", "trigger", "edge", "broker"}
+
   # The platform operator's partner and staff organisation. The first domain
   # belongs to that organisation, so its admins have cluster reach once
   # tenancy enforcement is on.
+  #
+  # On a cluster that predates tenancy the backfill migration has already
+  # given the first domain an organisation of its own. While that organisation
+  # is untouched, its estate moves into the staff organisation.
   def create_management_organisation(
     authority : Model::Authority,
     partner_name : String = "PlaceOS",
@@ -62,12 +69,49 @@ module PlaceOS::Tasks::Entities
       authority.organisation_id = organisation.id
       authority.save!
       Log.info { {message: "attached Authority to staff Organisation", authority: authority.id, organisation: organisation.id.to_s} }
+    elsif backfilled = backfilled_organisation(authority)
+      adopt_estate(from: backfilled, into: organisation)
+      authority.organisation_id = organisation.id
+      Log.info { {message: "moved the backfilled estate into the staff Organisation", authority: authority.id, from: backfilled.id.to_s, organisation: organisation.id.to_s} }
     end
 
     organisation
   rescue e
     log_fail("Organisation", e)
     raise e
+  end
+
+  # The organisation the backfill migration created for this authority, while
+  # it is still as created: no partner, no other domain and the backfill's own
+  # description. Anything an operator has since changed is left alone.
+  protected def backfilled_organisation(authority : Model::Authority) : Model::Organisation?
+    organisation_id = authority.organisation_id
+    return unless organisation_id
+
+    organisation = Model::Organisation.find?(organisation_id)
+    return unless organisation
+    return unless organisation.partner_id.nil?
+    return unless organisation.description == "Auto-created from authority #{authority.id} during PPT-526 organisation backfill"
+    return unless organisation.authorities.count == 1
+
+    organisation
+  end
+
+  # Moves every row and grant owned by `from` to `into`, then removes `from`
+  protected def adopt_estate(from : Model::Organisation, into : Model::Organisation) : Nil
+    from_id = from.id.to_s
+    into_id = into.id.to_s
+
+    PgORM::Database.transaction do |tx|
+      OWNED_TABLES.each do |table|
+        tx.connection.exec(%(UPDATE "#{table}" SET organisation_id = $1::uuid WHERE organisation_id = $2::uuid), args: [into_id, from_id])
+      end
+      tx.connection.exec(
+        %(UPDATE "grants" SET scope_id = $1 WHERE scope_type = $2 AND scope_id = $3),
+        args: [into_id, Model::Grant::SCOPE_ORGANISATION, from_id],
+      )
+      from.destroy
+    end
   end
 
   def create_interface(
