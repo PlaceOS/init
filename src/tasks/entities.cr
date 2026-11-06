@@ -35,6 +35,85 @@ module PlaceOS::Tasks::Entities
     raise e
   end
 
+  # Tables whose rows an organisation owns through `organisation_id`
+  OWNED_TABLES = {"authority", "zone", "sys", "mod", "trigger", "edge", "broker"}
+
+  # The platform operator's partner and staff organisation. The first domain
+  # belongs to that organisation, so its admins have cluster reach once
+  # tenancy enforcement is on.
+  #
+  # On a cluster that predates tenancy the backfill migration has already
+  # given the first domain an organisation of its own. While that organisation
+  # is untouched, its estate moves into the staff organisation.
+  def create_management_organisation(
+    authority : Model::Authority,
+    partner_name : String = "PlaceOS",
+  ) : Model::Organisation
+    partner = upsert_document(Model::Partner.where(management: true)) do
+      Log.info { {message: "creating management Partner", name: partner_name} }
+      Model::Partner.new(name: partner_name, description: "Platform operator (management partner)").tap do |new_partner|
+        new_partner.management = true
+      end
+    end
+
+    organisation = upsert_document(Model::Organisation.where(partner_id: partner.id, partner_staff: true)) do
+      Log.info { {message: "creating staff Organisation", name: authority.name} }
+      Model::Organisation.new(name: "#{partner_name} staff", description: "Staff of the management partner").tap do |new_org|
+        new_org.partner_id = partner.id
+        new_org.partner_staff = true
+        new_org.payer = Model::Organisation::PAYER_ORGANISATION
+      end
+    end
+
+    if authority.organisation_id.nil?
+      authority.organisation_id = organisation.id
+      authority.save!
+      Log.info { {message: "attached Authority to staff Organisation", authority: authority.id, organisation: organisation.id.to_s} }
+    elsif backfilled = backfilled_organisation(authority)
+      adopt_estate(from: backfilled, into: organisation)
+      authority.organisation_id = organisation.id
+      Log.info { {message: "moved the backfilled estate into the staff Organisation", authority: authority.id, from: backfilled.id.to_s, organisation: organisation.id.to_s} }
+    end
+
+    organisation
+  rescue e
+    log_fail("Organisation", e)
+    raise e
+  end
+
+  # The organisation the backfill migration created for this authority, while
+  # it is still as created: no partner, no other domain and the backfill's own
+  # description. Anything an operator has since changed is left alone.
+  protected def backfilled_organisation(authority : Model::Authority) : Model::Organisation?
+    organisation_id = authority.organisation_id
+    return unless organisation_id
+
+    organisation = Model::Organisation.find?(organisation_id)
+    return unless organisation
+    return unless organisation.partner_id.nil?
+    return unless organisation.description == "Auto-created from authority #{authority.id} during PPT-526 organisation backfill"
+    return unless organisation.authorities.count == 1
+
+    organisation
+  end
+
+  # Moves every row and grant owned by `from` to `into`, then removes `from`
+  protected def adopt_estate(from : Model::Organisation, into : Model::Organisation) : Nil
+    from_id = from.id.to_s
+    into_id = into.id.to_s
+
+    PgORM::Database.transaction do |tx|
+      OWNED_TABLES.each do |table|
+        tx.connection.exec(%(UPDATE "#{table}" SET organisation_id = $1::uuid WHERE organisation_id = $2::uuid), args: [into_id, from_id])
+      end
+      tx.connection.exec(
+        %(UPDATE "grants" SET scope_id = $1 WHERE scope_type = $2 AND scope_id = $3),
+        args: [into_id, Model::Grant::SCOPE_ORGANISATION, from_id],
+      )
+      from.destroy
+    end
+  end
+
   def create_interface(
     name : String,
     folder_name : String,
@@ -141,7 +220,7 @@ module PlaceOS::Tasks::Entities
     raise e
   end
 
-  def create_placeholders
+  def create_placeholders(organisation_id : UUID? = nil)
     version = UUID.random.to_s.split('-').first
 
     private_repository_uri = "https://github.com/placeos/private-drivers"
@@ -201,6 +280,7 @@ module PlaceOS::Tasks::Entities
         Model::Zone.new.tap do |zone|
           zone.name = "Zone-#{tag}-#{version}"
           zone.tags = Set{tag}
+          zone.organisation_id = organisation_id
         end
       end
     end
@@ -213,7 +293,9 @@ module PlaceOS::Tasks::Entities
     zones[2].save!
 
     control_system = upsert_document(Model::ControlSystem.all) do
-      Model::ControlSystem.new(name: "System-#{version}")
+      Model::ControlSystem.new(name: "System-#{version}").tap do |sys|
+        sys.organisation_id = organisation_id
+      end
     end
 
     upsert_document(Model::Settings.for_parent(control_system.id.as(String))) do
@@ -227,6 +309,7 @@ module PlaceOS::Tasks::Entities
     mod = upsert_document(Model::Module.where(driver_id: driver.id.as(String), control_system_id: control_system.id.as(String))) do
       Model::Generator.module(driver: driver, control_system: control_system).tap do |new_module|
         new_module.custom_name = "Module-#{version}"
+        new_module.organisation_id = organisation_id
       end
     end
 
@@ -241,6 +324,7 @@ module PlaceOS::Tasks::Entities
       trigger_description = "An automatically generated Trigger."
       new_trigger = Model::Trigger.new(name: trigger_name, description: trigger_description)
       new_trigger.control_system = control_system
+      new_trigger.organisation_id = organisation_id
       new_trigger
     end
 

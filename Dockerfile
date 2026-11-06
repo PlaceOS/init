@@ -81,7 +81,8 @@ RUN for binary in /app/bin/* /usr/bin/pg_dump /usr/bin/pg_restore /usr/bin/psql;
         xargs -I % sh -c 'mkdir -p $(dirname deps%); cp % deps%;'; \
     done
 
-RUN git clone https://github.com/PlaceOS/models
+# PPT-526: the tenancy migrations live on this branch until models #332 merges
+RUN git clone --branch PPT-526-partner-client https://github.com/PlaceOS/models
 
 # Create tmp directory with proper permissions
 RUN rm -rf /tmp && mkdir -p /tmp && chmod 1777 /tmp
