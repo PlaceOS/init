@@ -40,14 +40,14 @@ module PlaceOS
         Model::Partner.where(management: true).count.should eq 0
       end
 
-      it "creates an ordinary organisation for a fresh default customer install" do
+      it "preserves management privileges for a fresh platform bootstrap" do
         start_customer_install("fresh-customer.example.com")
 
         authority = Model::Authority.find_by_domain("fresh-customer.example.com").not_nil!
         organisation = authority.organisation.not_nil!
-        organisation.partner_staff.should be_false
-        organisation.partner_id.should be_nil
-        Model::Partner.where(management: true).count.should eq 0
+        organisation.partner_staff.should be_true
+        organisation.partner.not_nil!.management.should be_true
+        Model::User.find_by_email(authority.id.as(String), "administrator@example.com").not_nil!.sys_admin.should be_true
       end
     end
   end
