@@ -46,7 +46,7 @@ RUN mkdir -p /app/bin
 # Limit LLVM workers while Buildx compiles both architectures concurrently.
 # Build init
 RUN shards build \
-      --threads 1 \
+      --threads=1 \
       --debug \
       --ignore-crystal-version \
       --skip-postinstall \
@@ -57,7 +57,7 @@ RUN shards build \
       --link-flags "-no-pie -Wl,-no-pie -Wl,--eh-frame-hdr -Wl,--build-id -rdynamic -Wl,--export-dynamic -lunwind -llzma"
 
 RUN crystal build src/sam.cr -o bin/task \
-      --threads 1 \
+      --threads=1 \
       --debug \
       --error-trace \
       --no-color \
@@ -66,7 +66,7 @@ RUN crystal build src/sam.cr -o bin/task \
       --link-flags "-no-pie -Wl,-no-pie -Wl,--eh-frame-hdr -Wl,--build-id -rdynamic -Wl,--export-dynamic -lunwind -llzma"
 
 RUN crystal build src/generate-secrets.cr -o bin/generate-secrets \
-      --threads 1 \
+      --threads=1 \
       --debug \
       --error-trace \
       --no-color \
