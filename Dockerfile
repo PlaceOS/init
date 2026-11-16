@@ -43,8 +43,10 @@ COPY src src
 
 RUN mkdir -p /app/bin
 
+# Limit LLVM workers while Buildx compiles both architectures concurrently.
 # Build init
 RUN shards build \
+      --threads=1 \
       --debug \
       --ignore-crystal-version \
       --skip-postinstall \
@@ -55,6 +57,7 @@ RUN shards build \
       --link-flags "-no-pie -Wl,-no-pie -Wl,--eh-frame-hdr -Wl,--build-id -rdynamic -Wl,--export-dynamic -lunwind -llzma"
 
 RUN crystal build src/sam.cr -o bin/task \
+      --threads=1 \
       --debug \
       --error-trace \
       --no-color \
@@ -63,6 +66,7 @@ RUN crystal build src/sam.cr -o bin/task \
       --link-flags "-no-pie -Wl,-no-pie -Wl,--eh-frame-hdr -Wl,--build-id -rdynamic -Wl,--export-dynamic -lunwind -llzma"
 
 RUN crystal build src/generate-secrets.cr -o bin/generate-secrets \
+      --threads=1 \
       --debug \
       --error-trace \
       --no-color \
@@ -81,7 +85,8 @@ RUN for binary in /app/bin/* /usr/bin/pg_dump /usr/bin/pg_restore /usr/bin/psql;
         xargs -I % sh -c 'mkdir -p $(dirname deps%); cp % deps%;'; \
     done
 
-RUN git clone https://github.com/PlaceOS/models
+# PPT-526: the tenancy migrations live on this branch until models #332 merges
+RUN git clone --branch PPT-526-partner-client https://github.com/PlaceOS/models
 
 # Create tmp directory with proper permissions
 RUN rm -rf /tmp && mkdir -p /tmp && chmod 1777 /tmp

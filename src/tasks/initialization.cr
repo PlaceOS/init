@@ -32,7 +32,16 @@ module PlaceOS::Tasks::Initialization
     metrics_config = {"metrics" => JSON::Any.new(metrics_url)}
 
     start_lock.synchronize do
-      authority = Entities.create_authority(name: application_base, domain: application_base, config: metrics_config)
+      existing_authority = Model::Authority.find_by_domain(application_base)
+      authority = existing_authority || Entities.create_authority(name: application_base, domain: application_base, config: metrics_config)
+      organisation = if existing_authority
+                       authority.organisation
+                     else
+                       Entities.create_management_organisation(authority)
+                     end
+      unless organisation
+        Log.warn { {message: "existing authority has no organisation; explicit reconciliation is required", authority: authority.id} }
+      end
 
       Entities.create_user(authority: authority, name: username, email: email, password: password, sys_admin: true)
       Entities.create_application(authority: authority, name: application_name, base: application_base)
@@ -51,9 +60,9 @@ module PlaceOS::Tasks::Initialization
         description: "Admin interface for PlaceOS",
       )
 
-      unless PlaceOS::Tasks.production? || PlaceOS::SKIP_PLACEHOLDERS
+      unless PlaceOS::Tasks.production? || PlaceOS::SKIP_PLACEHOLDERS || organisation.nil?
         Log.info { "creating placeholder documents" }
-        Entities.create_placeholders
+        Entities.create_placeholders(organisation.id)
       end
     end
   end

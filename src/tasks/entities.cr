@@ -35,6 +35,43 @@ module PlaceOS::Tasks::Entities
     raise e
   end
 
+  # Preserve an existing customer's ownership and configuration. Only a newly
+  # created bootstrap authority without an organisation seeds platform staff.
+  # Moving a legacy customer into management requires explicit reconciliation.
+  def create_management_organisation(
+    authority : Model::Authority,
+    partner_name : String = "PlaceOS",
+  ) : Model::Organisation
+    if organisation_id = authority.organisation_id
+      return Model::Organisation.find!(organisation_id)
+    end
+
+    partner = upsert_document(Model::Partner.where(management: true)) do
+      Log.info { {message: "creating management Partner", name: partner_name} }
+      Model::Partner.new(name: partner_name, description: "Platform operator (management partner)").tap do |new_partner|
+        new_partner.management = true
+      end
+    end
+
+    organisation = upsert_document(Model::Organisation.where(partner_id: partner.id, partner_staff: true)) do
+      Log.info { {message: "creating staff Organisation", name: authority.name} }
+      Model::Organisation.new(name: "#{partner_name} staff", description: "Staff of the management partner").tap do |new_org|
+        new_org.partner_id = partner.id
+        new_org.partner_staff = true
+        new_org.payer = Model::Organisation::PAYER_ORGANISATION
+      end
+    end
+
+    authority.organisation_id = organisation.id
+    authority.save!
+    Log.info { {message: "attached new bootstrap Authority to staff Organisation", authority: authority.id, organisation: organisation.id.to_s} }
+
+    organisation
+  rescue e
+    log_fail("Organisation", e)
+    raise e
+  end
+
   def create_interface(
     name : String,
     folder_name : String,
@@ -141,7 +178,7 @@ module PlaceOS::Tasks::Entities
     raise e
   end
 
-  def create_placeholders
+  def create_placeholders(organisation_id : UUID? = nil)
     version = UUID.random.to_s.split('-').first
 
     private_repository_uri = "https://github.com/placeos/private-drivers"
@@ -197,10 +234,13 @@ module PlaceOS::Tasks::Entities
 
     # Create default entities for each element of the hierarchy
     zones = {"building", "org", "level", "area"}.map do |tag|
-      upsert_document(Model::Zone.with_tag(tag)) do
+      query = Model::Zone.where("? = ANY(tags)", tag)
+      query = query.where(organisation_id: organisation_id) if organisation_id
+      upsert_document(query) do
         Model::Zone.new.tap do |zone|
           zone.name = "Zone-#{tag}-#{version}"
           zone.tags = Set{tag}
+          zone.organisation_id = organisation_id
         end
       end
     end
@@ -212,8 +252,12 @@ module PlaceOS::Tasks::Entities
     zones[2].parent_id = zones.first.id
     zones[2].save!
 
-    control_system = upsert_document(Model::ControlSystem.all) do
-      Model::ControlSystem.new(name: "System-#{version}")
+    system_query = Model::ControlSystem.all
+    system_query = system_query.where(organisation_id: organisation_id) if organisation_id
+    control_system = upsert_document(system_query) do
+      Model::ControlSystem.new(name: "System-#{version}").tap do |sys|
+        sys.organisation_id = organisation_id
+      end
     end
 
     upsert_document(Model::Settings.for_parent(control_system.id.as(String))) do
@@ -224,9 +268,12 @@ module PlaceOS::Tasks::Entities
       settings
     end
 
-    mod = upsert_document(Model::Module.where(driver_id: driver.id.as(String), control_system_id: control_system.id.as(String))) do
+    module_query = Model::Module.where(driver_id: driver.id.as(String), control_system_id: control_system.id.as(String))
+    module_query = module_query.where(organisation_id: organisation_id) if organisation_id
+    mod = upsert_document(module_query) do
       Model::Generator.module(driver: driver, control_system: control_system).tap do |new_module|
         new_module.custom_name = "Module-#{version}"
+        new_module.organisation_id = organisation_id
       end
     end
 
@@ -235,12 +282,15 @@ module PlaceOS::Tasks::Entities
     control_system.zones = control_system.zones | zones.compact_map &.id
     control_system.save!
 
-    trigger = upsert_document(Model::Trigger.where(control_system_id: control_system.id.as(String))) do
+    trigger_query = Model::Trigger.where(control_system_id: control_system.id.as(String))
+    trigger_query = trigger_query.where(organisation_id: organisation_id) if organisation_id
+    trigger = upsert_document(trigger_query) do
       # Trigger metadata
       trigger_name = "Trigger-#{version}"
       trigger_description = "An automatically generated Trigger."
       new_trigger = Model::Trigger.new(name: trigger_name, description: trigger_description)
       new_trigger.control_system = control_system
+      new_trigger.organisation_id = organisation_id
       new_trigger
     end
 

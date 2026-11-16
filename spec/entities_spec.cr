@@ -1,0 +1,138 @@
+require "./spec_helper"
+require "../src/tasks/entities"
+
+module PlaceOS::Tasks
+  # The organisation the backfill migration creates for a domain that has none
+  def self.backfilled_organisation(authority : Model::Authority) : Model::Organisation
+    organisation = Model::Organisation.new(
+      name: "#{authority.name} (#{authority.domain})",
+      description: "Auto-created from authority #{authority.id} during PPT-526 organisation backfill",
+    ).save!
+    authority.organisation_id = organisation.id
+    authority.save!
+    organisation
+  end
+
+  def self.owned_zone(organisation : Model::Organisation) : Model::Zone
+    zone = Model::Zone.new(name: "zone-#{Random::Secure.hex(4)}", tags: Set{"org"})
+    zone.organisation_id = organisation.id
+    zone.save!
+  end
+
+  def self.organisation_grant(organisation : Model::Organisation) : Model::Grant
+    user = Model::Generator.user.save!
+    Model::Generator.grant(user, Model::Grant::SCOPE_ORGANISATION, organisation.id.to_s)
+  end
+
+  describe Entities do
+    it "creates organisation-specific placeholders while sharing driver and repository catalogs" do
+      previous_mode = ENV["PLACE_TENANCY_ENFORCE"]?
+      ENV["PLACE_TENANCY_ENFORCE"] = "false"
+      first = Model::Generator.organisation.save!
+      second = Model::Generator.organisation.save!
+      Entities.create_placeholders(first.id)
+      first_zones = Model::Zone.where(organisation_id: first.id).to_a
+      original_parents = first_zones.to_h { |zone| {zone.id.as(String), zone.parent_id} }
+      driver_count = Model::Driver.all.count
+      repository_count = Model::Repository.all.count
+
+      Entities.create_placeholders(second.id)
+
+      second_zones = Model::Zone.where(organisation_id: second.id).to_a
+      second_zones.size.should eq 4
+      (second_zones.map(&.name).to_set & first_zones.map(&.name).to_set).should be_empty
+      second_system = Model::ControlSystem.where(organisation_id: second.id).first.not_nil!
+      second_system.zones.to_set.should eq second_zones.map(&.id.as(String)).to_set
+      Model::Module.where(organisation_id: second.id).count.should eq 1
+      Model::Trigger.where(organisation_id: second.id).count.should eq 1
+      Model::Zone.where(organisation_id: first.id).to_a.to_h { |zone| {zone.id.as(String), zone.parent_id} }.should eq original_parents
+      Model::Driver.all.count.should eq driver_count
+      Model::Repository.all.count.should eq repository_count
+    ensure
+      if previous_mode
+        ENV["PLACE_TENANCY_ENFORCE"] = previous_mode
+      else
+        ENV.delete("PLACE_TENANCY_ENFORCE")
+      end
+    end
+
+    describe "create_management_organisation" do
+      it "seeds the management partner and attaches an unowned domain to its staff organisation" do
+        authority = Model::Generator.authority("https://first.example.com").save!
+
+        organisation = Entities.create_management_organisation(authority)
+
+        organisation.partner_staff.should be_true
+        organisation.partner.not_nil!.management.should be_true
+        Model::Authority.find!(authority.id.as(String)).organisation_id.should eq organisation.id
+      end
+
+      it "is idempotent" do
+        authority = Model::Generator.authority("https://first.example.com").save!
+
+        first = Entities.create_management_organisation(authority)
+        second = Entities.create_management_organisation(Model::Authority.find!(authority.id.as(String)))
+
+        second.id.should eq first.id
+        Model::Partner.where(management: true).count.should eq 1
+        Model::Organisation.where(partner_staff: true).count.should eq 1
+      end
+
+      it "preserves a backfilled customer's estate and grants" do
+        authority = Model::Generator.authority("https://first.example.com").save!
+        backfilled = backfilled_organisation(authority)
+        zone = owned_zone(backfilled)
+        grant = organisation_grant(backfilled).save!
+
+        Entities.create_management_organisation(authority)
+
+        Model::Authority.find!(authority.id.as(String)).organisation_id.should eq backfilled.id
+        Model::Zone.find!(zone.id.as(String)).organisation_id.should eq backfilled.id
+        Model::Grant.find!(grant.id.not_nil!).scope_id.should eq backfilled.id.to_s
+        Model::Organisation.find?(backfilled.id.not_nil!).should_not be_nil
+      end
+
+      it "preserves a renamed and configured customer organisation with its generated description" do
+        authority = Model::Generator.authority("https://customer.example.com").save!
+        backfilled = backfilled_organisation(authority)
+        backfilled.name = "Customer organisation"
+        backfilled.config = {"billing_reference" => JSON::Any.new("customer-owned")}
+        backfilled.save!
+        Model::Organisation.find!(backfilled.id.not_nil!).config["billing_reference"].as_s.should eq "customer-owned"
+
+        Entities.create_management_organisation(authority)
+
+        persisted = Model::Organisation.find!(backfilled.id.not_nil!)
+        persisted.name.should eq "Customer organisation"
+        persisted.config["billing_reference"].as_s.should eq "customer-owned"
+        Model::Authority.find!(authority.id.as(String)).organisation_id.should eq backfilled.id
+      end
+
+      it "leaves an organisation an operator has changed" do
+        authority = Model::Generator.authority("https://first.example.com").save!
+        backfilled = backfilled_organisation(authority)
+        backfilled.description = "Acme, merged by hand"
+        backfilled.save!
+        zone = owned_zone(backfilled)
+
+        Entities.create_management_organisation(authority)
+
+        Model::Authority.find!(authority.id.as(String)).organisation_id.should eq backfilled.id
+        Model::Zone.find!(zone.id.as(String)).organisation_id.should eq backfilled.id
+      end
+
+      it "leaves an organisation that owns other domains" do
+        authority = Model::Generator.authority("https://first.example.com").save!
+        backfilled = backfilled_organisation(authority)
+        other = Model::Generator.authority("https://second.example.com")
+        other.organisation_id = backfilled.id
+        other.save!
+
+        Entities.create_management_organisation(authority)
+
+        Model::Authority.find!(authority.id.as(String)).organisation_id.should eq backfilled.id
+        Model::Organisation.find?(backfilled.id.not_nil!).should_not be_nil
+      end
+    end
+  end
+end
