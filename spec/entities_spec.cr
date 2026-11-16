@@ -65,8 +65,9 @@ module PlaceOS::Tasks
         authority = Model::Generator.authority("https://customer.example.com").save!
         backfilled = backfilled_organisation(authority)
         backfilled.name = "Customer organisation"
-        backfilled.config["billing_reference"] = JSON::Any.new("customer-owned")
+        backfilled.config = {"billing_reference" => JSON::Any.new("customer-owned")}
         backfilled.save!
+        Model::Organisation.find!(backfilled.id.not_nil!).config["billing_reference"].as_s.should eq "customer-owned"
 
         Entities.create_management_organisation(authority)
 
