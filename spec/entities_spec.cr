@@ -26,6 +26,8 @@ module PlaceOS::Tasks
 
   describe Entities do
     it "creates organisation-specific placeholders while sharing driver and repository catalogs" do
+      previous_mode = ENV["PLACE_TENANCY_ENFORCE"]?
+      ENV["PLACE_TENANCY_ENFORCE"] = "false"
       first = Model::Generator.organisation.save!
       second = Model::Generator.organisation.save!
       Entities.create_placeholders(first.id)
@@ -38,6 +40,7 @@ module PlaceOS::Tasks
 
       second_zones = Model::Zone.where(organisation_id: second.id).to_a
       second_zones.size.should eq 4
+      (second_zones.map(&.name).to_set & first_zones.map(&.name).to_set).should be_empty
       second_system = Model::ControlSystem.where(organisation_id: second.id).first.not_nil!
       second_system.zones.to_set.should eq second_zones.map(&.id.as(String)).to_set
       Model::Module.where(organisation_id: second.id).count.should eq 1
@@ -45,6 +48,12 @@ module PlaceOS::Tasks
       Model::Zone.where(organisation_id: first.id).to_a.to_h { |zone| {zone.id.as(String), zone.parent_id} }.should eq original_parents
       Model::Driver.all.count.should eq driver_count
       Model::Repository.all.count.should eq repository_count
+    ensure
+      if previous_mode
+        ENV["PLACE_TENANCY_ENFORCE"] = previous_mode
+      else
+        ENV.delete("PLACE_TENANCY_ENFORCE")
+      end
     end
 
     describe "create_management_organisation" do

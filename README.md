@@ -132,6 +132,36 @@ The default entrypoint to the init container generates a User, Authority, and Ap
 - `backoffice_branch`: `PLACE_BACKOFFICE_BRANCH`, `build/prod` or `build/dev` dependent on environment.
 - `backoffice_commmit`: `PLACE_BACKOFFICE_COMMIT` ||`"HEAD"`
 
+### Management access on an existing cluster
+
+Normal startup preserves an existing authority's organisation, including its name,
+configuration and grants. An existing unowned authority remains unowned for explicit
+reconciliation; rerunning init does not promote it to management staff.
+
+If a legacy cluster has no management-domain administrator, choose a **new**
+management hostname routed to the existing deployment. It must not already have an
+Authority record: do not pre-create it with `create:authority`. Run the normal init
+startup against that hostname using the existing cluster's database connection and
+platform secrets, with dedicated administrator credentials:
+
+```bash
+# Set NEW_PLATFORM_PASSWORD to a new strong password before running this command.
+docker compose run --rm --no-deps \
+  -e PLACE_DOMAIN=management.example.com \
+  -e PLACE_TLS=true \
+  -e PLACE_EMAIL=platform-admin@example.com \
+  -e PLACE_USERNAME="Platform administrator" \
+  -e PLACE_PASSWORD="$NEW_PLATFORM_PASSWORD" \
+  -e PLACE_SKIP_PLACEHOLDERS=true \
+  init /app/bin/start
+```
+
+Only the newly created authority is attached to the management partner's staff
+organisation, and its seeded administrator retains platform administration rights.
+Sign in through the management hostname and use the REST tenancy inventory and
+explicit reconciliation operations before enabling `PLACE_TENANCY_ENFORCE` for
+customer traffic. Existing customer domains are never adopted or merged implicitly.
+
 ## Backup Container
 
 `Dockerfile.pg-backup` generates a container that will backup the state of PG to `S3` or `Azure Storage` depending on the environment variables.
