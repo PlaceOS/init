@@ -25,6 +25,28 @@ module PlaceOS::Tasks
   end
 
   describe Entities do
+    it "creates organisation-specific placeholders while sharing driver and repository catalogs" do
+      first = Model::Generator.organisation.save!
+      second = Model::Generator.organisation.save!
+      Entities.create_placeholders(first.id)
+      first_zones = Model::Zone.where(organisation_id: first.id).to_a
+      original_parents = first_zones.to_h { |zone| {zone.id.as(String), zone.parent_id} }
+      driver_count = Model::Driver.all.count
+      repository_count = Model::Repository.all.count
+
+      Entities.create_placeholders(second.id)
+
+      second_zones = Model::Zone.where(organisation_id: second.id).to_a
+      second_zones.size.should eq 4
+      second_system = Model::ControlSystem.where(organisation_id: second.id).first.not_nil!
+      second_system.zones.to_set.should eq second_zones.map(&.id.as(String)).to_set
+      Model::Module.where(organisation_id: second.id).count.should eq 1
+      Model::Trigger.where(organisation_id: second.id).count.should eq 1
+      Model::Zone.where(organisation_id: first.id).to_a.to_h { |zone| {zone.id.as(String), zone.parent_id} }.should eq original_parents
+      Model::Driver.all.count.should eq driver_count
+      Model::Repository.all.count.should eq repository_count
+    end
+
     describe "create_management_organisation" do
       it "seeds the management partner and attaches an unowned domain to its staff organisation" do
         authority = Model::Generator.authority("https://first.example.com").save!
