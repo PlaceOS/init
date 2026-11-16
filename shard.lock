@@ -155,7 +155,7 @@ shards:
 
   placeos-models: # Overridden
     git: https://github.com/placeos/models.git
-    version: 9.123.5+git.commit.5adba67b9eb9a35fa007a5914074738fa47dcb39
+    version: 9.123.5+git.commit.716ca764f68e09a72b9028aa3380fdb06a50a635
 
   sam:
     git: https://github.com/imdrasil/sam.cr.git
