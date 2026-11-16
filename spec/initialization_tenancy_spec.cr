@@ -49,6 +49,15 @@ module PlaceOS
         organisation.partner.not_nil!.management.should be_true
         Model::User.find_by_email(authority.id.as(String), "administrator@example.com").not_nil!.sys_admin.should be_true
       end
+
+      it "does not treat an existing unowned authority as a fresh management bootstrap" do
+        authority = Model::Generator.authority("legacy-unowned.example.com").save!
+
+        start_customer_install(authority.domain)
+
+        Model::Authority.find!(authority.id.as(String)).organisation_id.should be_nil
+        Model::Partner.where(management: true).count.should eq 0
+      end
     end
   end
 end
