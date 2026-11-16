@@ -47,19 +47,33 @@ module PlaceOS::Tasks
         Model::Organisation.where(partner_staff: true).count.should eq 1
       end
 
-      it "moves a backfilled estate into the staff organisation" do
+      it "preserves a backfilled customer's estate and grants" do
         authority = Model::Generator.authority("https://first.example.com").save!
         backfilled = backfilled_organisation(authority)
         zone = owned_zone(backfilled)
         grant = organisation_grant(backfilled).save!
 
-        organisation = Entities.create_management_organisation(authority)
+        Entities.create_management_organisation(authority)
 
-        authority.organisation_id.should eq organisation.id
-        Model::Authority.find!(authority.id.as(String)).organisation_id.should eq organisation.id
-        Model::Zone.find!(zone.id.as(String)).organisation_id.should eq organisation.id
-        Model::Grant.find!(grant.id.not_nil!).scope_id.should eq organisation.id.to_s
-        Model::Organisation.find?(backfilled.id.not_nil!).should be_nil
+        Model::Authority.find!(authority.id.as(String)).organisation_id.should eq backfilled.id
+        Model::Zone.find!(zone.id.as(String)).organisation_id.should eq backfilled.id
+        Model::Grant.find!(grant.id.not_nil!).scope_id.should eq backfilled.id.to_s
+        Model::Organisation.find?(backfilled.id.not_nil!).should_not be_nil
+      end
+
+      it "preserves a renamed and configured customer organisation with its generated description" do
+        authority = Model::Generator.authority("https://customer.example.com").save!
+        backfilled = backfilled_organisation(authority)
+        backfilled.name = "Customer organisation"
+        backfilled.config["billing_reference"] = JSON::Any.new("customer-owned")
+        backfilled.save!
+
+        Entities.create_management_organisation(authority)
+
+        persisted = Model::Organisation.find!(backfilled.id.not_nil!)
+        persisted.name.should eq "Customer organisation"
+        persisted.config["billing_reference"].as_s.should eq "customer-owned"
+        Model::Authority.find!(authority.id.as(String)).organisation_id.should eq backfilled.id
       end
 
       it "leaves an organisation an operator has changed" do
