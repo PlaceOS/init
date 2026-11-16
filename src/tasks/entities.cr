@@ -234,7 +234,9 @@ module PlaceOS::Tasks::Entities
 
     # Create default entities for each element of the hierarchy
     zones = {"building", "org", "level", "area"}.map do |tag|
-      upsert_document(Model::Zone.with_tag(tag)) do
+      query = Model::Zone.where("? = ANY(tags)", tag)
+      query = query.where(organisation_id: organisation_id) if organisation_id
+      upsert_document(query) do
         Model::Zone.new.tap do |zone|
           zone.name = "Zone-#{tag}-#{version}"
           zone.tags = Set{tag}
@@ -250,7 +252,9 @@ module PlaceOS::Tasks::Entities
     zones[2].parent_id = zones.first.id
     zones[2].save!
 
-    control_system = upsert_document(Model::ControlSystem.all) do
+    system_query = Model::ControlSystem.all
+    system_query = system_query.where(organisation_id: organisation_id) if organisation_id
+    control_system = upsert_document(system_query) do
       Model::ControlSystem.new(name: "System-#{version}").tap do |sys|
         sys.organisation_id = organisation_id
       end
@@ -264,7 +268,9 @@ module PlaceOS::Tasks::Entities
       settings
     end
 
-    mod = upsert_document(Model::Module.where(driver_id: driver.id.as(String), control_system_id: control_system.id.as(String))) do
+    module_query = Model::Module.where(driver_id: driver.id.as(String), control_system_id: control_system.id.as(String))
+    module_query = module_query.where(organisation_id: organisation_id) if organisation_id
+    mod = upsert_document(module_query) do
       Model::Generator.module(driver: driver, control_system: control_system).tap do |new_module|
         new_module.custom_name = "Module-#{version}"
         new_module.organisation_id = organisation_id
@@ -276,7 +282,9 @@ module PlaceOS::Tasks::Entities
     control_system.zones = control_system.zones | zones.compact_map &.id
     control_system.save!
 
-    trigger = upsert_document(Model::Trigger.where(control_system_id: control_system.id.as(String))) do
+    trigger_query = Model::Trigger.where(control_system_id: control_system.id.as(String))
+    trigger_query = trigger_query.where(organisation_id: organisation_id) if organisation_id
+    trigger = upsert_document(trigger_query) do
       # Trigger metadata
       trigger_name = "Trigger-#{version}"
       trigger_description = "An automatically generated Trigger."
