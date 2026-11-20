@@ -23,7 +23,7 @@ shards:
 
   azblob:
     git: https://github.com/spider-gazelle/azblob.cr.git
-    version: 0.1.0
+    version: 0.1.1
 
   backtracer:
     git: https://github.com/sija/backtracer.cr.git
